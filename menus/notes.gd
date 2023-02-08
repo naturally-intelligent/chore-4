@@ -4,7 +4,7 @@ var no_back_button = true
 
 func _ready():
 	$BackButton.connect("pressed",Callable(self,"on_back_pressed"))
-	var file = FileAccess.open('res://CHORE-ENGINE-SETUP.txt', FileAccess.READ)
+	var file = FileAccess.open('res://README.md', FileAccess.READ)
 	var notes = file.get_as_text()
 	file = null
 	$File.set_text(notes)
