@@ -128,7 +128,7 @@ func queue_event(name, time, event_data={}, function=null):
 		for key in event_data:
 			data[key] = event_data[key]
 	if function:
-		data['func-call'] = funcref(self, function)
+		data['func-call'] = Callable(self, function)
 	data['timer'] = step + time
 	data['loop-count'] = 0
 	events[name] = data

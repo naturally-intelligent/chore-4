@@ -39,10 +39,6 @@ func animating():
 	if sliding_tween: return true
 	return false
 
-# generic show call (override)
-func show():
-	set_visible(true)
-
 func flip():
 	if up_front:
 		leave()
@@ -77,7 +73,7 @@ func slide_in():
 	if not sliding_in:
 		var p = entry_point
 		if sliding_tween:
-			sliding_tween.stop_all()
+			sliding_tween.stop()
 			sliding_tween = null
 			sliding_out = false
 			p = get_position()
@@ -86,13 +82,11 @@ func slide_in():
 		to_the_side = false
 		up_front = false
 		set_visible(true)
-		var tween = Tween.new()
-		tween.interpolate_property(
-			self, "position",
-			p, view_point, 0.5,
-			Tween.TRANS_SINE, Tween.EASE_OUT)
-		add_child(tween)
-		tween.start()
+		position = p
+		var tween = create_tween()
+		tween.tween_property(self, "position", view_point, 0.5)
+		tween.set_trans(Tween.TRANS_SINE)
+		tween.set_ease(Tween.EASE_OUT)
 		if show_sound:
 			audio.play_sound(show_sound)
 		sliding_tween = tween
@@ -106,20 +100,18 @@ func slide_out():
 	if not sliding_out:
 		var p = get_position()
 		if sliding_tween:
-			sliding_tween.stop_all()
+			sliding_tween.stop()
 			sliding_tween = null
 			sliding_in = false
 		sliding_out = true
 		sliding_in = false
 		to_the_side = false
 		up_front = false
-		var tween = Tween.new()
-		tween.interpolate_property(
-			self, "position",
-			p, leave_point, 0.25,
-			Tween.TRANS_SINE, Tween.EASE_OUT)
-		add_child(tween)
-		tween.start()
+		position = p
+		var tween = create_tween()
+		tween.tween_property(self, "position", leave_point, 0.25)
+		tween.set_trans(Tween.TRANS_SINE)
+		tween.set_ease(Tween.EASE_OUT)
 		sliding_tween = tween
 		if leave_sound:
 			audio.play_sound(leave_sound)
@@ -131,20 +123,18 @@ func slide_out():
 
 func slide_over():
 	if sliding_tween:
-		sliding_tween.stop_all()
+		sliding_tween.stop()
 		sliding_tween = null
 	var p = get_position()
 	sliding_out = false
 	sliding_in = false
 	up_front = true
 	set_visible(true)
-	var tween = Tween.new()
-	tween.interpolate_property(
-		self, "position",
-		p, side_point, 0.5,
-		Tween.TRANS_SINE, Tween.EASE_OUT)
-	add_child(tween)
-	tween.start()
+	position = p
+	var tween = create_tween()
+	tween.tween_property(self, "position", side_point, 0.5)
+	tween.set_trans(Tween.TRANS_SINE)
+	tween.set_ease(Tween.EASE_OUT)
 	sliding_tween = tween
 	await tween.finished
 	to_the_side = true
