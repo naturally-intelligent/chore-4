@@ -1,6 +1,4 @@
-# chore-4
----
-CHORE ENGINE v1.4
+# CHORE ENGINE v1.4
 -
 Godot 4 Framework
 ---

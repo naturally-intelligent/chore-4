@@ -1,0 +1,149 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://widgets/dialog-bubble.gd" type="Script" id=1]
+[ext_resource path="res://art/hud/choice9p-hover.tres" type="StyleBox" id=2]
+[ext_resource path="res://art/hud/choice9p-press.tres" type="StyleBox" id=3]
+[ext_resource path="res://art/hud/choice9p-normal.tres" type="StyleBox" id=4]
+[ext_resource path="res://art/hud/dialog-9patch.png" type="Texture2D" id=5]
+[ext_resource path="res://art/hud/action9p-normal.png" type="Texture2D" id=6]
+[ext_resource path="res://art/hud/choice9p-normal.png" type="Texture2D" id=7]
+[ext_resource path="res://art/fonts/mincraft-font.tres" type="FontFile" id=8]
+[ext_resource path="res://art/hud/button-red9p-normal.png" type="Texture2D" id=9]
+
+[node name="Root" type="Control"]
+offset_right = 76.0
+offset_bottom = 16.0
+mouse_filter = 2
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Bubble" type="MarginContainer" parent="."]
+offset_right = 142.0
+offset_bottom = 22.0
+mouse_filter = 2
+custom_constants/offset_right = 0
+custom_constants/offset_top = 0
+custom_constants/offset_left = 0
+custom_constants/offset_bottom = 0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Backgrounds" type="MarginContainer" parent="Bubble"]
+offset_right = 142.0
+offset_bottom = 22.0
+mouse_filter = 2
+custom_constants/offset_right = 0
+custom_constants/offset_top = 0
+custom_constants/offset_left = 0
+custom_constants/offset_bottom = 0
+
+[node name="ChoiceButton" type="Button" parent="Bubble/Backgrounds"]
+visible = false
+modulate = Color( 0.552734, 0.552734, 0.552734, 1 )
+offset_right = 142.0
+offset_bottom = 24.0
+custom_styles/hover = ExtResource( 2 )
+custom_styles/pressed = ExtResource( 3 )
+custom_styles/focus = ExtResource( 4 )
+custom_styles/disabled = ExtResource( 4 )
+custom_styles/normal = ExtResource( 4 )
+
+[node name="AdvanceButton" type="TextureButton" parent="Bubble/Backgrounds"]
+visible = false
+offset_right = 142.0
+offset_bottom = 22.0
+
+[node name="Red9P" type="NinePatchRect" parent="Bubble/Backgrounds"]
+visible = false
+offset_right = 142.0
+offset_bottom = 22.0
+texture = ExtResource( 9 )
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 2
+patch_margin_bottom = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Player9P" type="NinePatchRect" parent="Bubble/Backgrounds"]
+visible = false
+modulate = Color( 0.583984, 0.583984, 0.583984, 1 )
+offset_right = 142.0
+offset_bottom = 22.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource( 7 )
+patch_margin_left = 8
+patch_margin_top = 8
+patch_margin_right = 8
+patch_margin_bottom = 8
+
+[node name="Action9P" type="NinePatchRect" parent="Bubble/Backgrounds"]
+visible = false
+modulate = Color( 0.609375, 0.609375, 0.609375, 1 )
+offset_right = 142.0
+offset_bottom = 22.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource( 6 )
+patch_margin_left = 8
+patch_margin_top = 8
+patch_margin_right = 8
+patch_margin_bottom = 8
+
+[node name="Something" type="NinePatchRect" parent="Bubble/Backgrounds"]
+visible = false
+offset_right = 142.0
+offset_bottom = 22.0
+
+[node name="Dialog9P" type="NinePatchRect" parent="Bubble/Backgrounds"]
+modulate = Color( 0.945312, 0.945312, 0.945312, 1 )
+offset_right = 142.0
+offset_bottom = 22.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource( 5 )
+patch_margin_left = 6
+patch_margin_top = 6
+patch_margin_right = 6
+patch_margin_bottom = 6
+
+[node name="TextContainer" type="MarginContainer" parent="Bubble"]
+offset_right = 142.0
+offset_bottom = 22.0
+mouse_filter = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/offset_right = 6
+custom_constants/offset_top = 4
+custom_constants/offset_left = 11
+custom_constants/offset_bottom = 0
+
+[node name="TextLabel" type="RichTextLabel" parent="Bubble/TextContainer"]
+offset_left = 11.0
+offset_top = 4.0
+offset_right = 136.0
+offset_bottom = 22.0
+mouse_filter = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/line_separation = 2
+custom_fonts/normal_font = ExtResource( 8 )
+bbcode_enabled = true
+scroll_active = false
+
+[node name="TextLabelL" type="Label" parent="Bubble/TextContainer"]
+visible = false
+offset_left = 11.0
+offset_top = 4.0
+offset_right = 136.0
+offset_bottom = 22.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/line_spacing = 2
+custom_fonts/font = ExtResource( 8 )
+autowrap = true

@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://bw4j8wcy50gp3"]
+
+[ext_resource type="Script" path="res://menus/menu.gd" id="1"]
+[ext_resource type="Theme" uid="uid://bml6iiodj2eom" path="res://art/chore_theme.tres" id="1_c16ai"]
+
+[node name="Menu" type="Control"]
+process_mode = 1
+layout_mode = 3
+anchors_preset = 0
+theme = ExtResource("1_c16ai")
+script = ExtResource("1")

@@ -1,0 +1,8 @@
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://bml6iiodj2eom"]
+
+[ext_resource type="FontFile" uid="uid://c3m6nmrvg7n4p" path="res://art/fonts/publicsans/PublicSans-Regular.ttf" id="1_ogix4"]
+
+[resource]
+default_base_scale = 2.0
+default_font = ExtResource("1_ogix4")
+default_font_size = 32

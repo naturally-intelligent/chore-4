@@ -1,0 +1,74 @@
+[gd_scene load_steps=2 format=3 uid="uid://dln51ca30d05d"]
+
+[ext_resource type="Script" path="res://menus/credits.gd" id="2"]
+
+[node name="Credits" type="Control"]
+process_mode = 1
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2")
+
+[node name="BG" type="ColorRect" parent="."]
+custom_minimum_size = Vector2(1920, 1080)
+layout_mode = 0
+color = Color(0.203922, 0.286275, 0.360784, 1)
+
+[node name="Inner" type="ColorRect" parent="."]
+layout_mode = 0
+offset_left = 632.0
+offset_top = 203.0
+offset_right = 1510.0
+offset_bottom = 745.0
+color = Color(0.027451, 0.0509804, 0.0745098, 1)
+
+[node name="Title" type="Label" parent="."]
+layout_mode = 0
+offset_top = 29.0
+offset_right = 1920.0
+offset_bottom = 89.0
+theme_override_font_sizes/font_size = 48
+text = "CHORE ENGINE"
+horizontal_alignment = 1
+
+[node name="Notes" type="Label" parent="."]
+layout_mode = 0
+offset_left = 686.0
+offset_top = 845.0
+offset_right = 1324.0
+offset_bottom = 971.0
+text = "www.naturallyintelligent.com
+
+\"Chore Engine\" Copyright YEAR
+Naturally Intelligent
+"
+horizontal_alignment = 1
+
+[node name="BackButton" type="Button" parent="."]
+layout_mode = 0
+offset_left = 1595.0
+offset_top = 924.0
+offset_right = 1798.0
+offset_bottom = 1003.0
+text = "BACK"
+
+[node name="CodeText" type="RichTextLabel" parent="."]
+layout_mode = 0
+offset_left = 722.0
+offset_top = 264.0
+offset_right = 1754.0
+offset_bottom = 797.0
+mouse_filter = 2
+bbcode_enabled = true
+text = "FRAMEWORK FOR GODOT
+
+- Open Source - Free to Use - MIT License -
+
+\"Wow! I love not having to doing chores! 
+Thanks Chore Engine!\"
+
+CODE:
+David Kerr"

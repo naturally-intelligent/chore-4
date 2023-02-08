@@ -1,0 +1,100 @@
+[gd_scene load_steps=6 format=3 uid="uid://b5ccvws7pb1fx"]
+
+[ext_resource type="Script" path="res://scenes/play.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://c0cka18yihvk2" path="res://art/hud/black-512x512.png" id="2"]
+[ext_resource type="Shader" path="res://engine/shaders/screen-mirage.gdshader" id="3"]
+[ext_resource type="Texture2D" uid="uid://bx2rdxgg0ciyf" path="res://icon.png" id="4"]
+
+[sub_resource type="ShaderMaterial" id="2"]
+shader = ExtResource("3")
+shader_parameter/frequency = 60.0
+shader_parameter/depth = 0.005
+
+[node name="Play" type="Control"]
+process_mode = 1
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1")
+
+[node name="Background" type="TextureRect" parent="."]
+visible = false
+modulate = Color(1, 1, 1, 0.854902)
+layout_mode = 0
+offset_right = 512.0
+offset_bottom = 512.0
+texture = ExtResource("2")
+
+[node name="Chore" type="Sprite2D" parent="."]
+position = Vector2(1516, 324)
+texture = ExtResource("4")
+
+[node name="Title" type="Label" parent="."]
+layout_mode = 0
+offset_left = 807.0
+offset_top = 88.0
+offset_right = 1147.0
+offset_bottom = 148.0
+theme_override_font_sizes/font_size = 48
+text = "CHORE SCENE"
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 0
+offset_left = 162.0
+offset_top = 284.0
+offset_right = 648.0
+offset_bottom = 985.0
+color = Color(0.129412, 0.129412, 0.129412, 1)
+
+[node name="LabelContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 213.0
+offset_top = 320.0
+offset_right = 604.0
+offset_bottom = 937.0
+
+[node name="Label" type="Label" parent="LabelContainer"]
+layout_mode = 2
+text = "CHORE BOARD A"
+
+[node name="MirageShader" type="ColorRect" parent="."]
+material = SubResource("2")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="AddLabel" type="Button" parent="."]
+layout_mode = 0
+offset_left = 730.0
+offset_top = 383.0
+offset_right = 1122.0
+offset_bottom = 481.0
+text = "<- Add Chore To Do"
+
+[node name="MainMenu" type="Button" parent="."]
+layout_mode = 0
+offset_left = 1054.0
+offset_top = 831.0
+offset_right = 1531.0
+offset_bottom = 941.0
+focus_neighbor_bottom = NodePath("../New")
+text = "MAIN MENU"
+
+[node name="BoringButton" type="Button" parent="."]
+layout_mode = 0
+offset_left = 1239.0
+offset_top = 606.0
+offset_right = 1790.0
+offset_bottom = 704.0
+text = "SCENE SWAP TEST ->"
+
+[connection signal="pressed" from="AddLabel" to="." method="_on_AddLabel_pressed"]
+[connection signal="pressed" from="MainMenu" to="." method="_on_MainMenu_pressed"]
+[connection signal="pressed" from="BoringButton" to="." method="_on_BoringButton_pressed"]
