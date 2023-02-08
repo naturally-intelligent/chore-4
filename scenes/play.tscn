@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://scenes/play.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://c0cka18yihvk2" path="res://art/hud/black-512x512.png" id="2"]
 [ext_resource type="Shader" path="res://engine/shaders/screen-mirage.gdshader" id="3"]
-[ext_resource type="Texture2D" uid="uid://bx2rdxgg0ciyf" path="res://icon.png" id="4"]
+[ext_resource type="Texture2D" uid="uid://cx6i2eky1ux" path="res://icon.png" id="4"]
 
 [sub_resource type="ShaderMaterial" id="2"]
 shader = ExtResource("3")
@@ -62,12 +62,10 @@ text = "CHORE BOARD A"
 
 [node name="MirageShader" type="ColorRect" parent="."]
 material = SubResource("2")
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+custom_minimum_size = Vector2(1920, 1080)
+layout_mode = 0
+offset_right = 1920.0
+offset_bottom = 1080.0
 mouse_filter = 2
 
 [node name="AddLabel" type="Button" parent="."]

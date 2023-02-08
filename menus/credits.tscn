@@ -36,15 +36,13 @@ horizontal_alignment = 1
 
 [node name="Notes" type="Label" parent="."]
 layout_mode = 0
-offset_left = 686.0
-offset_top = 845.0
-offset_right = 1324.0
-offset_bottom = 971.0
+offset_left = 653.0
+offset_top = 829.0
+offset_right = 1488.0
+offset_bottom = 1055.0
 text = "www.naturallyintelligent.com
-
-\"Chore Engine\" Copyright YEAR
-Naturally Intelligent
-"
+\"Chore Engine\" name is Copyright YEAR
+Naturally Intelligent"
 horizontal_alignment = 1
 
 [node name="BackButton" type="Button" parent="."]

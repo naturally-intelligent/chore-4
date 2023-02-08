@@ -1,8 +1,7 @@
-[gd_scene load_steps=20 format=3 uid="uid://bd75f2uxinml3"]
+[gd_scene load_steps=19 format=3 uid="uid://bd75f2uxinml3"]
 
 [ext_resource type="Script" path="res://engine/root.gd" id="1"]
 [ext_resource type="PackedScene" path="res://engine/overlay.tscn" id="2"]
-[ext_resource type="Texture2D" uid="uid://ciiqtn8giqbdj" path="res://art/cutscenes/cutscene-background.png" id="4"]
 [ext_resource type="Shader" path="res://engine/shaders/blur-shader.gdshader" id="5"]
 [ext_resource type="Shader" path="res://engine/shaders/greyscale-shader.gdshader" id="6"]
 [ext_resource type="Shader" path="res://engine/shaders/brightness.gdshader" id="7"]
@@ -279,7 +278,6 @@ offset_top = -0.409818
 offset_right = 320.303
 offset_bottom = 180.0
 mouse_filter = 2
-texture = ExtResource("4")
 
 [node name="Top" type="ColorRect" parent="Overlay/Transitions/Box"]
 use_parent_material = true

@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://tk8scshhvliw"]
 
 [ext_resource type="Script" path="res://engine/launch.gd" id="1"]
-[ext_resource type="Texture2D" uid="uid://bx2rdxgg0ciyf" path="res://icon.png" id="2"]
+[ext_resource type="Texture2D" uid="uid://cx6i2eky1ux" path="res://icon.png" id="2"]
 [ext_resource type="Texture2D" uid="uid://bto3qjr4kqgyq" path="res://art/hud/black-320x180.png" id="4"]
 
 [node name="Splash" type="Node"]
