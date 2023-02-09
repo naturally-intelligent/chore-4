@@ -180,7 +180,11 @@ func build_dialog(text, type='dialog'):
 	elif type=='player':
 		dialog_bubble.set_background('Player9P')
 
-	var font = label.get_font('normal_font')
+	#var font = label.get('theme_override_fonts/normal_font')
+	#var _theme = util.find_theme(self)
+	#var font = _theme.default_font
+	#if font == null:
+	var font = load(ProjectSettings.get_setting('gui/theme/custom_font'))
 	var data = text_in_box_shape(text, font, line_spacing, inner_text_width)
 	var formatted_text = data[0]
 	var text_h = data[1]
