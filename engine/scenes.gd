@@ -59,10 +59,7 @@ func thaw(scene_name, transitions={}, info={}, scene_data=false):
 	var infos = {}
 	if info:
 		infos[info] = true
-	if scene is String and scene == '':
-		debug.print("ERROR: scene.thaw() can't find scene: ", scene_name)
-		return false
-	elif scene == null:
+	if util.is_not(scene):
 		debug.print("ERROR: scene.thaw() can't find scene: ", scene_name)
 		return false
 	root.switch_to_scene(scene, scene_name, scene_data, infos, transitions)

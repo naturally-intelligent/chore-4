@@ -41,12 +41,12 @@ func thaw(menu_name, transitions={}, info={}, menu_data=false):
 	var menu = null
 	if has_in_memory(menu_name):
 		menu = retrieve_menu(menu_name)
-		if menu == null:
+		if util.is_not(menu):
 			debug.print("ERROR: menu.thaw() can't find menu: ", menu_name)
 			return false
 	else:
 		menu = find_menu_file(menu_name)
-		if menu == '':
+		if util.is_not(menu):
 			debug.print("ERROR: menu.thaw() can't find menu: ", menu_name)
 			return false
 	root.switch_to_menu(menu, menu_name, menu_data, info, transitions)

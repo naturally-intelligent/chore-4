@@ -115,10 +115,7 @@ func switch_to_menu(menu, menu_name, menu_data=false, info={}, transitions={}):
 
 # called by scenes.show()
 func switch_to_scene(scene, scene_name, scene_data=false, info={}, transitions={}):
-	if scene is String and scene == '':
-		debug.print("ERROR: root.switch_to_scene called without scene, aborting")
-		return false
-	elif scene == null:
+	if util.is_not(scene):
 		debug.print("ERROR: root.switch_to_scene called without scene, aborting")
 		return false
 	if 'switch_target' in info:

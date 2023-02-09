@@ -224,12 +224,10 @@ static func percent_string(f: float) -> String:
 	return str(int(f*100)) + '%'
 
 static func file_exists(file):
+	if FileAccess.file_exists(file):
+		return true
 	if ResourceLoader.exists(file):
 		return true
-	if file.find('://') != -1:
-		var split = file.split('://')
-		var dir = DirAccess.open(split[0]+'://')
-		return dir.file_exists(split[1])
 	return false
 
 static func int_to_currency(i, pennies=false):
@@ -781,3 +779,28 @@ static func map_gamepad_input(config):
 				InputMap.action_add_event(ui_action, new_event)
 		else:
 			return
+
+static func find_theme(control):
+	var theme = null
+	while control != null && "theme" in control:
+		theme = control.theme
+		if theme != null: break
+		control = control.get_parent()
+	return theme
+
+static func is_not(variable):
+	if variable is String and variable == '':
+		return true
+	elif variable is Dictionary and variable == {}:
+		return true
+	elif variable is Array and variable == []:
+		return true
+	elif variable is bool and not variable:
+		return true
+	elif variable is Object and not is_instance_valid(variable):
+		return true
+	elif variable is int and variable == 0:
+		return true
+	elif variable is float and variable == 0.0:
+		return true
+	return false
