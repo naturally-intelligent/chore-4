@@ -789,18 +789,4 @@ static func find_theme(control):
 	return theme
 
 static func is_not(variable):
-	if variable is String and variable == '':
-		return true
-	elif variable is Dictionary and variable == {}:
-		return true
-	elif variable is Array and variable == []:
-		return true
-	elif variable is bool and not variable:
-		return true
-	elif variable is Object and not is_instance_valid(variable):
-		return true
-	elif variable is int and variable == 0:
-		return true
-	elif variable is float and variable == 0.0:
-		return true
-	return false
+	return variable == null
