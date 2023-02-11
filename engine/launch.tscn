@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://engine/launch.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://cx6i2eky1ux" path="res://icon.png" id="2"]
-[ext_resource type="Texture2D" uid="uid://bto3qjr4kqgyq" path="res://art/hud/black-320x180.png" id="4"]
+[ext_resource type="Theme" uid="uid://bml6iiodj2eom" path="res://art/chore_theme.tres" id="2_b7qqu"]
 
 [node name="Splash" type="Node"]
 script = ExtResource("1")
@@ -12,25 +12,30 @@ layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
+theme = ExtResource("2_b7qqu")
 
-[node name="black-320x180" type="TextureRect" parent="EditorSplash"]
+[node name="ColorRect" type="ColorRect" parent="EditorSplash"]
+custom_minimum_size = Vector2(1920, 1080)
 layout_mode = 0
-offset_right = 320.0
-offset_bottom = 180.0
-scale = Vector2(2, 2)
-texture = ExtResource("4")
+offset_right = 1920.0
+offset_bottom = 1080.0
+color = Color(0, 0, 0, 1)
 
 [node name="ChoreEngineIcon" type="TextureRect" parent="EditorSplash"]
+custom_minimum_size = Vector2(1920, 0)
 layout_mode = 0
-offset_right = 640.0
-offset_bottom = 334.0
+offset_top = 186.0
+offset_right = 1920.0
+offset_bottom = 771.0
 texture = ExtResource("2")
-stretch_mode = 4
+stretch_mode = 5
 
 [node name="Title" type="Label" parent="EditorSplash"]
 layout_mode = 0
-offset_top = 257.0
-offset_right = 320.0
-offset_bottom = 307.0
-scale = Vector2(2, 2)
+offset_top = 792.0
+offset_right = 1920.0
+offset_bottom = 1078.0
+theme_override_font_sizes/font_size = 96
 text = "CHORE ENGINE"
+horizontal_alignment = 1
+vertical_alignment = 1
