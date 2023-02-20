@@ -405,7 +405,8 @@ func _hard_switch_scene():
 		current_scene_name = _next_scene_name
 		current_scene_type = _next_scene_type
 		current_scene.visible = true
-		current_scene.move_to_front()
+		if current_scene.has_method("move_to_front"):
+			current_scene.move_to_front()
 	_next_scene = null
 	_next_scene_name = ''
 	_next_scene_type = ''
@@ -554,10 +555,8 @@ func scale_root():
 	#  menus_root.set_scale(view_scale)
 
 func scale_transitions():
-	if game.pixel_width > 640:
-		Transitions.scale.x = game.pixel_width / 640
-		Transitions.scale.y = game.pixel_height / 320
-
+	pass
+	
 func scale_cursor():
 	Cursor.scale = settings.scale_mouse_cursor
 
