@@ -87,7 +87,7 @@ func array(a, title=false):
 		dict(a)
 
 # ignore; used by debug,print()
-static func convert_string(s1,s2,s3,s4,s5,s6,s7,s8,s9,s10,s11,s12,s13,s14):
+func convert_string(s1,s2,s3,s4,s5,s6,s7,s8,s9,s10,s11,s12,s13,s14):
 	var s = str(s1)
 	var c = ' '
 	if s2 or s2 is bool: s+=c+str(s2);
@@ -127,14 +127,14 @@ func error(s1, s2='',s3='',s4='',s5='',s6='',s7='',s8='',s9='',s10='',s11='',s12
 # debug printing by "category"
 # any categories enabled will be printed to console
 #  but all will still be recorded to log
-func cat(cat, s1, s2='',s3='',s4='',s5='',s6='',s7='',s8='',s9='',s10='',s11='',s12='',s13='',s14=''):
+func cat(_cat, s1, s2='',s3='',s4='',s5='',s6='',s7='',s8='',s9='',s10='',s11='',s12='',s13='',s14=''):
 	if echo:
-		if echo_all_categories or cat in categories:
-			var s = cat+': '+convert_string(s1,s2,s3,s4,s5,s6,s7,s8,s9,s10,s11,s12,s13,s14)
-			print(s)
+		if echo_all_categories or _cat in categories:
+			var _s = _cat+': '+convert_string(s1,s2,s3,s4,s5,s6,s7,s8,s9,s10,s11,s12,s13,s14)
+			print(_s)
 	if log_file_name:
-		var s = cat+': '+convert_string(s1,s2,s3,s4,s5,s6,s7,s8,s9,s10,s11,s12,s13,s14)
-		append_log(s)
+		var _s = _cat+': '+convert_string(s1,s2,s3,s4,s5,s6,s7,s8,s9,s10,s11,s12,s13,s14)
+		append_log(_s)
 
 # add mode to keep log file open isntead of opening/closing each line?
 func append_log(s):

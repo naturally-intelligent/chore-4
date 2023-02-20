@@ -736,18 +736,18 @@ func capture_mouse_cursor():
 
 # SHADERS
 
-func enable_shader(name):
+func enable_shader(shader_name):
 	hide_shaders()
 	Shaders.visible = true
-	if name == 'whirl':
+	if shader_name == 'whirl':
 		Shaders.get_node("WhirlShader").visible = true
-	elif name == 'mirage':
+	elif shader_name == 'mirage':
 		Shaders.get_node("MirageShader").visible = true
-	elif name == 'blur':
+	elif shader_name == 'blur':
 		Shaders.get_node("BlurShader").visible = true
-	elif name == 'grey':
+	elif shader_name == 'grey':
 		Shaders.get_node("GreyShader").visible = true
-	elif name == 'brightness':
+	elif shader_name == 'brightness':
 		Shaders.get_node("BrightnessShader").visible = true
 	#elif name == 'sepia':
 	#	Shaders.get_node("SepiaShader").visible = true

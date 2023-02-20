@@ -100,8 +100,8 @@ func back():
 		settings.back()
 		return
 	if root.current_scene_type == 'scene':
-		var current_scene = current_scene()
-		if current_scene and current_scene.name != settings.main_scene_name:
+		var _current_scene = current_scene()
+		if _current_scene and _current_scene.name != settings.main_scene_name:
 			scenes.show(settings.main_scene_name)
 	else:
 		scenes.show(settings.main_scene_name)

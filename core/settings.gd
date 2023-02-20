@@ -91,9 +91,9 @@ var color_rgbs = {
 	'red': Color(1,0,0),
 	'blue': Color(0,0,1),
 	'green': Color(0,1,0),
-	'purple': Color(64/256,0,64/256),
-	'yellow': Color(1,2/3,0),
-	'orange': Color(1,1/3,0),
+	'purple': Color(64.0/256.0,0,64.0/256.0),
+	'yellow': Color(1,2.0/3.0,0),
+	'orange': Color(1,1.0/3.0,0),
 	'white': Color(1,1,1),
 	'black': Color(0,0,0),
 }
@@ -114,7 +114,7 @@ func save_settings_config():
 	store_settings_values()
 	util.save_config(settings_config_file, settings_config)
 
-func apply_settings_config(first_launch=false):
+func apply_settings_config(_first_launch=false):
 	if has_config('AUDIO', 'sound_volume'):
 		sound_volume = float(get_config('AUDIO', 'sound_volume'))
 	if has_config('AUDIO', 'music_volume'):

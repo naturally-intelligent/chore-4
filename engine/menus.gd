@@ -84,8 +84,8 @@ func back():
 		settings.back()
 		return
 	if root.current_scene_type == 'menu':
-		var current_menu = current_menu()
-		if current_menu and current_menu.name != settings.main_menu_name:
+		var _current_menu = current_menu()
+		if _current_menu and _current_menu.name != settings.main_menu_name:
 			menus.show(settings.main_menu_name)
 	else:
 		menus.show(settings.main_menu_name)
@@ -161,7 +161,7 @@ func menu_or_scene(menu):
 		return 'menu'
 	return 'scene'
 
-func is_menu(menu_or_scene):
-	if find_menu_file(menu_or_scene):
+func is_menu(_menu_or_scene):
+	if find_menu_file(_menu_or_scene):
 		return true
 	return false

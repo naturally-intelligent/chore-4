@@ -102,24 +102,24 @@ func name(word_id):
 	return word_id
 
 # FACTS
-func fact(fact):
-	if fact in facts:
-		return facts[fact]
+func fact(_fact):
+	if _fact in facts:
+		return facts[_fact]
 	else:
 		return false
 
-func flip_fact(fact, default=false):
-	if fact in facts:
-		facts[fact] = not facts[fact]
+func flip_fact(_fact, default=false):
+	if _fact in facts:
+		facts[_fact] = not facts[_fact]
 	else:
-		facts[fact] = default
-	return facts[fact]
+		facts[_fact] = default
+	return facts[_fact]
 
-func set_fact(fact, value):
+func set_fact(_fact, value):
 	#print('set_fact(',fact,' ', value)
-	facts[fact] = value
+	facts[_fact] = value
 
 # TIME FACTOR (required by root)
 
-func time(time):
-	return time
+func time(_time):
+	return _time

@@ -6,7 +6,7 @@ var info_index := -1
 func _ready() -> void:
 	set_process(false)
 
-func _process(delta):
+func _process(_delta):
 	update_info_nodes()
 
 func add_info_node(node: Node):

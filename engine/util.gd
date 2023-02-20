@@ -19,8 +19,7 @@ func _ready():
 	input_detection()
 
 func platform_detection():
-	var name = OS.get_name()
-	match name:
+	match OS.get_name():
 		'Android':
 			mobile = true
 			android = true
@@ -48,13 +47,13 @@ func input_detection():
 
 # SORT CLASSES
 class FirstElementGreatest:
-	static func sort(a, b):
+	func sort(a, b):
 		if a[0] > b[0]:
 			return true
 		return false
 
 class FirstElementLeast:
-	static func sort(a, b):
+	func sort(a, b):
 		if a[0] < b[0]:
 			return true
 		return false
@@ -69,31 +68,31 @@ func fullscreen_flip():
 	else:
 		get_window().mode = Window.MODE_EXCLUSIVE_FULLSCREEN if (true) else Window.MODE_WINDOWED
 
-static func random(s, e):
-	if typeof(s) == TYPE_INT:
-		return math.random_int(s, e)
+func random(_s, _e):
+	if typeof(_s) == TYPE_INT:
+		return math.random_int(_s, _e)
 	else:
-		return math.random_float(s, e)
+		return math.random_float(_s, _e)
 
-static func random_boolean():
+func random_boolean():
 	return ((randi()%2) == 0)
 
-static func random_array(a):
+func random_array(a):
 	if a.size() > 0:
 		var i = math.random_int(0,a.size()-1)
 		return a[i]
 	return null
 
-static func random_array_index(a):
+func random_array_index(a):
 	if a.size() > 0:
 		var i = math.random_int(0,a.size()-1)
 		return i
 	return null
 
-static func random_set(s):
-	return random_array(s)
+func random_set(_s):
+	return random_array(_s)
 
-static func random_key(dict):
+func random_key(dict):
 	var keys = dict.keys()
 	if keys.size() > 0:
 		var i = randi() % keys.size()
@@ -102,12 +101,12 @@ static func random_key(dict):
 	else:
 		return null
 
-static func random_value(dict):
+func random_value(dict):
 	var key = random_key(dict)
 	if key: return dict[key]
 	return false
 
-static func random_integer_key(dict):
+func random_integer_key(dict):
 	var keysT = dict.keys()
 	var keys = Array()
 	for key in keysT:
@@ -120,15 +119,15 @@ static func random_integer_key(dict):
 	else:
 		return null
 
-static func random_vector():
+func random_vector():
 	var angle = math.random_float(0,PI)
 	return Vector2(cos(angle), sin(angle))
 
-static func random_direction(excluding=[]):
+func random_direction(excluding=[]):
 	var dirs = [Vector2.UP, Vector2.DOWN, Vector2.LEFT, Vector2.RIGHT]
 	return random_array_excluding(dirs, excluding)
 
-static func random_left_right_up_vector(left_right_scale=1.0, up_scale=1.0):
+func random_left_right_up_vector(left_right_scale=1.0, up_scale=1.0):
 	var angle = math.random_float(PI,PI*2)
 	var v = Vector2(cos(angle), sin(angle))
 	v.x *= left_right_scale
@@ -136,7 +135,7 @@ static func random_left_right_up_vector(left_right_scale=1.0, up_scale=1.0):
 	return v.normalized()
 
 # dict is {} you want key from, exclude is array [] with keys you dont want again
-static func random_key_excluding(dict, exclude):
+func random_key_excluding(dict, exclude):
 	var keysT = dict.keys()
 	var keys = Array()
 	for key in keysT:
@@ -149,7 +148,7 @@ static func random_key_excluding(dict, exclude):
 	else:
 		return null
 
-static func random_value_excluding(dict, exclude=[]):
+func random_value_excluding(dict, exclude=[]):
 	var keysT = dict.keys()
 	var keys = Array()
 	for key in keysT:
@@ -162,7 +161,7 @@ static func random_value_excluding(dict, exclude=[]):
 	else:
 		return null
 
-static func random_array_excluding(array, exclude):
+func random_array_excluding(array, exclude):
 	var pool = Array()
 	for a in array:
 		if not a in exclude:
@@ -174,18 +173,18 @@ static func random_array_excluding(array, exclude):
 	else:
 		return null
 
-static func random_sign():
+func random_sign():
 	if random_boolean():
 		return 1
 	else:
 		return -1
 
-static func random_color(modifier):
+func random_color(modifier):
 	return Color(math.random_float(0,1)*modifier,
 				math.random_float(0,1)*modifier,
 				math.random_float(0,1)*modifier, 1)
 
-static func randomize_color(color, modifier):
+func randomize_color(color, modifier):
 	color.r += math.random_float(-modifier/2.0, modifier/2.0)
 	color.r = clamp(color.r, 0, 1)
 	color.g += math.random_float(-modifier/2.0, modifier/2.0)
@@ -194,16 +193,16 @@ static func randomize_color(color, modifier):
 	color.b = clamp(color.b, 0, 1)
 	return color
 
-static func random_colors(one,two):
+func random_colors(one,two):
 	return Color(math.randomf(one.r,two.r), math.randomf(one.g,two.g), math.randomf(one.b,two.b), 1)
 
-static func rgb100_to_color(r,g,b):
+func rgb100_to_color(r,g,b):
 	return Color(r/100.0, g/100.0, b/100.0, 1)
 
-static func rgb256_to_color(r,g,b,a=1.0):
+func rgb256_to_color(r,g,b,a=1.0):
 	return Color(r/256.0, g/256.0, b/256.0, a)
 
-static func thousands_sep(number, prefix=''):
+func thousands_sep(number, prefix=''):
 	number = int(number)
 	var neg = false
 	if number < 0:
@@ -220,34 +219,34 @@ static func thousands_sep(number, prefix=''):
 	else: res = prefix+res
 	return res
 
-static func percent_string(f: float) -> String:
+func percent_string(f: float) -> String:
 	return str(int(f*100)) + '%'
 
-static func file_exists(file):
+func file_exists(file):
 	if FileAccess.file_exists(file):
 		return true
 	if ResourceLoader.exists(file):
 		return true
 	return false
 
-static func int_to_currency(i, pennies=false):
+func int_to_currency(i, pennies=false):
 	var cash_text = util.thousands_sep(str(i), '$')
 	if pennies:	cash_text += '.00'
 	return cash_text
 
-static func trim_decimals(f, places):
+func trim_decimals(f, places):
 	return snapped(f, pow(0.1,places))
 
-static func string_upper_first(id):
+func string_upper_first(id):
 	return id.substr(0,1).to_upper() + id.substr(1, id.length())
 
-static func first_letter(id):
+func first_letter(id):
 	return id.substr(0,1)
 
-static func upper_first_letter(id):
+func upper_first_letter(id):
 	return id.substr(0,1).to_upper()
 
-static func a_an(word):
+func a_an(word):
 	var first = word.substr(0,1).to_upper()
 	var vowels = ['a','e','i','o','u']
 	if first in vowels:
@@ -255,7 +254,7 @@ static func a_an(word):
 	else:
 		return 'a'
 
-static func name_full(object):
+func name_full(object):
 	var full = ''
 	if 'prefix' in object:
 		full = object['prefix'] + ' '
@@ -266,29 +265,29 @@ static func name_full(object):
 		full+= object['last']
 	object['full'] = full
 
-static func name_fills(object):
+func name_fills(object):
 	name_full(object)
 	object['first_upper'] = object['first'].to_upper()
 	if 'last' in object:
 		object['last_upper'] = object['last'].to_upper()
 
-static func first_upper(string):
+func first_upper(string):
 	return string.capitalize()
 
-static func calculate_total(data):
+func calculate_total(data):
 	data['total'] = 0
 	for col in data:
 		if col != 'total':
 			var amount = data[col]
 			data['total'] += amount
 
-static func clean_string(s):
-	return s.replace("\n", '').replace(" ",'')
+func clean_string(_s):
+	return _s.replace("\n", '').replace(" ",'')
 
-static func replace_fake_formatting(s):
-	return s.replace("\\n", "\n")
+func replace_fake_formatting(_s):
+	return _s.replace("\\n", "\n")
 
-static func random_phone_number():
+func random_phone_number():
 	var ph = '555-'
 	ph+= str(math.random_int(0,9))
 	ph+= str(math.random_int(0,9))
@@ -301,7 +300,7 @@ static func random_phone_number():
 # keys = values
 # keys = array # if split_commas and comma detected
 # values converted to ints/floats if convert_numbers, otherwise strings
-static func load_config(_filename, split_commas=true, convert_numbers=true):
+func load_config(_filename, split_commas=true, convert_numbers=true):
 	var path = _filename
 	var file = FileAccess.open(path, FileAccess.READ)
 	var records = {}
@@ -362,7 +361,7 @@ static func load_config(_filename, split_commas=true, convert_numbers=true):
 		debug.print('ERROR: File missing: ', _filename)
 	return records
 
-static func save_config(_filename, config_data, header={}, convert_numbers=true):
+func save_config(_filename, config_data, header={}, _convert_numbers=true):
 	var path = _filename
 	var file = FileAccess.open(path, FileAccess.WRITE)
 	var records = {}
@@ -394,21 +393,21 @@ static func save_config(_filename, config_data, header={}, convert_numbers=true)
 		debug.print("ERROR: can't write config file ", _filename)
 
 # tries to convert a string to a number, if possible
-static func convert_string_to_number(value):
+func convert_string_to_number(value):
 	if value.is_valid_int():
 		return value.to_int()
 	if value.is_valid_float():
 		return value.to_float()
 	return value
 
-static func set_texture(sprite, file):
+func set_texture(sprite, file):
 	if util.file_exists(file):
 		var tex = load(file)
 		sprite.texture = tex
 	else:
 		debug.print('MISSING TEXTURE: ' + file)
 
-static func number2words(n):
+func number2words(n):
 	var num2words = {1: 'One', 2: 'Two', 3: 'Three', 4: 'Four', 5: 'Five', \
 				6: 'Six', 7: 'Seven', 8: 'Eight', 9: 'Nine', 10: 'Ten', \
 				11: 'Eleven', 12: 'Twelve', 13: 'Thirteen', 14: 'Fourteen', \
@@ -421,14 +420,14 @@ static func number2words(n):
 	else:
 		return num2words[n-n%10] + num2words[n%10].to_lower()
 
-static func number2past(n):
+func number2past(n):
 	var num2words = {1: 'Once', 2: 'Twice', 3: 'Thrice'}
 	if n in num2words:
 		return num2words[n]
 	else:
 		return number2words(n) + ' times'
 
-static func number2present(i):
+func number2present(i):
 	var n = str(i)
 	var num2present = {0: 'Zeroeth', 1: 'First', 2: 'Second', 3: 'Third', \
 		4: 'Fourth', 5: 'Fifth', 6: 'Sixth', 7: 'Seventh', 8: 'Eighth', \
@@ -446,13 +445,13 @@ static func number2present(i):
 			return number2words(i) + 'rd'
 		return number2words(i) + 'th'
 
-static func str_no_zero(i: int) -> String:
+func str_no_zero(i: int) -> String:
 	if i == 0:
 		return ''
 	else:
 		return str(i)
 
-static func next_in_list(current, list : Array):
+func next_in_list(current, list : Array):
 	var index = list.find(current, 0)
 	if index >= 0:
 		index = index + 1
@@ -461,7 +460,7 @@ static func next_in_list(current, list : Array):
 		return list[index]
 	return current
 
-static func prev_in_list(current, list : Array):
+func prev_in_list(current, list : Array):
 	var index = list.find(current, 0)
 	if index >= 0:
 		index = index - 1
@@ -472,7 +471,7 @@ static func prev_in_list(current, list : Array):
 
 # must call yield checked t after return
 # because gdscript wont wait for a yield in an outside function call
-static func wait(time, parent=null):
+func wait(time, parent=null):
 	var t = Timer.new()
 	t.set_wait_time(time)
 	t.set_one_shot(true)
@@ -482,7 +481,7 @@ static func wait(time, parent=null):
 	return t
 
 # https://github.com/godotengine/godot/issues/14562
-static func create_import_files_for_export(texture_dir):
+func create_import_files_for_export(texture_dir):
 	var file_list = list_files_in_directory(texture_dir)
 	for file in file_list:
 		if file.ends_with(".import"):
@@ -490,7 +489,7 @@ static func create_import_files_for_export(texture_dir):
 			return load(texture_dir + file_name)
 
 # SCREENSHOT (F5)
-static func screenshot(scene, scale=false, logo=false, savedir="screenshots"):
+func screenshot(scene, scale=false, logo=false, savedir="screenshots"):
 	debug.print('Screenshot...')
 	scene.get_viewport().set_clear_mode(SubViewport.CLEAR_MODE_ONCE)
 
@@ -542,7 +541,7 @@ static func screenshot(scene, scale=false, logo=false, savedir="screenshots"):
 	if show_cursor:
 		root.show_cursor()
 
-static func numbered_filename(dir="user://", file_prefix='', file_ext='.png'):
+func numbered_filename(dir="user://", file_prefix='', file_ext='.png'):
 	if not file_prefix:
 		file_prefix = ProjectSettings.get_setting('application/config/name').replace(' ','')
 	var count = 1
@@ -554,7 +553,7 @@ static func numbered_filename(dir="user://", file_prefix='', file_ext='.png'):
 		file_dir = append_separator(dir) + file_name
 	return [file_dir, file_name]
 
-static func ensure_dir(subdir, res="user://"):
+func ensure_dir(subdir, res="user://"):
 	var directory = DirAccess.open(res)
 	if not directory.dir_exists(subdir):
 		directory.make_dir(subdir)
@@ -562,7 +561,7 @@ static func ensure_dir(subdir, res="user://"):
 # https://godotengine.org/qa/5175/how-to-get-all-the-files-inside-a-folder
 # - sort_by = date
 # - sort_order = newest/oldest
-static func list_files_in_directory(path, sort_by=false, sort_order=false):
+func list_files_in_directory(path, sort_by=false, sort_order=false):
 	var files = []
 	var sort = []
 	var dir = DirAccess.open(path)
@@ -578,7 +577,7 @@ static func list_files_in_directory(path, sort_by=false, sort_order=false):
 			if sort_by:
 				if sort_by == 'date':
 					var file_object = FileAccess.open(file, FileAccess.READ)
-					var modified_time = file_object.get_modified_time(file)
+					var modified_time = FileAccess.get_modified_time(file)
 					sort.append([file, modified_time])
 	dir.list_dir_end()
 
@@ -598,32 +597,32 @@ static func list_files_in_directory(path, sort_by=false, sort_order=false):
 	return files
 
 # directory separator
-static func dir_sep():
+func dir_sep():
 	if util.windows:
 		return '\\'
 	else:
 		return '/'
 
-static func append_separator(dir):
+func append_separator(dir):
 	var last = dir.substr(-1, 1)
 	if last != '/' and last != '\\':
 		return dir + dir_sep()
 	return dir
 
-static func strip_bbcode(text):
+func strip_bbcode(text):
 	var regex = RegEx.new()
 	regex.compile('|[[\\/\\!]*?[^\\[\\]]*?]|')
 	return regex.sub(text, '', true)
 
-static func open_browser(www_url):
+func open_browser(www_url):
 	return OS.shell_open(www_url)
 
-static func delete_children(node):
+func delete_children(node):
 	for n in node.get_children():
 		node.remove_child(n)
 		n.queue_free()
 
-static func get_all_children(node) -> Array:
+func get_all_children(node) -> Array:
 	var nodes: Array = []
 	for c in node.get_children():
 		if c.get_child_count() > 0:
@@ -633,7 +632,7 @@ static func get_all_children(node) -> Array:
 			nodes.append(c)
 	return nodes
 
-static func opposite_direction(direction: String) -> String:
+func opposite_direction(direction: String) -> String:
 	if direction == 'up':
 		return 'down'
 	if direction == 'down':
@@ -646,7 +645,7 @@ static func opposite_direction(direction: String) -> String:
 
 # TILES
 
-static func tilemap_closest_used_cell(map: TileMap, position: Vector2, direction):
+func tilemap_closest_used_cell(map: TileMap, position: Vector2, direction):
 	var desired_cell = map.local_to_map(position)
 	if map.get_cell(desired_cell.x, desired_cell.y) == 0:#:TileMap.INVALID_CELL:
 		var closest_cell = false
@@ -663,38 +662,38 @@ static func tilemap_closest_used_cell(map: TileMap, position: Vector2, direction
 
 # STRING CONVENIENCE
 
-static func s(i: int) -> String:
+func s(i: int) -> String:
 	if i == 1:
 		return ''
 	return 's'
 
-static func unlimited(i: int) -> String:
+func unlimited(i: int) -> String:
 	if i == -1:
 		return 'Unlimited'
 	return str(i)
 
-static func a_or_number(i: int) -> String:
+func a_or_number(i: int) -> String:
 	if i == 1:
 		return 'a'
 	return str(i)
 
-static func signed_number(i: int) -> String:
+func signed_number(i: int) -> String:
 	if i < 0:
 		return str(i)
 	elif i > 0:
 		return '+'+str(i)
 	return str(i)
 
-static func string_to_bool(s: String) -> bool:
-	if s.to_lower() == 'true':
+func string_to_bool(_s: String) -> bool:
+	if _s.to_lower() == 'true':
 		return true
 	else:
 		return false
 
-static func vector_to_string(vector) -> String:
+func vector_to_string(vector) -> String:
 	return "x="+str(trim_decimals(vector.x, 1))+" y="+str(trim_decimals(vector.y, 1))
 
-static func keycode_to_scancode(key_code):
+func keycode_to_scancode(key_code):
 	var scan_code = OS.find_keycode_from_string(key_code) # ex: Escape
 	if not scan_code:
 		scan_code = OS.find_keycode_from_string(key_code.substr(4)) # ex: KEY_ESCAPE
@@ -710,7 +709,7 @@ static func keycode_to_scancode(key_code):
 # KEY_LEFT = ui_left
 # KEY_RIGHT = ui_right
 # KEY_SPACE = ui_jump
-static func map_input_keys(config, allowed:=[]):
+func map_input_keys(config, allowed:=[]):
 	var to_map = []
 	var cleared = []
 	# Check for validity of input maps, and erase any existing conflicts
@@ -722,14 +721,14 @@ static func map_input_keys(config, allowed:=[]):
 			#debug.print('Input Map Request: ', ui_action, key_code, scan_code)
 			if scan_code:
 				# Check if already mapped
-				var duplicate = false
+				var _duplicate = false
 				var input_events = InputMap.action_get_events(ui_action)
 				for input_event in input_events:
 					if input_event is InputEventKey:
 						if scan_code == input_event.scancode:
-							duplicate = true
+							_duplicate = true
 				# Erase if new
-				if not duplicate:
+				if not _duplicate:
 					for input_event in input_events:
 						if input_event is InputEventKey:
 							debug.print('Erasing Key:', ui_action, '<-', OS.get_keycode_string(input_event.scancode))
@@ -753,7 +752,7 @@ static func map_input_keys(config, allowed:=[]):
 # Button_2=ui_jump
 # Button_1=ui_shoot
 # Button_3=ui_flashlight
-static func map_gamepad_input(config):
+func map_gamepad_input(config):
 	for device_id in range(0,8+1):
 		var device_section = 'GAMEPAD_'+str(device_id)
 		if device_section in config:
@@ -780,7 +779,7 @@ static func map_gamepad_input(config):
 		else:
 			return
 
-static func find_theme(control):
+func find_theme(control):
 	var theme = null
 	while control != null && "theme" in control:
 		theme = control.theme
@@ -788,5 +787,5 @@ static func find_theme(control):
 		control = control.get_parent()
 	return theme
 
-static func is_not(variable):
+func is_not(variable):
 	return variable == null

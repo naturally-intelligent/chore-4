@@ -24,21 +24,20 @@ func _ready():
 func play_music(song_name, volume=1.0):
 	if dev.silence: return
 	if dev.no_music: return
-	var name = song_name
 	if song_name in settings.tracklist:
 		var song_data = settings.tracklist[song_name]
 		if typeof(song_data) == TYPE_STRING:
-			name = song_data
+			song_name = song_data
 			volume = 1.0
 		else: # array
-			name = song_data[0]
+			song_name = song_data[0]
 			volume = song_data[1]
-	if music_playing(name): return
-	debug.print('playing song: ' + name)
+	if music_playing(song_name): return
+	debug.print('playing song: ' + song_name)
 	if music_fadeout_tween.is_running():
 		music_fadeout_tween.stop()
 	stop_and_reset_music()
-	var songfile = find_music_file(name)
+	var songfile = find_music_file(song_name)
 	if songfile:
 		var stream = load(songfile)
 		if stream:
@@ -47,19 +46,19 @@ func play_music(song_name, volume=1.0):
 			$MusicPlayer.set_stream(stream)
 			$MusicPlayer.stream_paused = false
 			$MusicPlayer.play()
-			current_song = name
+			current_song = song_name
 		else:
 			if not songfile in missing_files:
-				debug.print("MUSIC FILE FAILED TO LOAD:",name,songfile)
+				debug.print("MUSIC FILE FAILED TO LOAD:",song_name,songfile)
 				missing_files.append(songfile)
 	else:
-		if not name in missing_files:
-			debug.print("MUSIC FILE MISSING:",name)
-			missing_files.append(name)
+		if not song_name in missing_files:
+			debug.print("MUSIC FILE MISSING:",song_name)
+			missing_files.append(song_name)
 
-func find_music_file(name):
+func find_music_file(song_name):
 	for dir in settings.music_dirs:
-		var file_name = 'res://' + dir + '/' + name + settings.music_ext
+		var file_name = 'res://' + dir + '/' + song_name + settings.music_ext
 		if util.file_exists(file_name) or util.file_exists(file_name+".import"):
 			return file_name
 	return false
@@ -87,9 +86,9 @@ func stop_and_reset_music():
 	stop_music()
 	set_music_volume(settings.music_volume)
 
-func play_sound(name, volume=1.0, origin=false, listener=false, allow_multiple=true):
+func play_sound(sound_name, volume=1.0, origin=false, listener=false, allow_multiple=true):
 	if dev.silence: return
-	var file_name = sound_file(name)
+	var file_name = sound_file(sound_name)
 	if file_name:
 		# stop already playing sounds of this
 		stop_sound(file_name)
@@ -104,37 +103,37 @@ func play_sound(name, volume=1.0, origin=false, listener=false, allow_multiple=t
 				return
 		return queue_sound(file_name, volume, allow_multiple)
 	else:
-		if not name in missing_files:
-			debug.print("SOUND FILE MISSING:",name)
-			missing_files.append(name)
+		if not sound_name in missing_files:
+			debug.print("SOUND FILE MISSING:",sound_name)
+			missing_files.append(sound_name)
 
-func play_once(name, volume=1.0):
-	return play_sound(name, volume, false, false, true)
+func play_once(sound_name, volume=1.0):
+	return play_sound(sound_name, volume, false, false, true)
 
-func play_random_sound(name, total, volume=1.0, origin=false, listener=false):
+func play_random_sound(sound_name, total, volume=1.0, origin=false, listener=false):
 	if dev.silence: return
 	var c = math.random_int(1,total)
-	return play_sound(name + str(c), volume, origin, listener)
+	return play_sound(sound_name + str(c), volume, origin, listener)
 
-func play_sound_pitched(name, pitch_start=0.8, pitch_end=1.2):
-	var player = play_sound(name)
+func play_sound_pitched(sound_name, pitch_start=0.8, pitch_end=1.2):
+	var player = play_sound(sound_name)
 	if player:
 		player.pitch_scale = math.random_float(pitch_start, pitch_end)
 
-func play_ambience_sound(name, total=1, origin=false, listener=false, time=0.33, random=true):
+func play_ambience_sound(sound_name, total=1, origin=false, listener=false, time=0.33, random=true):
 	if dev.silence: return
-	if not name in ambience_timers:
+	if not sound_name in ambience_timers:
 		var timer = Timer.new()
 		timer.one_shot = true
 		timer.autostart = false
 		$Timers.add_child(timer)
-		ambience_timers[name] = timer
-	var timer = ambience_timers[name]
+		ambience_timers[sound_name] = timer
+	var timer = ambience_timers[sound_name]
 	if timer.is_stopped():
 		if total == 1:
-			play_sound(name, 1.0, origin, listener)
+			play_sound(sound_name, 1.0, origin, listener)
 		else:
-			play_random_sound(name, total, 1.0, origin, listener)
+			play_random_sound(sound_name, total, 1.0, origin, listener)
 		if random:
 			time = math.random_float(time/2,time+time/2)
 		timer.start(time)
@@ -163,8 +162,8 @@ func queue_sound(file_name, volume=1.0, allow_multiple=true):
 		paused_sounds.erase(player)
 		return player
 
-func stop_sound(name):
-	var file_name = sound_file(name)
+func stop_sound(sound_name):
+	var file_name = sound_file(sound_name)
 	for player in $SoundPlayers.get_children():
 		if player.playing:
 			if player.name in history:
@@ -175,14 +174,14 @@ func stop_sound(name):
 					#player.set_stream(null)
 					history.erase(player.name)
 					paused_sounds.erase(player)
-				elif history[player.name] == name:
+				elif history[player.name] == sound_name:
 					player.stream_paused = true
 					player.stop()
 					player.playing = false
 					#player.set_stream(null)
 					history.erase(player.name)
 					paused_sounds.erase(player)
-				elif player.name == name:
+				elif player.name == sound_name:
 					player.stream_paused = true
 					player.stop()
 					player.playing = false
@@ -199,14 +198,14 @@ func stop_sound(name):
 					player.set_stream(null)
 					history.erase(player.name)
 					paused_sounds.erase(player)
-				elif history[player.name] == name:
+				elif history[player.name] == sound_name:
 					player.stream_paused = true
 					player.stop()
 					player.playing = false
 					player.set_stream(null)
 					history.erase(player.name)
 					paused_sounds.erase(player)
-				elif player.name == name:
+				elif player.name == sound_name:
 					player.stream_paused = true
 					player.stop()
 					player.playing = false
@@ -214,34 +213,34 @@ func stop_sound(name):
 					history.erase(player.name)
 					paused_sounds.erase(player)
 
-func sound_file(name):
-	if util.file_exists(name):
-		return name
-	if name in file_locations:
-		return file_locations[name]
-	var file_name = find_sound_file(name)
+func sound_file(sound_name):
+	if util.file_exists(sound_name):
+		return sound_name
+	if sound_name in file_locations:
+		return file_locations[sound_name]
+	var file_name = find_sound_file(sound_name)
 	if file_name:
-		file_locations[name] = file_name
+		file_locations[sound_name] = file_name
 		return file_name
-	if name in settings.sound_alias:
-		var alias_name = settings.sound_alias[name]
+	if sound_name in settings.sound_alias:
+		var alias_name = settings.sound_alias[sound_name]
 		if alias_name:
 			var file_name2 = find_sound_file(alias_name)
 			if file_name2:
-				file_locations[name] = file_name2
+				file_locations[sound_name] = file_name2
 			return file_name2
 	return false
 
-func find_sound_file(name):
+func find_sound_file(sound_name):
 	for dir in settings.sound_dirs:
-		var file_name = 'res://' + dir + '/' + name + settings.sound_ext
+		var file_name = 'res://' + dir + '/' + sound_name + settings.sound_ext
 		if util.file_exists(file_name) or util.file_exists(file_name+".import"):
 			return file_name
 	return false
 
-func loop_sound(name, volume=1.0):
+func loop_sound(sound_name, volume=1.0):
 	if dev.silence: return
-	var file_name = sound_file(name)
+	var file_name = sound_file(sound_name)
 	if file_name:
 		# stop already playing sounds of this
 		stop_sound(file_name)
@@ -280,16 +279,16 @@ func set_music_volume(amount):
 	emit_signal("music_volume_changed", db)
 	#$MusicPlayer.volume_db = (1.0-amount) * -80.0
 
-func fade_in_music(name, time, ease_method=Tween.EASE_IN):
+func fade_in_music(music_name, _time, _ease_method=Tween.EASE_IN):
 	set_music_volume(0)
-	play_music(name, false)
+	play_music(music_name, false)
 	if music_fadein_tween.is_running():
 		music_fadeout_tween.stop()
 	var db = convert_percent_to_db(settings.music_volume)
 	#$MusicFadeIn.interpolate_property($MusicPlayer, "volume_db", -80, db, time, Tween.TRANS_SINE, ease_method, 0)
 	#$MusicFadeIn.start()
 
-func fade_out_music(time=1.0, ease_method=Tween.EASE_IN):
+func fade_out_music(_time=1.0, _ease_method=Tween.EASE_IN):
 	if $MusicPlayer.playing:
 		if not music_fadeout_tween.is_running():
 			pass
@@ -314,12 +313,12 @@ func calm_button_hover_sounds(button, focus_sound, unfocus_sound=false):
 	if unfocus_sound:
 		button.connect("on_normal_state",Callable(self,"play_sound").bind(unfocus_sound))
 
-func delayed_sound(name, time, volume=1.0):
+func delayed_sound(sound_name, time, volume=1.0):
 	if dev.silence: return
 	# todo: more timers
 	if $Timers/DelayedTimer1.is_connected("timeout",Callable(self,"play_sound")):
 		$Timers/DelayedTimer1.disconnect("timeout",Callable(self,"play_sound"))
-	$Timers/DelayedTimer1.connect("timeout",Callable(self,"play_sound").bind(name, volume))
+	$Timers/DelayedTimer1.connect("timeout",Callable(self,"play_sound").bind(sound_name, volume))
 	$Timers/DelayedTimer1.wait_time = time
 	$Timers/DelayedTimer1.start()
 
@@ -360,5 +359,5 @@ func resume_sounds():
 
 # plays a sound if not already playing
 # todo: add within last time played
-func play_sound_if_not(name, volume=1.0):
-	play_sound(name, volume, false, false, false)
+func play_sound_if_not(sound_name, volume=1.0):
+	play_sound(sound_name, volume, false, false, false)
