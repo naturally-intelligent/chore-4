@@ -47,13 +47,13 @@ func input_detection():
 
 # SORT CLASSES
 class FirstElementGreatest:
-	func sort(a, b):
+	static func sort(a, b):
 		if a[0] > b[0]:
 			return true
 		return false
 
 class FirstElementLeast:
-	func sort(a, b):
+	static func sort(a, b):
 		if a[0] < b[0]:
 			return true
 		return false

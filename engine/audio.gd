@@ -285,16 +285,16 @@ func fade_in_music(music_name, _time, _ease_method=Tween.EASE_IN):
 	if music_fadein_tween.is_running():
 		music_fadeout_tween.stop()
 	var db = convert_percent_to_db(settings.music_volume)
-	#$MusicFadeIn.interpolate_property($MusicPlayer, "volume_db", -80, db, time, Tween.TRANS_SINE, ease_method, 0)
+	#$MusicFadeIn.tween_property($MusicPlayer, "volume_db", -80, db, time, Tween.TRANS_SINE, ease_method, 0)
 	#$MusicFadeIn.start()
 
 func fade_out_music(_time=1.0, _ease_method=Tween.EASE_IN):
 	if $MusicPlayer.playing:
 		if not music_fadeout_tween.is_running():
 			pass
-			#$MusicFadeOut.interpolate_property($MusicPlayer, "volume_db", 0, -80, time, Tween.TRANS_SINE, ease_method, 0)
-			#broken: $MusicFadeOut.interpolate_property($MusicPlayer, "volume_db", $MusicPlayer.volume_db, convert_percent_to_db(0), time, Tween.TRANS_SINE, ease_method, 0)
-			#$MusicFadeOut.connect("tween_all_completed",Callable(self,"stop_and_reset_music"))
+			#$MusicFadeOut.tween_property($MusicPlayer, "volume_db", 0, -80, time, Tween.TRANS_SINE, ease_method, 0)
+			#broken: $MusicFadeOut.tween_property($MusicPlayer, "volume_db", $MusicPlayer.volume_db, convert_percent_to_db(0), time, Tween.TRANS_SINE, ease_method, 0)
+			#$MusicFadeOut.connect("finished",Callable(self,"stop_and_reset_music"))
 			#$MusicFadeOut.start()
 
 func button_sounds(button, hover_sound, press_sound):

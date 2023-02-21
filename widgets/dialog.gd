@@ -98,15 +98,15 @@ func _process(delta):
 		'leave':
 			# using a tween for easier pixel-locked movement
 			dialog_action = 'leave-checked'
-			var tween = Tween.new()
+			var tween: Tween = create_tween()
 			var new_pos = get_position()
 			new_pos.y = new_pos.y - get_size().y
-			tween.interpolate_property(self,
-				"position", get_position(), new_pos, 0.5,
-				Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-			add_child(tween)
+			position = get_position()
+			tween.tween_property(self, "position", new_pos, 0.5)
+			tween.set_trans(Tween.TRANS_LINEAR)
+			tween.set_ease(Tween.EASE_IN_OUT)
 			tween.start()
-			await tween.finished
+			await tween.loop_finished
 			delete_dialogs()
 			dialog_action = false
 		'leave-pixel':
@@ -477,6 +477,6 @@ func fade():
 			var alpha = (1.0 + fading_bubbles*fade_step) - (position*fade_step)
 			#print(position, ' ', fade_bubbles, ' = ', alpha)
 			child.modulate.a = alpha
-	#$Tween.interpolate_property($AnimatedSprite2D, "modulate",
+	#$Tween.tween_property($AnimatedSprite2D, "modulate",
 	#    Color(1, 1, 1, 1), Color(1, 1, 1, 0), 2.0,
 	#    Tween.TRANS_LINEAR, Tween.EASE_IN)

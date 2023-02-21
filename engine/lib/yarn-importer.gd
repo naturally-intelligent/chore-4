@@ -102,7 +102,7 @@ func new_yarn_fibre(line):
 			fibre['command'] = split[1]
 			#print(line, split[0], split[1])
 			return fibre
-	 # comment ##
+	# comment ##
 	elif first_two == '##':
 		var fibre = {}
 		fibre['kind'] = 'comment'
@@ -120,8 +120,7 @@ func load_yarn(path):
 	yarn['threads'] = {}
 	yarn['start'] = false
 	yarn['file'] = path
-	var file = File.new()
-	file.open(path, file.READ)
+	var file = FileAccess.open(path, FileAccess.READ)
 	if file.is_open():
 		# yarn reading flags
 		var start = false
@@ -163,7 +162,7 @@ func load_yarn(path):
 				if fibre:
 					thread['fibres'].append(fibre)
 	else:
-		print('ERROR: Yarn file missing: ', filename)
+		print('ERROR: Yarn file missing: ', path)
 	return yarn
 
 # Main logic for node handling
@@ -302,8 +301,7 @@ func print_gdscript_to_console():
 func save_to_gdscript(filename):
 	var script = export_to_gdscript()
 	# write to file
-	var file = File.new()
-	file.open(filename, file.WRITE)
+	var file = FileAccess.open(filename, FileAccess.WRITE)
 	if not file.is_open():
 		print('ERROR: Cant open file ', filename)
 		return false

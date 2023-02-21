@@ -493,7 +493,7 @@ func clear_menus_above(menu):
 
 # F6 - for running from F6 key within godot editor
 #   to use, add a check to top of ready() function in any scene:
-#  	if not root.check_is_root_scene(self, filename):
+#  	if not root.check_is_root_scene(self, scene_file_path):
 #		return
 func check_is_root_scene(scene, scene_name, scene_type='scene'):
 	if not root_scene and dev.dev_mode_enabled:
@@ -856,7 +856,7 @@ func transition_fade_out(fade_time=0.3):
 	var transition = Transitions.get_node("Fader")
 	transition.visible = true
 	transition.modulate = Color(1, 1, 1, 0)
-	var tween = create_tween()
+	var tween: Tween = create_tween()
 	tween.tween_property(transition, "modulate", Color(1, 1, 1, 1), game.time(fade_time))
 	tween.set_trans(Tween.TRANS_LINEAR)
 	tween.set_ease(Tween.EASE_IN)
@@ -872,7 +872,7 @@ func transition_fade_in(fade_time=0.3):
 	var transition = Transitions.get_node("Fader")
 	transition.visible = true
 	transition.modulate = Color(1, 1, 1, 1)
-	var tween = create_tween()
+	var tween: Tween = create_tween()
 	tween.tween_property(transition, "modulate", Color(1, 1, 1, 0), game.time(fade_time))
 	tween.set_trans(Tween.TRANS_LINEAR)
 	tween.set_ease(Tween.EASE_IN)
@@ -948,7 +948,7 @@ func transition_slide(scene, in_out, direction, time=0.5):
 			scene.position = on_screen
 		else:
 			scene.position = on_screen
-	var tween = create_tween()
+	var tween: Tween = create_tween()
 	tween.tween_property(scene, param, destination, game.time(time))
 	tween.set_trans(Tween.TRANS_LINEAR)
 	tween.set_ease(Tween.EASE_IN_OUT)
@@ -1006,7 +1006,7 @@ func black_box_slide():
 	hide_cursor()
 	var time = 1.5
 	var transition = Transitions.get_node("Box")
-	var tween = create_tween()
+	var tween: Tween = create_tween()
 	var material = transition.get_material()
 	transition.visible = true
 	Transitions.get_node("Box/Top").visible = false

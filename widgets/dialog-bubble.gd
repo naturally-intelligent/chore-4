@@ -35,7 +35,7 @@ func set_text(text):
 	var label = get_text_label()
 	if text.count('[') > 0:
 		label.bbcode_enabled = true
-		label.set_bbcode(text)
+		label.set_text(text)
 	else:
 		label.set_text(text)
 
@@ -70,7 +70,7 @@ func grow_animation(dx, dy, time, text):
 	enable_button()
 
 func property_tween(property, ox,oy, dx,dy, time):
-	var tween = create_tween()
+	var tween: Tween = create_tween()
 	$Bubble.set(property, Vector2(ox,oy))
 	tween.tween_property($Bubble, property, Vector2(dx,dy), time)
 	tween.set_trans(Tween.TRANS_LINEAR)

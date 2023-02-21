@@ -1,25 +1,25 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=2 format=3 uid="uid://bi84xuh2mo5xh"]
 
-[ext_resource path="res://widgets/feature-camera-2d.gd" type="Script" id=1]
+[ext_resource type="Script" path="res://widgets/feature-camera-2d.gd" id="1"]
 
 [node name="FeatureCamera2D" type="Camera2D"]
-current = true
-process_mode = 0
 position_smoothing_speed = 1.0
 drag_left_margin = 0.0
 drag_right_margin = 0.1
-script = ExtResource( 1 )
+script = ExtResource("1")
+target_node = null
+target_ahead = null
+target_ahead_pixels = null
+target_behind_pixels = null
+target_ahead_factor = null
+target_behind_factor = null
+target_ahead_vector = null
+camera_trigger_areas = null
 
 [node name="DramaticTimer" type="Timer" parent="."]
 wait_time = 0.33
 one_shot = true
 
-[node name="DramaticTween" type="Tween" parent="."]
-
-[node name="TargetTween" type="Tween" parent="."]
-
 [node name="TargetAheadTimer" type="Timer" parent="."]
 wait_time = 0.5
 one_shot = true
-
-[node name="LimitsTween" type="Tween" parent="."]

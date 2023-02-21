@@ -173,6 +173,7 @@ offset_bottom = 360.0
 
 [node name="Letterbox" type="Control" parent="Overlay/Shaders"]
 process_mode = 1
+visible = false
 anchors_preset = 0
 offset_left = 53.0
 offset_top = 15.0
@@ -223,19 +224,18 @@ anchors_preset = 0
 [node name="Mouse" type="Control" parent="Overlay"]
 layout_mode = 3
 anchors_preset = 0
-offset_top = 1.12247
-offset_right = 40.0
-offset_bottom = 41.1225
-mouse_filter = 2
-
-[node name="Cursor" type="TextureRect" parent="Overlay/Mouse"]
-layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 mouse_filter = 2
 
+[node name="Cursor" type="TextureRect" parent="Overlay/Mouse"]
+texture_filter = 1
+layout_mode = 0
+mouse_filter = 2
+
 [node name="Transitions" type="Control" parent="Overlay"]
 process_mode = 1
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

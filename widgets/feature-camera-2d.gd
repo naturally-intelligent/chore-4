@@ -2,7 +2,7 @@ extends Camera2D
 class_name FeatureCamera2D
 
 # target
-@export (NodePath) var target_node
+@export var target_node: NodePath = NodePath("")
 var target_ref: WeakRef
 var target: Node2D : set = set_target
 
@@ -18,7 +18,7 @@ var last_camera_direction_x := 0
 #var last_camera_direction := Vector2.ZERO
 
 # earthquake
-@onready var noise := OpenSimplexNoise.new()
+@onready var noise := FastNoiseLite.new()
 var quake_decay := 0.8  # How quickly the shaking stops [0, 1].
 var quake := 0.0  # Current shake strength.
 var quake_power := 2  # quake exponent. Use [2, 3].
@@ -32,12 +32,12 @@ var shoot_shake_decay := 2.0
 var shoot_shake_power := 2
 
 # camera trigger areas - parent container of CameraTrigger objects
-@export (NodePath) var camera_trigger_areas = null
+@export var camera_trigger_areas: NodePath = NodePath("")
 var trigger_areas: Control = null
 var last_trigger_area := ''
 
 # maintenance
-@onready var last_camera_position: Vector2 = get_camera_position()
+@onready var last_camera_position: Vector2 = global_position
 var initial_camera_left_limit := 0
 var initial_camera_right_limit := 0
 
@@ -71,7 +71,7 @@ func _process(delta):
 				if trigger_area.name != last_trigger_area:
 					#debug.print('Inside', trigger_area.name)
 					# tween
-					var tween = $LimitsTween
+					var tween: Tween = create_tween()
 					var time = 1.5
 					var trans_type = Tween.TRANS_CUBIC
 					var ease_type = Tween.EASE_OUT
@@ -79,12 +79,12 @@ func _process(delta):
 					tween.remove_all()
 					# y limits
 					if trigger_area.new_y_limits:
-						tween.interpolate_property(self, "limit_top",
-							null, trigger_area.limit_y_top, time,
-							trans_type, ease_type)
-						tween.interpolate_property(self, "limit_bottom",
-							null, trigger_area.limit_y_bottom, time,
-							trans_type, ease_type)
+						tween.tween_property(self, "limit_top", trigger_area.limit_y_top, time)
+						tween.set_trans(trans_type)
+						tween.set_ease(ease_type)
+						tween.tween_property(self, "limit_bottom", trigger_area.limit_y_bottom, time)
+						tween.set_trans(trans_type)
+						tween.set_trans(ease_type)
 					# x limits
 					if trigger_area.new_x_limits:
 						limit_left = trigger_area.limit_x_left
@@ -114,7 +114,7 @@ func _physics_process(delta):
 		if shoot_shake > 0:
 			shoot_shake = max(shoot_shake - shoot_shake_decay * delta, 0)
 			do_shake(shoot_shake, shoot_shake_power)
-	last_camera_position = get_camera_position()
+	last_camera_position = global_position
 
 # TARGET
 func set_target(_target):
@@ -140,8 +140,8 @@ func target_ahead_camera(delta):
 				if target_point.x < -target_behind_pixels:
 					target_point.x = -target_behind_pixels
 
-	var tween = $TargetTween
-	tween.interpolate_property(self,
+	var tween: Tween = create_tween()
+	tween.tween_property(self,
 		"global_position", null, target.global_position + target_point,
 		0.2, Tween.TRANS_SINE, Tween.EASE_OUT)
 	tween.start()
@@ -172,10 +172,10 @@ func zoom_drama(wait=0.25, zoom_factor=0.5):
 
 func after_drama():
 	#zoom_normal()
-	var tween = $DramaticTween
-	tween.interpolate_property(self, "zoom",
-	  null, Vector2(1.0,1.0), 0.22,
-	  Tween.TRANS_SINE, Tween.EASE_IN)
+	var tween: Tween = create_tween()
+	tween.tween_property(self, "zoom", Vector2(1.0,1.0), 0.22)
+	tween.set_trans(Tween.TRANS_SINE)
+	tween.set_ease(Tween.EASE_IN)
 	tween.start()
 
 # ZOOM
@@ -245,11 +245,9 @@ func check_empty_triggers():
 func set_smoothing_speed_temporarily(speed=1, time=2.5):
 	var old_speed = position_smoothing_speed
 	position_smoothing_speed = speed
-	var tween = Tween.new()
-	tween.interpolate_property(self,
-		'position_smoothing_speed', speed, old_speed, time,
-		Tween.TRANS_CUBIC, Tween.EASE_IN)
-	add_child(tween)
+	var tween: Tween = create_tween()
+	tween.tween_property(self, 'position_smoothing_speed', old_speed, time)
+	tween.set_trans(Tween.TRANS_CUBIC)
+	tween.set_ease(Tween.EASE_IN)
 	tween.start()
-	await tween.tween_all_completed
-	tween.queue_free()
+	await tween.finished

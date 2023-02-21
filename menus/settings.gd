@@ -19,16 +19,16 @@ func _ready():
 	music.connect('value_changed',Callable(self,'music_changed'))
 	set_default_menu_button($BackButton)
 
-func get_widget(name):
-	if name == 'fullscreen':
+func get_widget(widget_name):
+	if widget_name == 'fullscreen':
 		return $GridNames/FullscreenCheckBox
-	elif name == 'fullscreen_label':
+	elif widget_name == 'fullscreen_label':
 		return $GridNames/FullscreenLabel
-	elif name == 'sound':
+	elif widget_name == 'sound':
 		return $GridAudio/HSliderSound
-	elif name == 'music':
+	elif widget_name == 'music':
 		return $GridAudio/HSliderMusic
-	elif name == 'reset':
+	elif widget_name == 'reset':
 		return $GridNames/ResetButton
 
 func customize_to_platform():

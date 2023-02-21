@@ -66,7 +66,7 @@ func thaw(scene_name, transitions={}, info={}, scene_data=false):
 	return scene
 
 func fresh(scene_name, transitions=false, info=false, scene_data=false):
-	if info == '': 
+	if info == null: 
 		info = 'remove_at'
 	return thaw(scene_name, transitions, info, scene_data)
 
