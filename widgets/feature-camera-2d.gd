@@ -44,8 +44,8 @@ var initial_camera_right_limit := 0
 func _ready():
 	# random noise
 	noise.seed = randi()
-	noise.period = 4
-	noise.octaves = 2
+	#noise.period = 4
+	#noise.octaves = 2
 	# timers
 	$DramaticTimer.connect("timeout",Callable(self,"after_drama"))
 	# limits
@@ -95,7 +95,6 @@ func _process(delta):
 					if trigger_area.new_target_ahead:
 						target_ahead_pixels = trigger_area.target_ahead_pixels
 						target_behind_pixels = trigger_area.target_behind_pixels
-					tween.start()
 					last_trigger_area = trigger_area.name
 					call_deferred("check_empty_triggers")
 
@@ -141,10 +140,9 @@ func target_ahead_camera(delta):
 					target_point.x = -target_behind_pixels
 
 	var tween: Tween = create_tween()
-	tween.tween_property(self,
-		"global_position", null, target.global_position + target_point,
-		0.2, Tween.TRANS_SINE, Tween.EASE_OUT)
-	tween.start()
+	tween.tween_property(self, "global_position", target.global_position + target_point, 0.2)
+	tween.set_trans(Tween.TRANS_SINE)
+	tween.set_ease(Tween.EASE_OUT)
 
 	last_camera_direction_x = new_direction_x
 
@@ -159,9 +157,11 @@ func do_shake(_shake, _shake_power):
 		offset.y = 0
 
 func shake(amount):
+	return
 	quake = min(quake + amount, 1.0)
 
 func shooty_shake(_direction):
+	return
 	shoot_shake = 1
 
 # DRAMA
@@ -176,7 +176,6 @@ func after_drama():
 	tween.tween_property(self, "zoom", Vector2(1.0,1.0), 0.22)
 	tween.set_trans(Tween.TRANS_SINE)
 	tween.set_ease(Tween.EASE_IN)
-	tween.start()
 
 # ZOOM
 func zoom_normal():
@@ -249,5 +248,4 @@ func set_smoothing_speed_temporarily(speed=1, time=2.5):
 	tween.tween_property(self, 'position_smoothing_speed', old_speed, time)
 	tween.set_trans(Tween.TRANS_CUBIC)
 	tween.set_ease(Tween.EASE_IN)
-	tween.start()
 	await tween.finished

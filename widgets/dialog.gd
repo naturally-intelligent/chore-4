@@ -105,7 +105,6 @@ func _process(delta):
 			tween.tween_property(self, "position", new_pos, 0.5)
 			tween.set_trans(Tween.TRANS_LINEAR)
 			tween.set_ease(Tween.EASE_IN_OUT)
-			tween.start()
 			await tween.loop_finished
 			delete_dialogs()
 			dialog_action = false

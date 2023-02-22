@@ -48,10 +48,10 @@ func yarn_custom_logic_after(to):
 
 # START SPINNING YOUR YARN
 #
-func spin_yarn(file, start_thread = false):
+func spin_yarn(file, start_thread = ''):
 	yarn = load_yarn(file)
 	# Find the starting thread...
-	if not start_thread:
+	if start_thread == '':
 		start_thread = yarn['start']
 	# Load any scene-specific settings
 	# (Not part of official Yarn standard)
@@ -118,7 +118,7 @@ func new_yarn_fibre(line):
 func load_yarn(path):
 	var yarn = {}
 	yarn['threads'] = {}
-	yarn['start'] = false
+	yarn['start'] = ''
 	yarn['file'] = path
 	var file = FileAccess.open(path, FileAccess.READ)
 	if file.is_open():
@@ -149,7 +149,7 @@ func load_yarn(path):
 								thread_kind = title_split[0]
 							thread['title'] = thread_title
 							thread['kind'] = thread_kind
-							if not yarn['start']:
+							if yarn['start'] == '':
 								yarn['start'] = thread_title
 			# end of thread
 			elif line == '===':
