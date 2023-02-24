@@ -28,7 +28,7 @@ var pause_tree_during_switch = false
 var custom_mouse_cursor = "res://art/hud/cursor-1.png"
 var allow_mouse_cursor = true
 var hide_system_cursor = true
-var scale_mouse_cursor = Vector2(1,1)
+var scale_mouse_cursor = Vector2(3,3)
 
 # TRANSITIONS
 var transition_out = 'fade' # fade / alpha / none
