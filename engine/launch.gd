@@ -1,4 +1,4 @@
-extends Node
+extends Control
 
 # CHORE ENGINE - Launch Scene
 
