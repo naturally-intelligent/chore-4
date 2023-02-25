@@ -1,7 +1,7 @@
 extends Node
 
 # CHORE ENGINE v1.4
-# Designed and developed by David Glen Kerr
+# Designed and developed by David Kerr
 
 # root scene manager
 #  loads and swaps scenes with transitions
@@ -201,6 +201,8 @@ func _soft_switch(scene, scene_name, scene_data, info, transitions):
 	var transition_in = transitions['in']
 	# already switching?
 	if switching_scene:
+
+
 		debug.print('WARNING: repeating scene switching:', scene_name)
 		return false
 	# semaphore

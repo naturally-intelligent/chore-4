@@ -647,7 +647,7 @@ func opposite_direction(direction: String) -> String:
 
 func tilemap_closest_used_cell(map: TileMap, position: Vector2, direction):
 	var desired_cell = map.local_to_map(position)
-	if map.get_cell(desired_cell.x, desired_cell.y) == 0:#:TileMap.INVALID_CELL:
+	if map.get_cell_source_id(0, desired_cell) == 0:#:TileMap.INVALID_CELL:
 		var closest_cell = false
 		var closest_distance = 100000
 		for cell in map.get_used_cells(0):

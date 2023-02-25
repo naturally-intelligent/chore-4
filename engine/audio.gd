@@ -18,8 +18,6 @@ signal music_volume_changed()
 func _ready():
 	set_sound_volume(settings.sound_volume)
 	set_music_volume(settings.music_volume)
-	music_fadeout_tween = create_tween()
-	music_fadein_tween = create_tween()
 
 func play_music(song_name, volume=1.0):
 	if dev.silence: return
@@ -34,7 +32,7 @@ func play_music(song_name, volume=1.0):
 			volume = song_data[1]
 	if music_playing(song_name): return
 	debug.print('playing song: ' + song_name)
-	if music_fadeout_tween.is_running():
+	if music_fadeout_tween and music_fadeout_tween.is_running():
 		music_fadeout_tween.stop()
 	stop_and_reset_music()
 	var songfile = find_music_file(song_name)
@@ -257,7 +255,8 @@ func loop_sound(sound_name, volume=1.0):
 			player.set_stream(stream)
 			player.stream_paused = false
 			player.play()
-			player.connect("finished",Callable(self,"on_loop_sound").bind(player))
+			if not player.is_connected("finished",Callable(self,"on_loop_sound")):
+				player.connect("finished",Callable(self,"on_loop_sound").bind(player))
 			history[player.name] = file_name
 
 func convert_percent_to_db(amount):
@@ -282,7 +281,7 @@ func set_music_volume(amount):
 func fade_in_music(music_name, _time, _ease_method=Tween.EASE_IN):
 	set_music_volume(0)
 	play_music(music_name, false)
-	if music_fadein_tween.is_running():
+	if music_fadein_tween and music_fadein_tween.is_running():
 		music_fadeout_tween.stop()
 	var db = convert_percent_to_db(settings.music_volume)
 	#$MusicFadeIn.tween_property($MusicPlayer, "volume_db", -80, db, time, Tween.TRANS_SINE, ease_method, 0)
@@ -290,7 +289,7 @@ func fade_in_music(music_name, _time, _ease_method=Tween.EASE_IN):
 
 func fade_out_music(_time=1.0, _ease_method=Tween.EASE_IN):
 	if $MusicPlayer.playing:
-		if not music_fadeout_tween.is_running():
+		if music_fadeout_tween and not music_fadeout_tween.is_running():
 			pass
 			#$MusicFadeOut.tween_property($MusicPlayer, "volume_db", 0, -80, time, Tween.TRANS_SINE, ease_method, 0)
 			#broken: $MusicFadeOut.tween_property($MusicPlayer, "volume_db", $MusicPlayer.volume_db, convert_percent_to_db(0), time, Tween.TRANS_SINE, ease_method, 0)
@@ -332,7 +331,8 @@ func stop_all_sounds():
 		sound.playing = false
 	for looper in $SoundLoopers.get_children():
 		if not dev.silence:
-			looper.disconnect("finished",Callable(self,"on_loop_sound"))
+			if looper.is_connected("finished",Callable(self,"on_loop_sound")):
+				looper.disconnect("finished",Callable(self,"on_loop_sound"))
 		looper.stop()
 		looper.playing = false
 	history = {}
