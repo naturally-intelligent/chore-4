@@ -229,7 +229,7 @@ func build_dialog(text, type='dialog'):
 	if text_lines > 1:
 		bubble_height += extra_multiline_bubble_height_multiplier * (text_lines-1)
 
-	bubble.set_h_size_flags(1)
+	bubble.set_h_size_flags(SIZE_FILL)
 	#dialog_bubble.set_size_direct(bubble_width, bubble_height, formatted_text)
 	#dialog_bubble.grow_animation(bubble_width, bubble_height, bubble_grow_time, formatted_text)
 	# changed to return original text to preserve bbcode, may cause issue?
@@ -239,7 +239,7 @@ func build_dialog(text, type='dialog'):
 	# set size
 	#bubble.set_size(Vector2(bubble_width, bubble_height))
 	#bubble.set_custom_minimum_size(Vector2(bubble_width, bubble_height)) # req for vbox
-	#bubble.set_h_size_flags(0) # stop horizontal expansion in vbox
+	#bubble.set_h_size_flags0(SIZE_SHRINK_BEGIN) # stop horizontal expansion in vbox
 
 	#return bubble
 

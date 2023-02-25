@@ -12,17 +12,17 @@ func _ready():
 	label.set_text('')
 	$Bubble.set_size(Vector2(0,0))
 	$Bubble.set_custom_minimum_size(Vector2(0, 0))
-	$Bubble.set_h_size_flags(1)
+	$Bubble.set_h_size_flags(SIZE_FILL)
 	if hover_sound:
 		audio.button_hover_sounds($Bubble/Backgrounds/ChoiceButton, hover_sound)
 
 func set_size_direct(dx, dy, text):
 	set_size(Vector2(dx, dy))
 	set_custom_minimum_size(Vector2(dx, dy))
-	set_h_size_flags(0)
+	set_h_size_flags(SIZE_SHRINK_BEGIN)
 	$Bubble.set_size(Vector2(dx, dy))
 	$Bubble.set_custom_minimum_size(Vector2(dx, dy))
-	$Bubble.set_h_size_flags(0)
+	$Bubble.set_h_size_flags(SIZE_SHRINK_BEGIN)
 	var label = get_text_label()
 	set_text(text)
 	label.set_size(Vector2(dx, dy))
@@ -48,7 +48,7 @@ func grow_animation(dx, dy, time, text):
 	future_text = text
 	set_size(Vector2(dx, dy))
 	set_custom_minimum_size(Vector2(dx, dy))
-	set_h_size_flags(0)
+	set_h_size_flags(SIZE_SHRINK_BEGIN)
 	$Bubble.set_size(Vector2(0, 0))
 
 	# wait a tiny bit for next frame to bump vbox up
@@ -63,7 +63,7 @@ func grow_animation(dx, dy, time, text):
 	var tween = property_tween('size', 0,0, dx,dy, time)
 	await tween.finished
 	$Bubble.set_custom_minimum_size(Vector2(dx, dy))
-	$Bubble.set_h_size_flags(0)
+	$Bubble.set_h_size_flags(SIZE_SHRINK_BEGIN)
 	#var label = get_text_label()
 	set_text(future_text)
 	animating = false
