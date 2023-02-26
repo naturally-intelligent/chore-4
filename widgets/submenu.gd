@@ -84,9 +84,9 @@ func slide_in():
 		set_visible(true)
 		position = p
 		var tween: Tween = create_tween()
-		tween.tween_property(self, "position", view_point, 0.5)
 		tween.set_trans(Tween.TRANS_SINE)
 		tween.set_ease(Tween.EASE_OUT)
+		tween.tween_property(self, "position", view_point, 0.5)
 		if show_sound:
 			audio.play_sound(show_sound)
 		sliding_tween = tween
@@ -109,9 +109,9 @@ func slide_out():
 		up_front = false
 		position = p
 		var tween: Tween = create_tween()
-		tween.tween_property(self, "position", leave_point, 0.25)
 		tween.set_trans(Tween.TRANS_SINE)
 		tween.set_ease(Tween.EASE_OUT)
+		tween.tween_property(self, "position", leave_point, 0.25)
 		sliding_tween = tween
 		if leave_sound:
 			audio.play_sound(leave_sound)
@@ -132,9 +132,9 @@ func slide_over():
 	set_visible(true)
 	position = p
 	var tween: Tween = create_tween()
-	tween.tween_property(self, "position", side_point, 0.5)
 	tween.set_trans(Tween.TRANS_SINE)
 	tween.set_ease(Tween.EASE_OUT)
+	tween.tween_property(self, "position", side_point, 0.5)
 	sliding_tween = tween
 	await tween.finished
 	to_the_side = true

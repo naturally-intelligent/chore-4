@@ -853,9 +853,9 @@ func transition_fade_out(fade_time=0.3):
 	transition.visible = true
 	transition.modulate = Color(1, 1, 1, 0)
 	var tween: Tween = create_tween()
-	tween.tween_property(transition, "modulate", Color(1, 1, 1, 1), game.time(fade_time))
 	tween.set_trans(Tween.TRANS_LINEAR)
 	tween.set_ease(Tween.EASE_IN)
+	tween.tween_property(transition, "modulate", Color(1, 1, 1, 1), game.time(fade_time))
 	await tween.finished
 	emit_signal("transition_finished")
 
@@ -869,9 +869,9 @@ func transition_fade_in(fade_time=0.3):
 	transition.visible = true
 	transition.modulate = Color(1, 1, 1, 1)
 	var tween: Tween = create_tween()
-	tween.tween_property(transition, "modulate", Color(1, 1, 1, 0), game.time(fade_time))
 	tween.set_trans(Tween.TRANS_LINEAR)
 	tween.set_ease(Tween.EASE_IN)
+	tween.tween_property(transition, "modulate", Color(1, 1, 1, 0), game.time(fade_time))
 	await tween.finished
 	emit_signal("transition_finished")
 
@@ -945,9 +945,9 @@ func transition_slide(scene, in_out, direction, time=0.5):
 		else:
 			scene.position = on_screen
 	var tween: Tween = create_tween()
-	tween.tween_property(scene, param, destination, game.time(time))
 	tween.set_trans(Tween.TRANS_LINEAR)
 	tween.set_ease(Tween.EASE_IN_OUT)
+	tween.tween_property(scene, param, destination, game.time(time))
 	await tween.finished
 	emit_signal('transition_finished')
 
@@ -985,14 +985,14 @@ func transition_slide_both(old, new, direction, time=0.5):
 		new.position = off_screen_new
 	# tween
 	var new_tween = create_tween()
-	new_tween.tween_property(new, new_param, on_screen, game.time(time))
 	new_tween.set_trans(Tween.TRANS_LINEAR)
 	new_tween.set_ease(Tween.EASE_IN_OUT)
+	new_tween.tween_property(new, new_param, on_screen, game.time(time))
 	#await new_tween.finished
 	var old_tween = create_tween()
-	old_tween.tween_property(old, old_param, off_screen_old, time)
 	old_tween.set_trans(Tween.TRANS_LINEAR)
 	old_tween.set_ease(Tween.EASE_IN_OUT)
+	old_tween.tween_property(old, old_param, off_screen_old, time)
 	await old_tween.finished
 	emit_signal('transition_finished')
 
