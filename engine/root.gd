@@ -516,15 +516,9 @@ func check_is_root_scene(scene, scene_name, scene_type='scene'):
 	return true
 
 func _notification(note):
-	# clear pointers
 	if note == NOTIFICATION_PREDELETE:
 		current_scene = null
 		_next_scene = null
-	# mobile back button
-	#if note == MainLoop.NOTIFICATION_WM_GO_BACK_REQUEST:
-	#	menus.back()
-	#if note == MainLoop.NOTIFICATION_WM_QUIT_REQUEST:
-	#	menus.back()
 
 func enable_menus():
 	menus_root.visible = true

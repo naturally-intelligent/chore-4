@@ -645,15 +645,16 @@ func opposite_direction(direction: String) -> String:
 
 # TILES
 
-func tilemap_closest_used_cell(map: TileMap, position: Vector2, direction):
+func tilemap_closest_used_cell(map: TileMap, position: Vector2, direction: Vector2 = Vector2.ZERO):
 	var desired_cell = map.local_to_map(position)
 	if map.get_cell_source_id(0, desired_cell) == 0:#:TileMap.INVALID_CELL:
 		var closest_cell = false
-		var closest_distance = 100000
+		var closest_distance = 1000000
 		for cell in map.get_used_cells(0):
 			var world_direction = position.direction_to(map.map_to_local(cell))
-			if not direction or sign(world_direction.x) == sign(direction.x):
-				var distance = desired_cell.distance_to(cell)
+			if direction.x == 0 or sign(world_direction.x) == sign(direction.x):
+				# we don't need to call sqrt() on distance here, just use squared values
+				var distance = (desired_cell.x-cell.x)*(desired_cell.x-cell.x)+(desired_cell.y-cell.y)*(desired_cell.y-cell.y)
 				if distance < closest_distance:
 					closest_cell = cell
 					closest_distance = distance
