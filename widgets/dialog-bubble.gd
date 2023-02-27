@@ -72,9 +72,9 @@ func grow_animation(dx, dy, time, text):
 func property_tween(property, ox,oy, dx,dy, time):
 	var tween: Tween = create_tween()
 	$Bubble.set(property, Vector2(ox,oy))
-	tween.tween_property($Bubble, property, Vector2(dx,dy), time)
 	tween.set_trans(Tween.TRANS_LINEAR)
 	tween.set_ease(Tween.EASE_IN_OUT)
+	tween.tween_property($Bubble, property, Vector2(dx,dy), time)
 	return tween
 
 func get_text():
