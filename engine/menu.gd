@@ -1,5 +1,4 @@
 extends Control
-class_name RootBaseMenuScene
 
 # contains the optional methods called by Chore management
 # - meant primarily for reference, inheritance of class is optional
