@@ -491,30 +491,34 @@ func create_import_files_for_export(texture_dir):
 # SCREENSHOT (F5)
 func screenshot(scene, scale=false, logo=false, savedir="screenshots"):
 	debug.print('Screenshot...')
-	scene.get_viewport().set_clear_mode(SubViewport.CLEAR_MODE_ONCE)
+	# clear next frame
+	RenderingServer.viewport_set_clear_mode(scene.get_viewport(), RenderingServer.VIEWPORT_CLEAR_ONLY_NEXT_FRAME)
 
 	# hide cursor?
 	var show_cursor = root.is_cursor_visible()
 	if show_cursor:
 		root.hide_cursor()
 
-	scene.get_viewport().transparent_bg = true
+	if settings.transparent_screenshot:
+		scene.get_viewport().transparent_bg = true
 
 	# Let two sprite_frames pass to make sure the screen was captured
-	await scene.get_tree().idle_frame
-	await scene.get_tree().idle_frame
+	await scene.get_tree().process_frame
+	await scene.get_tree().process_frame
 
 	# Retrieve the captured image
-	var img: Image = scene.get_viewport().get_texture().get_data()
+	var img: Image = scene.get_viewport().get_texture().get_image()
 
-	scene.get_viewport().transparent_bg = false
+	if settings.screenshot_transparent_bg:
+		scene.get_viewport().transparent_bg = false
 
 	# scale after (note, doesn't upscale pixel-art nicely)
 	if scale:
 		img.resize(scale.x, scale.y, Image.INTERPOLATE_NEAREST)
 
 	# Flip it checked the y-axis (because it's flipped)
-	img.flip_y()
+	if settings.screenshot_flip_y:
+		img.flip_y()
 	# color range format
 	img.convert(Image.FORMAT_RGBA8)
 
@@ -542,7 +546,7 @@ func screenshot(scene, scale=false, logo=false, savedir="screenshots"):
 		root.show_cursor()
 
 func numbered_filename(dir="user://", file_prefix='', file_ext='.png'):
-	if not file_prefix:
+	if file_prefix == '':
 		file_prefix = ProjectSettings.get_setting('application/config/name').replace(' ','')
 	var count = 1
 	var file_name = file_prefix + "-%03d" % count + file_ext
