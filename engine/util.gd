@@ -499,7 +499,7 @@ func screenshot(scene, scale=false, logo=false, savedir="screenshots"):
 	if show_cursor:
 		root.hide_cursor()
 
-	if settings.transparent_screenshot:
+	if settings.screenshot_transparent_bg:
 		scene.get_viewport().transparent_bg = true
 
 	# Let two sprite_frames pass to make sure the screen was captured
