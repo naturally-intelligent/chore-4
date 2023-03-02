@@ -10,8 +10,7 @@ var missing_files := []
 var paused_sounds := {}
 var music_position = false
 
-var music_fadeout_tween: Tween
-var music_fadein_tween: Tween
+@export var internal_music_volume: float : set = _set_internal_music_volume
 
 signal music_volume_changed()
 
@@ -26,14 +25,11 @@ func play_music(song_name, volume=1.0):
 		var song_data = settings.tracklist[song_name]
 		if typeof(song_data) == TYPE_STRING:
 			song_name = song_data
-			volume = 1.0
 		else: # array
 			song_name = song_data[0]
-			volume = song_data[1]
+			volume *= song_data[1]
 	if music_playing(song_name): return
-	debug.print('playing song: ' + song_name)
-	if music_fadeout_tween and music_fadeout_tween.is_running():
-		music_fadeout_tween.stop()
+	#debug.print('playing song: ' + song_name)
 	stop_and_reset_music()
 	var songfile = find_music_file(song_name)
 	if songfile:
@@ -278,23 +274,24 @@ func set_music_volume(amount):
 	emit_signal("music_volume_changed", db)
 	#$MusicPlayer.volume_db = (1.0-amount) * -80.0
 
-func fade_in_music(music_name, _time, _ease_method=Tween.EASE_IN):
-	set_music_volume(0)
-	play_music(music_name, false)
-	if music_fadein_tween and music_fadein_tween.is_running():
-		music_fadeout_tween.stop()
-	var db = convert_percent_to_db(settings.music_volume)
-	#$MusicFadeIn.tween_property($MusicPlayer, "volume_db", -80, db, time, Tween.TRANS_SINE, ease_method, 0)
-	#$MusicFadeIn.start()
+func fade_in_music(music_name, _time=3.3):
+	play_music(music_name, 0.0)
+	$MusicPlayer.volume_db = convert_percent_to_db(0.0)
+	var animation_player: AnimationPlayer = $AudioAnimations
+	if _time == 0.0: _time = 1.0
+	animation_player.speed_scale = 1.0/_time
+	animation_player.stop()
+	animation_player.play('fade_in_music')
 
-func fade_out_music(_time=1.0, _ease_method=Tween.EASE_IN):
-	if $MusicPlayer.playing:
-		if music_fadeout_tween and not music_fadeout_tween.is_running():
-			pass
-			#$MusicFadeOut.tween_property($MusicPlayer, "volume_db", 0, -80, time, Tween.TRANS_SINE, ease_method, 0)
-			#broken: $MusicFadeOut.tween_property($MusicPlayer, "volume_db", $MusicPlayer.volume_db, convert_percent_to_db(0), time, Tween.TRANS_SINE, ease_method, 0)
-			#$MusicFadeOut.connect("finished",Callable(self,"stop_and_reset_music"))
-			#$MusicFadeOut.start()
+func fade_out_music(_time=1.0):
+	if not $MusicPlayer.is_playing():
+		return
+	$MusicPlayer.volume_db = convert_percent_to_db(settings.music_volume)
+	var animation_player: AnimationPlayer = $AudioAnimations
+	if _time == 0.0: _time = 1.0
+	animation_player.speed_scale = 1.0/_time
+	animation_player.stop()
+	animation_player.play('fade_out_music')
 
 func button_sounds(button, hover_sound, press_sound):
 	button.connect("mouse_entered",Callable(self,"play_sound").bind(hover_sound))
@@ -361,3 +358,7 @@ func resume_sounds():
 # todo: add within last time played
 func play_sound_if_not(sound_name, volume=1.0):
 	play_sound(sound_name, volume, false, false, false)
+	
+func _set_internal_music_volume(_volume):
+	if is_inside_tree():
+		$MusicPlayer.volume_db = convert_percent_to_db(_volume * settings.music_volume)
