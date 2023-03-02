@@ -525,8 +525,8 @@ func screenshot(scene, scale=false, logo=false, savedir="screenshots"):
 	# optional logo (filename like "res://art/logo.png")
 	if logo:
 		if util.file_exists(logo):
-			var logo_img: Image = Image.new()
-			logo_img.load(logo)
+			var logo_tex = load(logo)
+			var logo_img = logo_tex.get_image()
 			var logo_rect = Rect2(0,0, settings.screenshot_size.x, settings.screenshot_size.y)
 			logo_img.convert(img.get_format())
 			img.blend_rect(logo_img, logo_rect, Vector2(0,0))
