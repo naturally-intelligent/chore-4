@@ -111,6 +111,9 @@ func switch_to_menu(menu, menu_name, menu_data=false, info={}, transitions={}):
 	else:
 		info['switch_origin'] = current_scene_type
 	reset_time_scale()
+	if info['switch_origin'] == 'scene':
+		if game.has_method('on_scene_to_menu'):
+			game.on_scene_to_menu()
 	_switch_prepare(menu, menu_name, menu_data, info, transitions)
 
 # called by scenes.show()
@@ -201,8 +204,6 @@ func _soft_switch(scene, scene_name, scene_data, info, transitions):
 	var transition_in = transitions['in']
 	# already switching?
 	if switching_scene:
-
-
 		debug.print('WARNING: repeating scene switching:', scene_name)
 		return false
 	# semaphore
