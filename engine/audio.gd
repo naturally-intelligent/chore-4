@@ -10,7 +10,9 @@ var missing_files := []
 var paused_sounds := {}
 var music_position = false
 
+# only used by AnimationPlayer
 @export var internal_music_volume: float : set = _set_internal_music_volume
+var fade_music_tween: Tween
 
 signal music_volume_changed()
 
@@ -21,6 +23,7 @@ func _ready():
 func play_music(song_name, volume=1.0):
 	if dev.silence: return
 	if dev.no_music: return
+	if music_loaded_resume(song_name): return
 	if song_name in settings.tracklist:
 		var song_data = settings.tracklist[song_name]
 		if typeof(song_data) == TYPE_STRING:
@@ -28,7 +31,10 @@ func play_music(song_name, volume=1.0):
 		else: # array
 			song_name = song_data[0]
 			volume *= song_data[1]
-	if music_playing(song_name): return
+	if music_loaded_resume(song_name): return
+	if song_name in settings.music_alias:
+		song_name = settings.music_alias[song_name]
+	if music_loaded_resume(song_name): return
 	#debug.print('playing song: ' + song_name)
 	stop_and_reset_music()
 	var songfile = find_music_file(song_name)
@@ -37,6 +43,7 @@ func play_music(song_name, volume=1.0):
 		if stream:
 			if volume:
 				set_music_volume(settings.music_volume*volume)
+			stream.loop = true
 			$MusicPlayer.set_stream(stream)
 			$MusicPlayer.stream_paused = false
 			$MusicPlayer.play()
@@ -50,6 +57,14 @@ func play_music(song_name, volume=1.0):
 			debug.print("MUSIC FILE MISSING:",song_name)
 			missing_files.append(song_name)
 
+func get_volume_for_song(song_name):
+	var volume = settings.music_volume
+	if song_name in settings.tracklist:
+		var song_data = settings.tracklist[song_name]
+		if typeof(song_data) != TYPE_STRING:
+			volume *= song_data[1]
+	return volume
+	
 func find_music_file(song_name):
 	for dir in settings.music_dirs:
 		var file_name = 'res://' + dir + '/' + song_name + settings.music_ext
@@ -57,21 +72,46 @@ func find_music_file(song_name):
 			return file_name
 	return false
 
-func music_playing(song):
-	if $MusicPlayer.is_playing() and current_song == song:
+func is_music_playing():
+	if $MusicPlayer.is_playing():
 		return true
 	return false
 
-func pause_music():
-	music_position = $MusicPlayer.get_playback_position()
-	$MusicPlayer.stop()
+func music_playing(song):
+	if $MusicPlayer.is_playing() and music_loaded(song):
+		return true
+	return false
 
-func resume_music():
-	$MusicPlayer.play()
-	if music_position:
-		$MusicPlayer.seek(music_position)
+func music_loaded(song):
+	if current_song is String and current_song == song:
+		return true
+	return false
+
+func music_loaded_resume(song):
+	if music_loaded(song):
+		if not $MusicPlayer.is_playing() and $MusicPlayer.stream_paused:
+			$MusicPlayer.stream_paused = false
+		return true
+	return false
+	
+func pause_music():
+	stop_music_animations()
+	if $MusicPlayer.is_playing():
+		music_position = $MusicPlayer.get_playback_position()
+		$MusicPlayer.stream_paused = true
+
+func resume_music(fade_in=false):
+	if dev.no_music: return
+	stop_music_animations()
+	if $MusicPlayer.stream_paused:
+		$MusicPlayer.stream_paused = false
+		#if music_position:
+		#	$MusicPlayer.seek(music_position)
+		if fade_in:
+			fade_in_music(current_song, 1.0, false)
 
 func stop_music():
+	stop_music_animations()
 	$MusicPlayer.stop()
 	music_position = false
 	current_song = false
@@ -79,6 +119,12 @@ func stop_music():
 func stop_and_reset_music():
 	stop_music()
 	set_music_volume(settings.music_volume)
+
+func stop_music_animations():
+	if fade_music_tween:
+		fade_music_tween.kill()
+	#var animation_player: AnimationPlayer = $AudioAnimations
+	#animation_player.stop()
 
 func play_sound(sound_name, volume=1.0, origin=false, listener=false, allow_multiple=true):
 	if dev.silence: return
@@ -272,26 +318,44 @@ func set_music_volume(amount):
 	var db = convert_percent_to_db(amount)
 	$MusicPlayer.volume_db = db
 	emit_signal("music_volume_changed", db)
-	#$MusicPlayer.volume_db = (1.0-amount) * -80.0
 
-func fade_in_music(music_name, _time=3.3):
-	play_music(music_name, 0.0)
+func fade_in_music(music_name, _time=1.0, _do_play=true):
+	var target_volume: float = 1.0
+	if _do_play:
+		play_music(music_name)
 	$MusicPlayer.volume_db = convert_percent_to_db(0.0)
-	var animation_player: AnimationPlayer = $AudioAnimations
-	if _time == 0.0: _time = 1.0
-	animation_player.speed_scale = 1.0/_time
-	animation_player.stop()
-	animation_player.play('fade_in_music')
+	if fade_music_tween:
+		fade_music_tween.kill()
+	fade_music_tween = create_tween()
+	fade_music_tween.tween_property(self, "internal_music_volume", target_volume, _time)
+#	fade_music_tween.tween_property($MusicPlayer, "volume_db", target_volume, _time)
+#	var animation_player: AnimationPlayer = $AudioAnimations
+#	var animation: Animation = animation_player.get_animation("fade_in_music")
+#	animation.track_set_key_value(0, 1, target_volume)
+#	if _time == 0.0: _time = 1.0
+#	animation_player.speed_scale = 1.0/_time
+#	animation_player.stop()
+#	animation_player.play('fade_in_music')
 
-func fade_out_music(_time=1.0):
+func fade_out_music(_time=0.5):
 	if not $MusicPlayer.is_playing():
 		return
-	$MusicPlayer.volume_db = convert_percent_to_db(settings.music_volume)
-	var animation_player: AnimationPlayer = $AudioAnimations
-	if _time == 0.0: _time = 1.0
-	animation_player.speed_scale = 1.0/_time
-	animation_player.stop()
-	animation_player.play('fade_out_music')
+	var target_volume: float = 0.0
+	# TWEEN STYLE
+	if fade_music_tween:
+		fade_music_tween.kill()
+	fade_music_tween = create_tween()
+	fade_music_tween.set_ease(Tween.EASE_IN)
+	fade_music_tween.tween_property(self, "internal_music_volume", target_volume, _time).from(1.0)
+	# ANIMATION STYLE
+#	$MusicPlayer.volume_db = convert_percent_to_db(settings.music_volume)
+#	var animation: Animation = animation_player.get_animation("fade_in_music")
+#	animation.track_set_key_value(0, 0, $MusicPlayer.volume_db)
+#	var animation_player: AnimationPlayer = $AudioAnimations
+#	if _time == 0.0: _time = 1.0
+#	animation_player.speed_scale = 1.0/_time
+#	animation_player.stop()
+#	animation_player.play('fade_out_music')
 
 func button_sounds(button, hover_sound, press_sound):
 	button.connect("mouse_entered",Callable(self,"play_sound").bind(hover_sound))
