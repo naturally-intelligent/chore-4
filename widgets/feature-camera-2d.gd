@@ -53,6 +53,7 @@ func _ready():
 	# random noise
 	noise.seed = 5
 	noise.frequency = 0.88
+	noise.fractal_octaves = 2
 	noise.noise_type = FastNoiseLite.TYPE_SIMPLEX
 	# timers
 	$DramaticTimer.connect("timeout",Callable(self,"after_drama"))
