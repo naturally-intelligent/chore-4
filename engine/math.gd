@@ -4,20 +4,25 @@ extends Node
 ### RANDOM NUMBERS
 
 func random_int(start: int, end: int) -> int:
-	var div = end-start+1
-	if div == 0: return start
-	return start + randi()%div
+	return randi_range(start, end)
+	#var div = end-start+1
+	#if div == 0: return start
+	#return start + randi()%div
 
 func randomi(s: int, e: int) -> int:  # shortened version of random_int
-	var div = e-s+1
-	if div == 0: return s
-	return s + randi()%div
+	return randi_range(s, e)
 
 func random_float(start: float, end: float) -> float:
-	return randf()*(end-start)+start
+	return randf_range(start, end)
+	#return randf()*(end-start)+start
+
+# random float with 'stepify' behavior
+func random_float_step(start: float, end: float, step: float) -> float:
+	var steps = int((end - start) / step)
+	return start + float(randi()%(steps+1)) * step
 
 func randomf(s: float, e: float) -> float: # shortened version of random_float
-	return randf()*(e-s)+s
+	return randf_range(s, e)
 
 func random_position(minx:int,maxx:int, miny:int,maxy:int):
 	return Vector2(random_int(minx,maxx), random_int(miny,maxy))
