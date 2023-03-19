@@ -1,4 +1,4 @@
-extends ColorRect
+extends Area2D
 class_name CameraTrigger
 
 # remove_at after entry?
@@ -19,12 +19,9 @@ class_name CameraTrigger
 @export var target_ahead_pixels := 0
 @export var target_behind_pixels := 0
 
-@onready var rect2 := Rect2(position, size)
+signal triggered()
 
-func check_trigger(point):
-	if not rect2.has_point(point):
-		return false
-	else:
-		if disappears_after:
-			queue_free()
-		return true
+func on_camera_target_entered(body):
+	emit_signal("triggered")
+	if disappears_after:
+		queue_free()

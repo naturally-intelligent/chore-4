@@ -35,7 +35,6 @@ var max_shake_roll := 0.1  # Maximum rotation in radians (use sparingly).
 var noise_vector := Vector2.ZERO
 var shake_vector := Vector2.ZERO
 
-
 # camera trigger areas - parent container of CameraTrigger objects
 @export var camera_trigger_areas: NodePath = NodePath("")
 var trigger_areas: Control = null
@@ -43,10 +42,12 @@ var last_trigger_area := ''
 
 # maintenance
 @onready var last_camera_position: Vector2 = global_position
+var float_camera_position: Vector2 = global_position
 var initial_camera_left_limit := 0
 var initial_camera_right_limit := 0
 
 const TARGET_CATCHUP_LERP_SPEED = 0.05
+const TARGET_IGNORE_PIXELS = 4
 const NOISE_FACTOR = 1
 
 func _ready():
@@ -59,13 +60,22 @@ func _ready():
 	$DramaticTimer.connect("timeout",Callable(self,"after_drama"))
 	# limits
 	init_limits()
+	# setup triggers
 	if camera_trigger_areas:
 		trigger_areas = get_node(camera_trigger_areas)
+		# connect triggers
+		for trigger in trigger_areas.get_children():
+			var camera_trigger: CameraTrigger = trigger
+			camera_trigger.connect("triggered", Callable(self, "on_camera_trigger").bind(camera_trigger))
 		trigger_areas.visible = false
 	# target
 	if target_node:
 		target = get_node(target_node)
 
+func on_camera_trigger(camera_trigger: CameraTrigger):
+	if camera_trigger.name != last_trigger_area:
+		enter_trigger_area(camera_trigger)
+		
 # PROCESS
 func _process(delta):
 	# target valid?
@@ -77,17 +87,11 @@ func _process(delta):
 		if target_ahead:
 			target_ahead_camera(delta)
 		else:
-			global_position = target.global_position
-	# trigger areas
-	if trigger_areas and target:
-		for trigger_area in trigger_areas.get_children():
-			# todo: optimize with Area2D?
-			if trigger_area.check_trigger(target.global_position):
-				if trigger_area.name != last_trigger_area:
-					enter_trigger_area(trigger_area)
+			float_camera_position = target.global_position
 	# shake
 	if shaking:
 		_shake_camera(delta)
+	global_position = round(float_camera_position)
 	# remember last position
 	last_camera_position = global_position
 
@@ -121,22 +125,24 @@ func target_ahead_camera(delta):
 				if target_point.x < -target_behind_pixels:
 					target_point.x = -target_behind_pixels
 	# move towards goal
-	global_position = lerp(global_position, target.global_position + target_point, TARGET_CATCHUP_LERP_SPEED)
+	var distance_x = abs(float_camera_position.x - (target.global_position.x + target_point.x))
+	if distance_x > TARGET_IGNORE_PIXELS:
+		float_camera_position = lerp(float_camera_position, target.global_position + target_point, TARGET_CATCHUP_LERP_SPEED)
 	# remember direction
 	last_camera_direction = new_direction
 
 # TRIGGER
 func enter_trigger_area(trigger_area: CameraTrigger):
-	#debug.print('Inside', trigger_area.name)
 	# tween
 	var tween: Tween = create_tween()
-	var time = 1.5
+	var time = 1.0
 	var trans_type = Tween.TRANS_CUBIC
-	var ease_type = Tween.EASE_OUT
+	var ease_type = Tween.EASE_IN
 	# y limits
 	if trigger_area.new_y_limits:
 		tween.set_trans(trans_type)
 		tween.set_ease(ease_type)
+		tween.set_parallel()
 		tween.tween_property(self, "limit_top", trigger_area.limit_y_top, time)
 		tween.tween_property(self, "limit_bottom", trigger_area.limit_y_bottom, time)
 	# x limits
