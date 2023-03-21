@@ -15,8 +15,10 @@ var music_position = false
 var fade_music_tween: Tween
 
 signal music_volume_changed()
+signal sound_volume_changed()
 
 func _ready():
+	# TODO: use mixer channels to set overall volume
 	set_sound_volume(settings.sound_volume)
 	set_music_volume(settings.music_volume)
 
@@ -305,6 +307,7 @@ func convert_percent_to_db(amount):
 	return 12.5 * log(amount)
 
 func set_sound_volume(amount):
+	if dev.silence: amount = 0.0
 	var db = convert_percent_to_db(amount)
 	#var db = linear_to_db(amount)
 	for player in $SoundPlayers.get_children():
@@ -313,8 +316,10 @@ func set_sound_volume(amount):
 	for player in $SoundLoopers.get_children():
 		player.volume_db = db
 		#player.volume_db = (1.0-amount) * -80.0
+	emit_signal("sound_volume_changed", db)
 
 func set_music_volume(amount):
+	if dev.silence: amount = 0.0
 	var db = convert_percent_to_db(amount)
 	$MusicPlayer.volume_db = db
 	emit_signal("music_volume_changed", db)
@@ -426,3 +431,16 @@ func play_sound_if_not(sound_name, volume=1.0):
 func _set_internal_music_volume(_volume):
 	if is_inside_tree():
 		$MusicPlayer.volume_db = convert_percent_to_db(_volume * settings.music_volume)
+
+func rogue_player(audio_node):
+	if dev.silence:
+		if 'volume_db' in audio_node:
+			audio_node.volume_db = convert_percent_to_db(0.0)
+		if 'playing' in audio_node:
+			audio_node.playing = false
+		if 'autoplay' in audio_node:
+			audio_node.autoplay = false
+		return
+	if 'volume_db' in audio_node:
+		audio_node.volume_db = convert_percent_to_db(settings.sound_volume)
+		
