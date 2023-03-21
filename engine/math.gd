@@ -74,6 +74,9 @@ func normal_to_90(n):
 	if deg >= 360: deg -= 360
 	return snapped(deg, 90)
 
+func radians_to_vector(radians):
+	return Vector2(cos(radians), sin(radians))
+
 ### POSITIONS
 
 func nearest_position(parent, position):
