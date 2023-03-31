@@ -451,6 +451,9 @@ func str_no_zero(i: int) -> String:
 	else:
 		return str(i)
 
+func index_in_list(current, list : Array):
+	return list.find(current)
+
 func next_in_list(current, list : Array):
 	var index = list.find(current, 0)
 	if index >= 0:

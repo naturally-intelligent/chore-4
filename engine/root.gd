@@ -1326,8 +1326,10 @@ func command_line_start():
 			dev.launch_hacks()
 			if dev.forced_window:
 				print('forcing window size')
-				get_window().mode = Window.MODE_EXCLUSIVE_FULLSCREEN if (false) else Window.MODE_WINDOWED
-				get_window().set_size(dev.forced_window)
+				DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+				DisplayServer.window_set_size(dev.forced_window)
+				if dev.forced_window_position:
+					DisplayServer.window_set_position(dev.forced_window_position)
 
 	# CHECK ARGUMENTS
 	if 'monitor' in settings.args:
