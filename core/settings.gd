@@ -75,6 +75,7 @@ var settings_config_file := "user://settings.cfg"
 # MUSIC
 var music_ext = '.ogg'
 var music_dirs = ['music']
+var music_alias = []
 var tracklist = {
 	'main-menu': ['song-file-todo', 0.8],
 }
