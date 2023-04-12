@@ -425,10 +425,13 @@ func fade_out_music(_fade_out_time:=0.5):
 	fade_out_music_tween.set_ease(Tween.EASE_IN)
 	fade_out_music_tween.set_trans(Tween.TRANS_CUBIC)
 	fade_out_music_tween.tween_property($MusicPlayer, "volume_db", target_db, _fade_out_time)
+	await fade_out_music_tween.finished
+	stop_music()
 
 func fade_out_in_music(song_name, _fade_out_time:=0.5, _fade_in_time:=1.0):
-	fade_out_music(_fade_out_time)
-	await fade_out_music_tween.finished
+	if is_music_playing():
+		fade_out_music(_fade_out_time)
+		await fade_out_music_tween.finished
 	fade_in_music(song_name, _fade_in_time, true, false)
 
 ### MUSIC - INTERNAL
