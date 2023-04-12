@@ -73,17 +73,21 @@ var settings_config = {}
 var settings_config_file := "user://settings.cfg"
 
 # MUSIC
-var music_ext = '.ogg'
-var music_dirs = ['music']
-var music_alias = []
-var tracklist = {
+const music_bus_name = 'Music'
+const music_ext = '.ogg'
+const music_dirs = ['music']
+const music_res = true
+const music_alias = {}
+const tracklist = {
 	'main-menu': ['song-file-todo', 0.8],
 }
 
 # SOUND
-var sound_ext = '.wav'
-var sound_dirs = ['sound']
-var sound_alias = {
+const sound_bus_name = 'Sounds'
+const sound_ext = '.wav'
+const sound_dirs = ['sound']
+const sound_res = true
+const sound_alias = {
 	# MENU
 	'menu-hover': 'bump',
 	'menu-press': 'pick',
