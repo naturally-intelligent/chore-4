@@ -1,16 +1,17 @@
+# UTILITY FUNCTIONS
 @tool
 extends Node
 
-# UTILITY FUNCTIONS AND JUNK LIKE THAT
 var desktop := true
 var mobile := false
-# specific osfil
+# specific os
 var android := false
 var apple := false
 var windows := false
 var linux := false
 var osx := false
 var web := false
+var console := false
 # touch
 var touch := false
 
@@ -19,31 +20,23 @@ func _ready():
 	input_detection()
 
 func platform_detection():
+	mobile = OS.has_feature('mobile')
+	desktop = OS.has_feature('pc')
+	web = OS.has_feature('web')
 	match OS.get_name():
 		'Android':
-			mobile = true
 			android = true
-		'iOS':
-			mobile = true
+		'iOS', 'macOS':
 			apple = true
-		'OSX':
-			apple = true
-		'Windows','WinRT':
-			windows = true
-		'X11','Haiku':
+		'Linux':
 			linux = true
-		'HTML5','Flash':
-			web = true
-		'BlackBerry 10':
-			mobile = true
-	# default desktop is true
-	if mobile:
-		desktop = false
+		'Windows','UWP':
+			windows = true
+		'FreeBSD', 'NetBSD', 'OpenBSD', 'BSD':
+			linux = true
 
 func input_detection():
-	touch = false
-	if DisplayServer.is_touchscreen_available():
-		touch = true
+	touch = DisplayServer.is_touchscreen_available()
 
 # SORT CLASSES
 class FirstElementGreatest:
