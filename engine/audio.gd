@@ -18,6 +18,8 @@ var music_position = false
 var fade_in_music_tween: Tween
 var fade_out_music_tween: Tween
 
+const silent_db = -60
+
 signal music_volume_changed()
 signal sound_volume_changed()
 
@@ -50,7 +52,8 @@ func play_sound(sound_name: String, volume:=1.0, allow_multiple:=false):
 		return null
 	player.set_stream(stream)
 	player.volume_db = convert_percent_to_db(volume)
-	player.set_meta('resource_link', resource_link)
+	player.pitch_scale = 1.0
+	player.set_meta('resource_link', resource_link)	
 	player.play()
 	return player
 
@@ -66,7 +69,7 @@ func stop_sound(sound_name):
 	var resource_link = _sound_resource(sound_name)
 	_stop_sound_resource(resource_link)
 
-func loop_sound(sound_name: String, volume:=1.0):
+func loop_sound(sound_name: String, volume:=1.0, fade_in:=false, fade_in_time:=0.5):
 	if dev.silence: return
 	# find sound resource link (res://dir/file.ext)
 	var resource_link = _sound_resource(sound_name)
@@ -88,13 +91,35 @@ func loop_sound(sound_name: String, volume:=1.0):
 		return null
 	player.set_stream(stream)
 	player.volume_db = convert_percent_to_db(volume)
+	player.pitch_scale = 1.0
 	player.set_meta('resource_link', resource_link)
 	if not player.is_connected("finished", Callable(self,"_on_loop_sound")):
 		player.connect("finished", Callable(self,"_on_loop_sound").bind(player))
 	player.play()
+	if fade_in:
+		var desired_db = player.volume_db
+		player.volume_db = silent_db
+		var tween = create_tween()
+		tween.set_trans(Tween.TRANS_CUBIC)
+		tween.set_ease(Tween.EASE_OUT)
+		tween.tween_property(player, "volume_db", desired_db, fade_in_time)
 	return player
 	
-func fade_sound(sound_name: String, fade_out_time:=0.5):
+func fade_in_sound(sound_name: String, volume:=1.0, fade_in_time:=1.5):
+	var player = play_sound(sound_name, volume)
+	if player:
+		var desired_db = player.volume_db
+		player.volume_db = silent_db
+		var tween = create_tween()
+		tween.set_trans(Tween.TRANS_CUBIC)
+		tween.set_ease(Tween.EASE_OUT)
+		tween.tween_property(player, "volume_db", desired_db, fade_in_time)
+	return player
+	
+func fade_in_loop_sound(sound_name: String, volume:=1.0, fade_in_time:=1.5):
+	loop_sound(sound_name, volume, true, fade_in_time)
+	
+func fade_out_sound(sound_name: String, fade_out_time:=1.0):
 	var resource_link = _sound_resource(sound_name)
 	if resource_link == '':
 		return false
@@ -105,7 +130,7 @@ func fade_sound(sound_name: String, fade_out_time:=0.5):
 				if player.has_meta('fading'):
 					continue
 				player.set_meta('fading', true)
-				call_deferred("_fade_sound_player", player, fade_out_time)
+				call_deferred("_fade_out_sound_player", player, fade_out_time)
 
 ### SOUNDS - INTERNAL CALLS
 
@@ -135,7 +160,7 @@ func _find_sound_file(sound_name):
 		var file_name = 'res://' + dir + '/' + sound_name + settings.sound_ext
 		if util.file_exists(file_name) or util.file_exists(file_name+".import"):
 			return file_name
-	return false
+	return ''
 
 func _find_empty_sound_player():
 	for child in $SoundPlayers.get_children():
@@ -189,11 +214,11 @@ func _stop_sound_resource(resource_link):
 				paused_sounds.erase(player)
 	return stopped
 
-func _fade_sound_player(player, fade_out_time):
+func _fade_out_sound_player(player, fade_out_time):
 	var tween = create_tween()
 	tween.set_ease(Tween.EASE_IN)
 	tween.set_trans(Tween.TRANS_CUBIC)
-	tween.tween_property(player, "volume_db", convert_percent_to_db(0.001), fade_out_time)
+	tween.tween_property(player, "volume_db", silent_db, fade_out_time)
 	await tween.finished
 	player.playing = false
 	player.remove_meta('fading')
@@ -223,10 +248,10 @@ func play_random_sound(sound_name, total, volume=1.0, origin=false, listener=fal
 	var c = math.random_int(1,total)
 	return play_sound(sound_name + str(c), volume)
 
-func play_sound_pitched(sound_name, pitch_start=0.8, pitch_end=1.2):
+func play_sound_pitched(sound_name, pitch_start=0.8, pitch_end=1.2, pitch_step:=0.02):
 	var player = play_sound(sound_name)
 	if player:
-		player.pitch_scale = math.random_float(pitch_start, pitch_end)
+		player.pitch_scale = math.random_float_step(pitch_start, pitch_end, pitch_step)
 
 func play_ambience_sound(sound_name, total=1, origin=false, listener=false, time=0.33, random=true):
 	if dev.silence: return
@@ -306,6 +331,11 @@ func rogue(player, load_with_sound_name=''):
 			player.set_stream(stream)
 	player.play()
 	return true
+
+func play_random_node(player, sound_name, total):
+	if dev.silence: return
+	var c = math.random_int(1,total)
+	return rogue(player, sound_name + str(c))
 
 ###
 ### MUSIC
@@ -406,7 +436,7 @@ func fade_in_music(song_name, _fade_in_time:=1.0, _do_play:=true, _stop_music:=t
 		play_music(song_name, 1.0, false, _stop_music)
 	var target_volume = _get_volume_for_song(song_name)
 	var target_db = convert_percent_to_db(target_volume)
-	$MusicPlayer.volume_db = convert_percent_to_db(0.001)
+	$MusicPlayer.volume_db = silent_db
 	if _stop_music:
 		stop_music_animations()
 	fade_in_music_tween = create_tween()
