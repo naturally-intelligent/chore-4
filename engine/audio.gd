@@ -180,6 +180,10 @@ func _is_sound_resource_playing(resource_link):
 		var player: AudioStreamPlayer = child
 		if player.playing and player.has_meta('resource_link') and player.get_meta('resource_link') == resource_link:
 			return true
+	for child in $SoundLoopers.get_children():
+		var player: AudioStreamPlayer = child
+		if player.playing and player.has_meta('resource_link') and player.get_meta('resource_link') == resource_link:
+			return true
 	return false
 
 func _find_empty_sound_looper():
@@ -344,6 +348,7 @@ func play_random_node(player, sound_name, total):
 func play_music(song_name:String, volume:=1.0, resume_if_previous:=true, stop_music:=true, loop:=true):
 	if dev.silence: return
 	if dev.no_music: return
+	#debug.print('play_music', song_name)
 	var resource_link = _music_resource(song_name)
 	if resource_link == '':
 		if not song_name in missing_files:
@@ -398,6 +403,7 @@ func is_music_playing(song_name=''):
 	return false
 
 func pause_music():
+	#debug.print('pause_music')
 	stop_music_animations()
 	if $MusicPlayer.is_playing():
 		music_position = $MusicPlayer.get_playback_position()
@@ -405,8 +411,9 @@ func pause_music():
 
 func resume_music(fade_in=false):
 	if dev.no_music: return
-	stop_music_animations()
-	if $MusicPlayer.stream_paused:
+	#debug.print('resume_music')
+	if current_song and $MusicPlayer.stream_paused:
+		stop_music_animations()
 		$MusicPlayer.stream_paused = false
 		#if music_position:
 		#	$MusicPlayer.seek(music_position)
@@ -414,8 +421,11 @@ func resume_music(fade_in=false):
 			fade_in_music(current_song, 1.0, false)
 
 func stop_music():
+	#debug.print('stop_music')
 	stop_music_animations()
 	$MusicPlayer.stop()
+	$MusicPlayer.stream_paused = false
+	$MusicPlayer.set_stream(null)
 	music_position = false
 	current_song = false
 
@@ -430,6 +440,8 @@ func stop_music_animations():
 		fade_out_music_tween.kill()
 
 func fade_in_music(song_name, _fade_in_time:=1.0, _do_play:=true, _stop_music:=true):
+	if dev.no_music: return	
+	#debug.print('fade_in_music')
 	if _do_play:
 		if _stop_music:
 			stop_and_reset_music()
@@ -445,20 +457,21 @@ func fade_in_music(song_name, _fade_in_time:=1.0, _do_play:=true, _stop_music:=t
 	fade_in_music_tween.tween_property($MusicPlayer, "volume_db", target_db, _fade_in_time)
 
 func fade_out_music(_fade_out_time:=0.5):
+	#debug.print('fade_out_music')
 	if not is_music_playing():
 		return
-	var target_volume: float = 0.01
-	var target_db = convert_percent_to_db(target_volume)
 	# TWEEN STYLE
 	stop_music_animations()
 	fade_out_music_tween = create_tween()
 	fade_out_music_tween.set_ease(Tween.EASE_IN)
 	fade_out_music_tween.set_trans(Tween.TRANS_CUBIC)
-	fade_out_music_tween.tween_property($MusicPlayer, "volume_db", target_db, _fade_out_time)
+	fade_out_music_tween.tween_property($MusicPlayer, "volume_db", silent_db, _fade_out_time)
 	await fade_out_music_tween.finished
+	#debug.print('faded_out_music')
 	stop_music()
 
 func fade_out_in_music(song_name, _fade_out_time:=0.5, _fade_in_time:=1.0):
+	#debug.print('fade_out_in_music')
 	if is_music_playing():
 		fade_out_music(_fade_out_time)
 		await fade_out_music_tween.finished
