@@ -53,7 +53,9 @@ func grow_animation(dx, dy, time, text):
 
 	# wait a tiny bit for next frame to bump vbox up
 	$Bubble.visible = false
-	await util.wait(0.05, self).timeout
+	var bubble_wait_timer = util.wait(0.05, self)
+	await bubble_wait_timer.timeout
+	bubble_wait_timer.queue_free()
 	$Bubble.visible = true
 
 	if appear_sound:

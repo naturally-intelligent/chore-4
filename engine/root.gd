@@ -99,6 +99,10 @@ func _ready():
 	# Post-Launch
 	if dev.dev_mode_enabled:
 		dev.call_deferred("post_launch_hacks")
+	# extra focus check
+	if util.desktop:
+		DisplayServer.window_move_to_foreground()
+		DisplayServer.call_deferred("window_move_to_foreground")
 
 # called by menus.show()
 func switch_to_menu(menu, menu_name, menu_data=false, info={}, transitions={}):
@@ -553,7 +557,7 @@ func scale_root():
 
 func scale_transitions():
 	pass
-	
+
 func scale_cursor():
 	Cursor.scale = settings.scale_mouse_cursor
 
@@ -843,6 +847,7 @@ func transition_wait(middle_time=0.3):
 	# stay for a little while
 	var middle_timer = util.wait(game.time(middle_time), self)
 	await middle_timer.timeout
+	middle_timer.queue_free()
 	emit_signal("transition_finished")
 
 func transition_fade_out(fade_time=0.3):
@@ -892,6 +897,7 @@ func transition_fade_out_stagger(fade_out_time=0.2):
 		transition.modulate = Color(1, 1, 1, a)
 		var timer = util.wait(game.time(fade_out_step_time), self)
 		await timer.timeout
+		timer.queue_free()
 	emit_signal('transition_finished')
 
 func transition_fade_in_stagger(fade_in_time=0.3):
@@ -910,6 +916,7 @@ func transition_fade_in_stagger(fade_in_time=0.3):
 		transition.modulate = Color(1, 1, 1, a)
 		var timer = util.wait(game.time(fade_in_step_time), self)
 		await timer.timeout
+		timer.queue_free()
 	emit_signal('transition_finished')
 
 func transition_slide(scene, in_out, direction, time=0.5):

@@ -473,7 +473,7 @@ func wait(time, parent=null):
 	t.set_one_shot(true)
 	if parent: parent.add_child(t)
 	t.start()
-	#await t.timeout # must call this outside of function!
+	#await t.timeout # must call this and queue_free outside of function!
 	return t
 
 # https://github.com/godotengine/godot/issues/14562
