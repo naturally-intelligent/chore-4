@@ -53,7 +53,7 @@ func play_sound(sound_name: String, volume:=1.0, allow_multiple:=false):
 	player.set_stream(stream)
 	player.volume_db = convert_percent_to_db(volume)
 	player.pitch_scale = 1.0
-	player.set_meta('resource_link', resource_link)	
+	player.set_meta('resource_link', resource_link)
 	player.play()
 	return player
 
@@ -104,7 +104,7 @@ func loop_sound(sound_name: String, volume:=1.0, fade_in:=false, fade_in_time:=0
 		tween.set_ease(Tween.EASE_OUT)
 		tween.tween_property(player, "volume_db", desired_db, fade_in_time)
 	return player
-	
+
 func fade_in_sound(sound_name: String, volume:=1.0, fade_in_time:=1.5):
 	var player = play_sound(sound_name, volume)
 	if player:
@@ -115,10 +115,10 @@ func fade_in_sound(sound_name: String, volume:=1.0, fade_in_time:=1.5):
 		tween.set_ease(Tween.EASE_OUT)
 		tween.tween_property(player, "volume_db", desired_db, fade_in_time)
 	return player
-	
+
 func fade_in_loop_sound(sound_name: String, volume:=1.0, fade_in_time:=1.5):
 	loop_sound(sound_name, volume, true, fade_in_time)
-	
+
 func fade_out_sound(sound_name: String, fade_out_time:=1.0):
 	var resource_link = _sound_resource(sound_name)
 	if resource_link == '':
@@ -168,13 +168,13 @@ func _find_empty_sound_player():
 		if not player.playing:
 			return player
 	return $SoundPlayers/SoundPlayer1
-	
+
 func _find_loaded_sound_player(resource_link):
 	for child in $SoundPlayers.get_children():
 		if child.has_meta('resource_link') and child.get_meta('resource_link') == resource_link:
 			return child
 	return null
-	
+
 func _is_sound_resource_playing(resource_link):
 	for child in $SoundPlayers.get_children():
 		var player: AudioStreamPlayer = child
@@ -192,13 +192,13 @@ func _find_empty_sound_looper():
 		if not player.playing:
 			return player
 	return $SoundLoopers/SoundPlayer1
-	
+
 func _find_loaded_sound_looper(resource_link):
 	for child in $SoundLoopers.get_children():
 		if child.has_meta('resource_link') and child.get_meta('resource_link') == resource_link:
 			return child
 	return null
-	
+
 func _is_sound_resource_looping(resource_link):
 	for child in $SoundLoopers.get_children():
 		var player: AudioStreamPlayer = child
@@ -274,11 +274,11 @@ func play_ambience_sound(sound_name, total=1, origin=false, listener=false, time
 		if random:
 			time = math.random_float(time/2,time+time/2)
 		timer.start(time)
-		
+
 func play_sound_if_not(sound_name, volume=1.0):
 	if not is_sound_playing(sound_name):
 		play_sound(sound_name, volume, false)
-	
+
 func delayed_sound(sound_name, time, volume=1.0):
 	if dev.silence: return
 	# todo: more timers
@@ -325,7 +325,7 @@ func rogue(player, load_with_sound_name=''):
 	if dev.silence: return
 	# load with sound from settings?
 	if load_with_sound_name != '':
-		var resource_link = _sound_resource(load_with_sound_name) 
+		var resource_link = _sound_resource(load_with_sound_name)
 		if not player.has_meta('resource_link') or player.get_meta('resource_link') != resource_link:
 			player.set_meta('resource_link', resource_link)
 			var stream = load(resource_link)
@@ -389,7 +389,7 @@ func play_music(song_name:String, volume:=1.0, resume_if_previous:=true, stop_mu
 			debug.print("ERROR Loading Music Stream:",resource_link)
 			missing_files.append(resource_link)
 	return false
-	
+
 func force_music(song_name:String, volume:=1.0):
 	play_music(song_name, volume, false)
 
@@ -440,7 +440,7 @@ func stop_music_animations():
 		fade_out_music_tween.kill()
 
 func fade_in_music(song_name, _fade_in_time:=1.0, _do_play:=true, _stop_music:=true):
-	if dev.no_music: return	
+	if dev.no_music: return
 	#debug.print('fade_in_music')
 	if _do_play:
 		if _stop_music:
@@ -481,21 +481,23 @@ func fade_out_in_music(song_name, _fade_out_time:=0.5, _fade_in_time:=1.0):
 
 func _get_volume_for_song(song_name):
 	var volume = 1.0
+	if song_name in settings.tracklist:
+		if typeof(settings.tracklist[song_name]) == TYPE_STRING:
+			song_name = settings.tracklist[song_name]
 	if song_name in settings.music_alias:
 		song_name = settings.music_alias[song_name]
-	if song_name in settings.tracklist:
-		var song_data = settings.tracklist[song_name]
-		if typeof(song_data) == TYPE_ARRAY:
-			volume = song_data[1]
 	return volume
-	
+
 func _music_resource(song_name: String) -> String:
 	if song_name in file_locations:
 		return file_locations[song_name]
 	if util.file_exists(song_name):
 		return song_name
 	if song_name in settings.tracklist:
-		song_name = settings.tracklist[song_name]
+		if typeof(settings.tracklist[song_name]) == TYPE_STRING:
+			song_name = settings.tracklist[song_name]
+		elif typeof(settings.tracklist[song_name]) == TYPE_ARRAY: # random selection
+			song_name = util.random_array(settings.tracklist[song_name])
 	if song_name in settings.music_alias:
 		song_name = settings.music_alias[song_name]
 	for dir in settings.music_dirs:
