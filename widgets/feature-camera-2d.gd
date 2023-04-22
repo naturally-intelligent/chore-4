@@ -39,6 +39,7 @@ var shake_vector := Vector2.ZERO
 @export var camera_trigger_areas: NodePath = NodePath("")
 var trigger_areas: Control = null
 var last_trigger_area := ''
+var trigger_tween: Tween
 
 # maintenance
 @onready var last_camera_position: Vector2 = global_position
@@ -61,21 +62,11 @@ func _ready():
 	# limits
 	init_limits()
 	# setup triggers
-	if camera_trigger_areas:
-		trigger_areas = get_node(camera_trigger_areas)
-		# connect triggers
-		for trigger in trigger_areas.get_children():
-			var camera_trigger: CameraTrigger = trigger
-			camera_trigger.connect("triggered", Callable(self, "on_camera_trigger").bind(camera_trigger))
-		trigger_areas.visible = false
+	setup_camera_triggers()
 	# target
 	if target_node:
 		target = get_node(target_node)
 
-func on_camera_trigger(camera_trigger: CameraTrigger):
-	if camera_trigger.name != last_trigger_area:
-		enter_trigger_area(camera_trigger)
-		
 # PROCESS
 func _process(delta):
 	# target valid?
@@ -132,19 +123,37 @@ func target_ahead_camera(delta):
 	last_camera_direction = new_direction
 
 # TRIGGER
+func setup_camera_triggers():
+	if camera_trigger_areas:
+		trigger_areas = get_node(camera_trigger_areas)
+		# connect triggers
+		for trigger in trigger_areas.get_children():
+			var camera_trigger: CameraTrigger = trigger
+			camera_trigger.connect("triggered", Callable(self, "on_camera_trigger").bind(camera_trigger))
+		trigger_areas.visible = false
+
+func on_camera_trigger(camera_trigger: CameraTrigger):
+	if camera_trigger.name != last_trigger_area:
+		enter_trigger_area(camera_trigger)
+			
 func enter_trigger_area(trigger_area: CameraTrigger):
 	# tween
-	var tween: Tween = create_tween()
+	if trigger_tween:
+		trigger_tween.kill()
+	trigger_tween = create_tween()
 	var time = 1.0
 	var trans_type = Tween.TRANS_CUBIC
 	var ease_type = Tween.EASE_IN
 	# y limits
 	if trigger_area.new_y_limits:
-		tween.set_trans(trans_type)
-		tween.set_ease(ease_type)
-		tween.set_parallel()
-		tween.tween_property(self, "limit_top", trigger_area.limit_y_top, time)
-		tween.tween_property(self, "limit_bottom", trigger_area.limit_y_bottom, time)
+		# set these limits to what is current, so that animation to new limits is smoother
+		limit_top = camera_edge_top_y()
+		limit_bottom = camera_edge_bottom_y()
+		trigger_tween.set_trans(trans_type)
+		trigger_tween.set_ease(ease_type)
+		trigger_tween.set_parallel()
+		trigger_tween.tween_property(self, "limit_top", trigger_area.limit_y_top, time)
+		trigger_tween.tween_property(self, "limit_bottom", trigger_area.limit_y_bottom, time)
 	# x limits
 	if trigger_area.new_x_limits:
 		limit_left = trigger_area.limit_x_left
@@ -290,6 +299,18 @@ func check_empty_triggers():
 	if trigger_areas and trigger_areas.get_child_count() == 0:
 		trigger_areas = null
 
+func camera_edge_left_x():
+	return get_screen_center_position().x - ProjectSettings.get_setting("display/window/size/viewport_width") * zoom.x / 2 
+	
+func camera_edge_right_x():
+	return get_screen_center_position().x + ProjectSettings.get_setting("display/window/size/viewport_width") * zoom.x / 2 
+	
+func camera_edge_bottom_y():
+	return get_screen_center_position().y + ProjectSettings.get_setting("display/window/size/viewport_height") * zoom.y / 2 
+	
+func camera_edge_top_y():
+	return get_screen_center_position().y - ProjectSettings.get_setting("display/window/size/viewport_height") * zoom.y / 2 
+
 # SMOOTHING
 func set_smoothing_speed_temporarily(speed=1, time=2.5):
 	var old_speed = position_smoothing_speed
@@ -299,3 +320,4 @@ func set_smoothing_speed_temporarily(speed=1, time=2.5):
 	tween.set_ease(Tween.EASE_IN)
 	tween.tween_property(self, 'position_smoothing_speed', old_speed, time)
 	await tween.finished
+
