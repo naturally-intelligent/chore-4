@@ -47,6 +47,9 @@ var float_camera_position: Vector2 = global_position
 var initial_camera_left_limit := 0
 var initial_camera_right_limit := 0
 
+# coop
+@export var coop_camera_limits := true
+
 const TARGET_CATCHUP_LERP_SPEED = 0.05
 const TARGET_IGNORE_PIXELS = 4
 const NOISE_FACTOR = 1
@@ -88,8 +91,9 @@ func _process(delta):
 
 # TARGET
 func set_target(_target):
-	target_ref = weakref(_target)
-	target = _target
+	if target != _target:
+		target_ref = weakref(_target)
+		target = _target
 
 func target_ahead_camera(delta):
 	# find direction based on target
@@ -135,7 +139,7 @@ func setup_camera_triggers():
 func on_camera_trigger(camera_trigger: CameraTrigger):
 	if camera_trigger.name != last_trigger_area:
 		enter_trigger_area(camera_trigger)
-			
+
 func enter_trigger_area(trigger_area: CameraTrigger):
 	# tween
 	if trigger_tween:
@@ -170,7 +174,7 @@ func enter_trigger_area(trigger_area: CameraTrigger):
 # SHAKE / QUAKE
 func start_shaking():
 	shaking = true
-	
+
 func stop_shaking():
 	shaking = false
 	shake_vector = Vector2.ZERO
@@ -300,16 +304,26 @@ func check_empty_triggers():
 		trigger_areas = null
 
 func camera_edge_left_x():
-	return get_screen_center_position().x - ProjectSettings.get_setting("display/window/size/viewport_width") * zoom.x / 2 
-	
+	return get_screen_center_position().x - ProjectSettings.get_setting("display/window/size/viewport_width") * zoom.x / 2
+
 func camera_edge_right_x():
-	return get_screen_center_position().x + ProjectSettings.get_setting("display/window/size/viewport_width") * zoom.x / 2 
-	
+	return get_screen_center_position().x + ProjectSettings.get_setting("display/window/size/viewport_width") * zoom.x / 2
+
 func camera_edge_bottom_y():
-	return get_screen_center_position().y + ProjectSettings.get_setting("display/window/size/viewport_height") * zoom.y / 2 
-	
+	return get_screen_center_position().y + ProjectSettings.get_setting("display/window/size/viewport_height") * zoom.y / 2
+
 func camera_edge_top_y():
-	return get_screen_center_position().y - ProjectSettings.get_setting("display/window/size/viewport_height") * zoom.y / 2 
+	return get_screen_center_position().y - ProjectSettings.get_setting("display/window/size/viewport_height") * zoom.y / 2
+
+func get_visible_screen_rect():
+	var rect: Rect2
+	rect.position = Vector2(camera_edge_left_x(), camera_edge_top_y())
+	rect.size = Vector2(ProjectSettings.get_setting("display/window/size/viewport_width"), ProjectSettings.get_setting("display/window/size/viewport_height"))
+	return rect
+
+func is_point_on_screen(position: Vector2):
+	var rect = get_visible_screen_rect()
+	return rect.has_point(position)
 
 # SMOOTHING
 func set_smoothing_speed_temporarily(speed=1, time=2.5):
