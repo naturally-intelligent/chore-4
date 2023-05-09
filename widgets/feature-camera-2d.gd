@@ -171,6 +171,20 @@ func enter_trigger_area(trigger_area: CameraTrigger):
 	last_trigger_area = trigger_area.name
 	call_deferred("check_empty_triggers")
 
+func tween_change_camera_limits_x(new_limit_left, new_limit_right, time=1.0):
+	if trigger_tween:
+		trigger_tween.kill()
+	trigger_tween = create_tween()
+	var trans_type = Tween.TRANS_CUBIC
+	var ease_type = Tween.EASE_OUT
+	limit_left = camera_edge_left_x()
+	limit_right = camera_edge_right_x()
+	trigger_tween.set_trans(trans_type)
+	trigger_tween.set_ease(ease_type)
+	trigger_tween.set_parallel()
+	trigger_tween.tween_property(self, "limit_left", new_limit_left, time)
+	trigger_tween.tween_property(self, "limit_right", new_limit_right, time)	
+
 # SHAKE / QUAKE
 func start_shaking():
 	shaking = true
@@ -275,6 +289,11 @@ func zoom_out(amount):
 	if target:
 		global_position = target.global_position
 
+func is_zooming():
+	if zoom.x != 1 or zoom.y != 1:
+		return true
+	return false
+	
 # LIMITS
 func init_limits():
 	# limits?
@@ -298,6 +317,11 @@ func reset_camera_limits():
 		set_smoothing_speed_temporarily()
 	limit_left = initial_camera_left_limit
 	limit_right = initial_camera_right_limit
+
+func tween_reset_camera_limits_x():
+	if position_smoothing_speed > 1:
+		set_smoothing_speed_temporarily()
+	tween_change_camera_limits_x(initial_camera_left_limit, initial_camera_right_limit)
 
 func check_empty_triggers():
 	if trigger_areas and trigger_areas.get_child_count() == 0:
