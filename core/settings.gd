@@ -81,7 +81,9 @@ const music_alias = {}
 const tracklist = {
 	'main-menu': ['song-file-todo', 0.8],
 }
-
+const music_pools = {
+    'default': ['main-menu'],
+}
 # SOUND
 const sound_bus_name = 'Sounds'
 const sound_ext = '.wav'

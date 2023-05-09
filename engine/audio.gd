@@ -376,7 +376,7 @@ func play_music(song_name:String, volume:=1.0, resume_if_previous:=true, stop_mu
 	# load stream
 	var stream = load(resource_link)
 	if stream:
-		stream.loop = loop
+		#stream.loop = loop
 		$MusicPlayer.volume_db = convert_percent_to_db(volume)
 		$MusicPlayer.set_stream(stream)
 		$MusicPlayer.stream_paused = false
@@ -476,6 +476,24 @@ func fade_out_in_music(song_name, _fade_out_time:=0.5, _fade_in_time:=1.0):
 		fade_out_music(_fade_out_time)
 		await fade_out_music_tween.finished
 	fade_in_music(song_name, _fade_in_time, true, false)
+
+func is_playing_music_pool(pool_name):
+	if not pool_name in settings.music_pools:
+		debug.print("WARNING: Missing Music Pool:", pool_name)
+		return false
+	for track_name in settings.music_pools[pool_name]:
+		if is_music_playing(track_name):
+			return true
+	return false
+
+func get_music_player():
+	return $MusicPlayer
+
+func get_song_alias(song_name):
+	if song_name in settings.tracklist:
+		if typeof(settings.tracklist[song_name]) == TYPE_STRING:
+			song_name = settings.tracklist[song_name]
+	return song_name
 
 ### MUSIC - INTERNAL
 
