@@ -51,6 +51,12 @@ class FirstElementLeast:
 			return true
 		return false
 
+class SecondElementGreatest:
+	static func sort(a, b):
+		if a[1] > b[1]:
+			return true
+		return false
+
 # HELPER FUNCTIONS
 #  these are all static, meaning they arent part of the 'util' object
 #  but still called like -> util.fullscreen_flip()
@@ -264,8 +270,11 @@ func name_fills(object):
 	if 'last' in object:
 		object['last_upper'] = object['last'].to_upper()
 
-func first_upper(string):
-	return string.capitalize()
+func first_upper(string: String):
+	return string.substr(0,1).capitalize() + string.substr(1)
+
+func first_upper_only(string: String):
+	return string.substr(0,1).capitalize() + string.substr(1).to_lower()
 
 func calculate_total(data):
 	data['total'] = 0
@@ -401,6 +410,10 @@ func set_texture(sprite, file):
 		debug.print('MISSING TEXTURE: ' + file)
 
 func number2words(n):
+	var prefix = ''
+	if n < 0:
+		n = -n
+		prefix = 'Negative '
 	var num2words = {1: 'One', 2: 'Two', 3: 'Three', 4: 'Four', 5: 'Five', \
 				6: 'Six', 7: 'Seven', 8: 'Eight', 9: 'Nine', 10: 'Ten', \
 				11: 'Eleven', 12: 'Twelve', 13: 'Thirteen', 14: 'Fourteen', \
@@ -409,9 +422,9 @@ func number2words(n):
 				50: 'Fifty', 60: 'Sixty', 70: 'Seventy', 80: 'Eighty', \
 				90: 'Ninety', 0: 'Zero'}
 	if n in num2words:
-		return num2words[n]
+		return prefix + num2words[n]
 	else:
-		return num2words[n-n%10] + num2words[n%10].to_lower()
+		return prefix + num2words[n-n%10] + '-' + num2words[n%10]
 
 func number2past(n):
 	var num2words = {1: 'Once', 2: 'Twice', 3: 'Thrice'}
