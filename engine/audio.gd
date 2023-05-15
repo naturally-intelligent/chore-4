@@ -10,7 +10,7 @@ var sound_dirs = settings.sound_dirs
 var history := {}
 var ambience_timers := {}
 var file_locations := {}
-var current_song = false
+var current_song := ''
 var missing_files := []
 var paused_sounds := {}
 var music_position = false
@@ -355,28 +355,30 @@ func play_music(song_name:String, volume:=1.0, resume_if_previous:=true, stop_mu
 			debug.print("MUSIC FILE FAILED TO LOAD:",song_name)
 			missing_files.append(song_name)
 		return false
-	# check if already loaded same song
-	if $MusicPlayer.has_meta('resource_link'):
-		if $MusicPlayer.get_meta('resource_link') == resource_link:
-			if resume_if_previous:
-				if $MusicPlayer.stream_paused:
-					$MusicPlayer.stream_paused = false
-			else:
-				$MusicPlayer.seek(0)
-			$MusicPlayer.volume_db = _get_volume_for_song(song_name)
-			if not $MusicPlayer.is_playing():
-				$MusicPlayer.play()
-			return true
 	# volume in settings
 	if volume == 1.0:
 		volume = _get_volume_for_song(song_name)
+	# check if already loaded same song
+	if current_song != '' and $MusicPlayer.has_meta('resource_link'):
+		if $MusicPlayer.get_meta('resource_link') == resource_link:
+			#debug.print("resuming song")
+			current_song = song_name
+			if resume_if_previous:
+				if $MusicPlayer.is_playing() and not $MusicPlayer.stream_paused:
+					return true
+				$MusicPlayer.play($MusicPlayer.get_playback_position())
+			else:
+				$MusicPlayer.seek(0)
+				$MusicPlayer.play(0)
+			$MusicPlayer.volume_db = convert_percent_to_db(volume)
+			$MusicPlayer.stream_paused = false
+			return true
 	# stop
 	if stop_music:
 		stop_and_reset_music()
 	# load stream
 	var stream = load(resource_link)
 	if stream:
-		#stream.loop = loop
 		$MusicPlayer.volume_db = convert_percent_to_db(volume)
 		$MusicPlayer.set_stream(stream)
 		$MusicPlayer.stream_paused = false
@@ -395,11 +397,11 @@ func force_music(song_name:String, volume:=1.0):
 
 func is_music_playing(song_name=''):
 	if song_name == '':
-		return $MusicPlayer.is_playing()
+		return $MusicPlayer.is_playing() and not $MusicPlayer.stream_paused
 	else:
 		var resource_link = _music_resource(song_name)
 		if $MusicPlayer.is_playing() and $MusicPlayer.get_meta('resource_link') == resource_link:
-			return true
+			return not $MusicPlayer.stream_paused
 	return false
 
 func pause_music():
@@ -412,7 +414,7 @@ func pause_music():
 func resume_music(fade_in=false):
 	if dev.no_music: return
 	#debug.print('resume_music')
-	if current_song and $MusicPlayer.stream_paused:
+	if current_song != '' and $MusicPlayer.stream_paused:
 		stop_music_animations()
 		$MusicPlayer.stream_paused = false
 		#if music_position:
@@ -426,8 +428,9 @@ func stop_music():
 	$MusicPlayer.stop()
 	$MusicPlayer.stream_paused = false
 	$MusicPlayer.set_stream(null)
+	$MusicPlayer.set_meta('resource_link', '')
 	music_position = false
-	current_song = false
+	current_song = ''
 
 func stop_and_reset_music():
 	stop_music()
