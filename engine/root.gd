@@ -285,8 +285,16 @@ func _add_next_scene(scene, scene_name, info):
 		var tscn = load(scene)
 		scene = tscn.instantiate()
 		scene.name = scene_name
+	# console info about bad scene
+	if typeof(scene) != TYPE_OBJECT:
+		debug.print("FATAL: Trying to load bad scene file!")
+		debug.print("- Bad Scene = ", scene_name, scene)
+		if not settings.allow_res_scenes and scene_name.contains("res://"):
+			debug.print("- NOTICE: Trying to load res:// scene without settings.allow_res_scenes enabled.")
+	# if fails here, check console output for above warnings
+	assert(typeof(scene) == TYPE_OBJECT)
 	# new current scene
-	_next_scene = scene
+	_next_scene = scene # if fails here, your scene is bad, open in editor to see issue
 	_next_scene.name = scene_name
 	_next_scene_name = scene_name
 	_next_scene_type = switch_target
