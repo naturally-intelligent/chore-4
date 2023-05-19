@@ -498,6 +498,10 @@ func get_song_alias(song_name):
 			song_name = settings.tracklist[song_name]
 	return song_name
 
+func seek_music(time: float):
+	if $MusicPlayer.is_playing():
+		$MusicPlayer.seek(time)
+
 ### MUSIC - INTERNAL
 
 func _get_volume_for_song(song_name):
