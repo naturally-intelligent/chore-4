@@ -50,7 +50,7 @@ var initial_camera_right_limit := 0
 # coop
 @export var coop_camera_limits := true
 
-const TARGET_CATCHUP_LERP_SPEED = 0.05
+const TARGET_CATCHUP_LERP_SPEED = 2.5
 const TARGET_IGNORE_PIXELS = 4
 const NOISE_FACTOR = 1
 
@@ -122,7 +122,7 @@ func target_ahead_camera(delta):
 	# move towards goal
 	var distance_x = abs(float_camera_position.x - (target.global_position.x + target_point.x))
 	if distance_x > TARGET_IGNORE_PIXELS:
-		float_camera_position = lerp(float_camera_position, target.global_position + target_point, TARGET_CATCHUP_LERP_SPEED)
+		float_camera_position = lerp(float_camera_position, target.global_position + target_point, TARGET_CATCHUP_LERP_SPEED * delta)
 	# remember direction
 	last_camera_direction = new_direction
 
