@@ -11,11 +11,14 @@ var target: Node2D : set = set_target
 @export var target_ahead := true
 @export var target_ahead_pixels := 90
 @export var target_behind_pixels := 0
-@export var target_ahead_factor := 1
+@export var target_ahead_factor := 2
 @export var target_behind_factor := 1
 @export var target_ahead_y := false
+@export var target_moved := false
 var target_point := Vector2.ZERO
 var last_camera_direction := Vector2.ZERO
+var target_anchor_position := Vector2.ZERO
+var target_anchored := false
 
 # shake
 var shaking := false
@@ -50,8 +53,8 @@ var initial_camera_right_limit := 0
 # coop
 @export var coop_camera_limits := true
 
-const TARGET_CATCHUP_LERP_SPEED = 2.5
-const TARGET_IGNORE_PIXELS = 4
+const TARGET_CATCHUP_LERP_SPEED = 3.0
+const TARGET_IGNORE_PIXELS = 24
 const NOISE_FACTOR = 1
 
 func _ready():
@@ -97,34 +100,52 @@ func set_target(_target):
 
 func target_ahead_camera(delta):
 	# find direction based on target
-	var new_direction: Vector2
-	new_direction.x = sign(target.direction.x)
-	new_direction.y = sign(target.direction.y)
-	if new_direction.x == 0:
-		new_direction.x = last_camera_direction.x
-	if new_direction.y == 0:
-		new_direction.y = last_camera_direction.y
+	var current_direction: Vector2
+	current_direction.x = sign(target.direction.x)
+	current_direction.y = sign(target.direction.y)
+	if current_direction.x == 0:
+		current_direction.x = last_camera_direction.x
+	if current_direction.y == 0:
+		current_direction.y = last_camera_direction.y
 	# switch direction?
-	if new_direction.x != last_camera_direction.x \
-	or (target_ahead_y and new_direction.y != last_camera_direction.y):
-		$TargetAheadTimer.start()
-	# move target point?
-	if $TargetAheadTimer.is_stopped():
-		if abs(target.velocity.x) > 0:
-			if new_direction.x > 0:
-				target_point.x += target_ahead_factor
-				if target_point.x > target_ahead_pixels:
-					target_point.x = target_ahead_pixels
-			elif new_direction.x < 0:
-				target_point.x -= target_behind_factor
-				if target_point.x < -target_behind_pixels:
-					target_point.x = -target_behind_pixels
-	# move towards goal
-	var distance_x = abs(float_camera_position.x - (target.global_position.x + target_point.x))
-	if distance_x > TARGET_IGNORE_PIXELS:
-		float_camera_position = lerp(float_camera_position, target.global_position + target_point, TARGET_CATCHUP_LERP_SPEED * delta)
+	var direction_changed = false
+	if current_direction.x != last_camera_direction.x \
+	or (target_ahead_y and current_direction.y != last_camera_direction.y):
+		if last_camera_direction.x != 0:
+			direction_changed = true
 	# remember direction
-	last_camera_direction = new_direction
+	last_camera_direction = current_direction
+	if direction_changed:
+		target_anchored = true
+		target_anchor_position = target.global_position
+		$TargetIgnoreTimer.start()
+		return
+	# anchored?
+	if target_anchored:
+		var anchor_distance_x = abs(target.global_position.x - target_anchor_position.x)
+		if anchor_distance_x <= TARGET_IGNORE_PIXELS:
+			return
+		target_anchored = false
+	# move target point?
+	if $TargetIgnoreTimer.is_stopped():
+		if current_direction.x > 0:
+			#target_point.x = target_ahead_pixels
+			target_point.x += target_ahead_factor
+			if target_point.x > target_ahead_pixels:
+				target_point.x = target_ahead_pixels
+		elif current_direction.x < 0:
+			#target_point.x = -target_behind_pixels
+			target_point.x -= target_behind_factor
+			if target_point.x < -target_behind_pixels:
+				target_point.x = -target_behind_pixels
+	# move towards goal
+	var camera_speed = TARGET_CATCHUP_LERP_SPEED * delta
+	# account for fast-moving target
+	if abs(target.velocity.x) > 1.0: camera_speed = lerp(camera_speed, camera_speed * sqrt(abs(target.velocity.x)), 0.15)
+	# clamp final speed
+	camera_speed = clamp(camera_speed, 0.1, 1.0)
+	# final move camera
+	float_camera_position = lerp(float_camera_position, target.global_position + target_point, camera_speed)
 
 # TRIGGER
 func setup_camera_triggers():
@@ -183,7 +204,7 @@ func tween_change_camera_limits_x(new_limit_left, new_limit_right, time=1.0):
 	trigger_tween.set_ease(ease_type)
 	trigger_tween.set_parallel()
 	trigger_tween.tween_property(self, "limit_left", new_limit_left, time)
-	trigger_tween.tween_property(self, "limit_right", new_limit_right, time)	
+	trigger_tween.tween_property(self, "limit_right", new_limit_right, time)
 
 # SHAKE / QUAKE
 func start_shaking():
@@ -293,7 +314,7 @@ func is_zooming():
 	if zoom.x != 1 or zoom.y != 1:
 		return true
 	return false
-	
+
 # LIMITS
 func init_limits():
 	# limits?
