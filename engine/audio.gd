@@ -370,6 +370,7 @@ func play_music(song_name:String, volume:=1.0, resume_if_previous:=true, stop_mu
 			else:
 				$MusicPlayer.seek(0)
 				$MusicPlayer.play(0)
+			#$MusicPlayer.seek($MusicPlayer.get_stream().get_length()-3)
 			$MusicPlayer.volume_db = convert_percent_to_db(volume)
 			$MusicPlayer.stream_paused = false
 			return true
@@ -383,6 +384,7 @@ func play_music(song_name:String, volume:=1.0, resume_if_previous:=true, stop_mu
 		$MusicPlayer.set_stream(stream)
 		$MusicPlayer.stream_paused = false
 		$MusicPlayer.play()
+		#$MusicPlayer.seek(stream.get_length()-3)
 		$MusicPlayer.set_meta("resource_link", resource_link)
 		current_song = song_name
 		return true
@@ -553,16 +555,29 @@ func set_music_volume(amount):
 
 # BUTTON SOUND MAPPERS
 
-func button_sounds(button, hover_sound, press_sound):
-	button.connect("mouse_entered",Callable(self,"play_sound").bind(hover_sound))
-	button.connect("pressed",Callable(self,"play_sound").bind(press_sound))
+func play_sound_if_ready(sound_name: String):
+	if not root.switching_scene:
+		play_sound(sound_name)
 
-func button_hover_sounds(button, focus_sound, unfocus_sound=false):
-	button.connect("mouse_entered",Callable(self,"play_sound").bind(focus_sound))
+func play_slider_sound(slider_value, sound_name):
+	play_sound(sound_name)
+
+func button_sounds(button, hover_sound='menu-hover', press_sound='menu-press'):
+	button.connect("mouse_entered",Callable(self,"play_sound_if_ready").bind(hover_sound))
+	button.connect("focus_entered",Callable(self,"play_sound_if_ready").bind(hover_sound))
+	if button.has_signal("pressed"):
+		button.connect("pressed",Callable(self,"play_sound").bind(press_sound))
+	if button.has_signal("value_changed"):
+		button.connect("value_changed",Callable(self,"play_slider_sound").bind(press_sound))
+
+func button_hover_sounds(button, focus_sound='menu-hover', unfocus_sound=''):
+	button.connect("mouse_entered",Callable(self,"play_sound_if_ready").bind(focus_sound))
+	button.connect("focus_entered",Callable(self,"play_sound_if_ready").bind(focus_sound))
 	if unfocus_sound:
 		button.connect("mouse_exited",Callable(self,"play_sound").bind(unfocus_sound))
+		button.connect("focus_exited",Callable(self,"play_sound").bind(unfocus_sound))
 
-func calm_button_hover_sounds(button, focus_sound, unfocus_sound=false):
-	button.connect("on_hover_state",Callable(self,"play_sound").bind(focus_sound))
+func calm_button_hover_sounds(button, focus_sound='menu-hover', unfocus_sound=''):
+	button.connect("on_hover_state",Callable(self,"play_sound_if_ready").bind(focus_sound))
 	if unfocus_sound:
 		button.connect("on_normal_state",Callable(self,"play_sound").bind(unfocus_sound))
