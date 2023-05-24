@@ -8,6 +8,8 @@ It's a basic framework for any kind of game using GDScript.
 
 You provide the game scenes (Control/2D/3D) and Chore provides a scene/menu management framework with libraries/audio/etc. Chore considers your game to be a bunch of scenes with menus on top!
 
+The repository includes a demo project.
+
 ---
 SHARED DIRECTORIES
 ---
@@ -18,7 +20,7 @@ Use by linking/copying into your project these directories:
 
 Example: ln -s /path/to/chore/engine /path/to/yourgame/.
 
-"widgets" contains optional convenient components you can use or not. Even though the Chore repo contains art, sound, etc, you should not link those, they are examples.
+"widgets" contains optional convenient components you can use or not. Even though the Chore repo contains art, sound, etc, you should not link those, they are examples. This means the repository is both the engine *and* the demo project.
 
 ---
 SETTINGS FILES + DIRECTORIES
@@ -91,10 +93,11 @@ For example if you are making a storybook scene and you want fades between panel
 ---
 BASE CLASS / DUCKING
 ---
-There is a top-level class "menu.gd" provided as reference for your menus/scenes, but it isn't required to inherit from. You just add any Control or Node as a scene/menu. This approach was chosen because it would be a chore to make all your scenes inherit from this.
+There is a top-level class "menu.gd" provided as reference for your menus/scenes, but it isn't required to inherit from. You just add any Control or Node as a scene/menu. This approach was chosen because it would be a *chore* to make all your scenes inherit from this.
 
 Instead, ducking is preferred:
 - on_show(), on_hide(), on_pause(), on_resume(), notify_closing(), pass_data()
+
 Add these optional methods to your scene/menu if you need special code during these moments.
 
 ---
