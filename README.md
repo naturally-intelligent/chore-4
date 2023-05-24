@@ -43,18 +43,18 @@ PROJECT SETTINGS
 
 You will need to set in your Project Settings:
 - main scene: launch.tscn (see next section)
-- autoload globals (order is important):
 
-engine/debug.gd / debug
-engine/math.gd / math
-engine/util.gd / util
-your-copy/settings.gd / settings
-your-copy/game.gd / game
-your-copy/dev.gd / dev
-engine/audio.tscn / audio
-engine/root.tscn / root
-engine/menus.gd / menus
-engine/scenes.gd / scenes
+Autoload globals (order is important):
+- engine/debug.gd / debug
+- engine/math.gd / math
+- engine/util.gd / util
+- your-copy/settings.gd / settings
+- your-copy/game.gd / game
+- your-copy/dev.gd / dev
+- engine/audio.tscn / audio
+- engine/root.tscn / root
+- engine/menus.gd / menus
+- engine/scenes.gd / scenes
 
 ---
 MAIN SCENE - launch.tscn
