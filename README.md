@@ -1,13 +1,12 @@
 # CHORE ENGINE v1.4
--
 Godot 4 Framework
 ---
 
 What does this engine do?
 
-It's a basic framework for any kind of game.
+It's a basic framework for any kind of game using GDScript.
 
-You provide the game scenes (Control/2D/3D) and Chore provides a menu framework with libraries/audio/etc. Chore considers your game to be a bunch of scenes with menus on top!
+You provide the game scenes (Control/2D/3D) and Chore provides a scene/menu management framework with libraries/audio/etc. Chore considers your game to be a bunch of scenes with menus on top!
 
 ---
 SHARED DIRECTORIES
