@@ -259,8 +259,9 @@ func quake_shake(amount):
 	quake = min(quake + amount, 1.0)
 	start_shaking()
 
-func shooty_shake(_direction):
-	shoot_shake = 1
+func shooty_shake(_direction, _threshold=1.0):
+	if shoot_shake <= _threshold:
+		shoot_shake = 1.0
 	start_shaking()
 
 # DRAMA
