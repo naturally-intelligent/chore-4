@@ -715,6 +715,17 @@ func keycode_to_scancode(key_code):
 		debug.print("Can't find scancode for ",key_code)
 	return scan_code
 
+func print_connected_gamepads():
+	for id in Input.get_connected_joypads():
+		debug.print("Joypad:", id, Input.get_joy_name(id), Input.get_joy_guid(id))
+
+func connected_gamepad_count():
+	var count = 0
+	for id in Input.get_connected_joypads():
+		if id != null:
+			count += 1
+	return count
+
 ### INPUT MAPPING
 # from previously loaded config file, ex:
 # [INPUT]
