@@ -15,6 +15,9 @@ var target: Node2D : set = set_target
 @export var target_behind_factor := 1
 @export var target_ahead_y := false
 @export var target_moved := false
+# catch up to high speed target? warning: causes jitter
+@export var target_velocity_account := false
+@export var target_velocity_threshold := 200
 var target_point := Vector2.ZERO
 var last_camera_direction := Vector2.ZERO
 var target_anchor_position := Vector2.ZERO
@@ -53,7 +56,7 @@ var initial_camera_right_limit := 0
 # coop
 @export var coop_camera_limits := true
 
-const TARGET_CATCHUP_LERP_SPEED = 3.0
+const TARGET_CATCHUP_LERP_SPEED = 4.0
 const TARGET_IGNORE_PIXELS = 24
 const NOISE_FACTOR = 1
 
@@ -140,8 +143,12 @@ func target_ahead_camera(delta):
 				target_point.x = -target_behind_pixels
 	# move towards goal
 	var camera_speed = TARGET_CATCHUP_LERP_SPEED * delta
-	# account for fast-moving target
-	if abs(target.velocity.x) > 1.0: camera_speed = lerp(camera_speed, camera_speed * sqrt(abs(target.velocity.x)), 0.15)
+	# account for fast-moving target?
+	if target_velocity_account:
+		if target.has_method("get_real_velocity"):
+			var real_velocity = target.get_real_velocity()
+			if real_velocity.length() > target_velocity_threshold:
+				camera_speed = lerp(camera_speed, 1.0, 0.1)
 	# clamp final speed
 	camera_speed = clamp(camera_speed, 0.1, 1.0)
 	# final move camera
