@@ -94,7 +94,8 @@ func _ready():
 	if not game.release:
 		$Timers/Screenshot.connect("timeout",Callable(self,"auto_screenshot"))
 		if dev.autoscreenshot_timer:
-			$Timers/Screenshot.start() # use A key to start/stop
+			settings.screenshot_auto_directory = util.auto_screenshot_dir()
+			$Timers/Screenshot.start()
 		$Timers/Advance.connect("timeout",Callable(self,"stop_frame"))
 	# Post-Launch
 	if dev.dev_mode_enabled:
@@ -1049,21 +1050,22 @@ func set_box_slide(value):
 func auto_screenshot():
 	debug.print('autoscreenshot')
 	if current_scene:
-		util.screenshot(self, dev.autoscreenshot_resolution)
+		util.screenshot(self, dev.autoscreenshot_resolution, false, settings.screenshot_auto_directory)
 
 func flip_autoscreenshot():
 	if not game.release:
 		if $Timers/Screenshot.is_stopped():
 			debug.print('autoscreenshot started')
 			if dev.autoscreenshot_hidecursor:
-				dev.allow_mouse_cursor = false
+				dev.hide_mouse_cursor = true
 				hide_cursor()
 				Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+			settings.screenshot_auto_directory = util.auto_screenshot_dir()
 			$Timers/Screenshot.start()
 		else:
 			debug.print('autoscreenshot stopped')
 			if dev.autoscreenshot_hidecursor:
-				dev.allow_mouse_cursor = true
+				dev.hide_mouse_cursor = false
 				update_ui()
 			$Timers/Screenshot.stop()
 

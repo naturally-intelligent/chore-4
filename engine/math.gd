@@ -27,6 +27,9 @@ func randomf(s: float, e: float) -> float: # shortened version of random_float
 func random_position(minx:int,maxx:int, miny:int,maxy:int):
 	return Vector2(random_int(minx,maxx), random_int(miny,maxy))
 
+func random_vector_position(vector1: Vector2, vector2: Vector2):
+	return Vector2(random_int(vector1.x,vector2.x), random_int(vector1.y,vector2.y))
+
 func random_vector(x_factor = 1.0, y_factor = 1.0):
 	return Vector2(random_float(-1.0,1.0)*x_factor, random_float(-1.0,1.0)*y_factor).normalized()
 

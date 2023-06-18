@@ -548,11 +548,25 @@ func screenshot(scene, scale=false, logo=false, savedir="screenshots"):
 	var file_name = files[1]
 	debug.print('Saving '+file+'...')
 	img.save_png(file)
-	var dir_plus_file = append_separator(OS.get_user_data_dir()) + file_name
+	var dir_plus_file = append_separator(OS.get_user_data_dir()) + append_separator(savedir) + file_name
 	debug.print('PNG saved to:', dir_plus_file)
 	# restore cursor?
 	if show_cursor:
 		root.show_cursor()
+
+func auto_screenshot_dir(auto_prefix="auto"):
+	# create a new subdirectory for autoscreenshots (or they spiral out of control)
+	var screenshots_dir = "screenshots"
+	var directory = DirAccess.open("user://")
+	var auto_dir_num = 1
+	var auto_dir = screenshots_dir + "/" + auto_prefix + str(auto_dir_num)
+	while directory.dir_exists(auto_dir):
+		auto_dir_num += 1
+		auto_dir = screenshots_dir + "/" + auto_prefix + str(auto_dir_num)
+		if auto_dir_num > 100:
+			break
+	util.ensure_dir(auto_dir)
+	return auto_dir
 
 func numbered_filename(dir="user://", file_prefix='', file_ext='.png'):
 	if file_prefix == '':

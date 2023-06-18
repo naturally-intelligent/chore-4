@@ -63,6 +63,7 @@ var screenshot_size := Vector2(1920,1080)
 var screenshot_scale = Vector2(1,1)
 var screenshot_flip_y := false
 var screenshot_transparent_bg := false
+var screenshot_auto_directory := ''
 var stretch_mode = false # SceneTree.STRETCH_MODE_VIEWPORT
 var stretch_aspect = false # SceneTree.STRETCH_ASPECT_KEEP
 var small_root_viewport := false
