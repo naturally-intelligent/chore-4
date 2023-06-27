@@ -348,6 +348,9 @@ func play_random_node(player, sound_name, total):
 func play_music(song_name:String, volume:=1.0, resume_if_previous:=true, stop_music:=true, loop:=true):
 	if dev.silence: return
 	if dev.no_music: return
+	if dev.skip_first_song:
+		dev.skip_first_song = false
+		return
 	#debug.print('play_music', song_name)
 	var resource_link = _music_resource(song_name)
 	if resource_link == '':

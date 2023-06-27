@@ -45,6 +45,7 @@ var launch_menu_override = false
 var launch_scene_override = false
 var skip_transitions = false
 var hide_mouse_cursor = false
+var skip_first_song = false
 
 func launch_hacks():
 	#silence = true
