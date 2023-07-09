@@ -490,6 +490,8 @@ func is_playing_music_pool(pool_name):
 		debug.print("WARNING: Missing Music Pool:", pool_name)
 		return false
 	for track_name in settings.music_pools[pool_name]:
+		if current_song == track_name:
+			return true
 		if is_music_playing(track_name):
 			return true
 	return false
