@@ -23,6 +23,9 @@ var last_camera_direction := Vector2.ZERO
 var target_anchor_position := Vector2.ZERO
 var target_anchored := false
 
+# pixel rounding
+@export var pixel_rounding := true
+
 # shake
 var shaking := false
 
@@ -48,7 +51,6 @@ var last_trigger_area := ''
 var trigger_tween: Tween
 
 # maintenance
-@onready var last_camera_position: Vector2 = global_position
 var float_camera_position: Vector2 = global_position
 var initial_camera_left_limit := 0
 var initial_camera_right_limit := 0
@@ -84,16 +86,18 @@ func _process(delta):
 		target = null
 	# target follow
 	if target:
-		if target_ahead:
+		if target_ahead and not trigger_tween:
 			target_ahead_camera(delta)
 		else:
 			float_camera_position = target.global_position
 	# shake
 	if shaking:
 		_shake_camera(delta)
-	global_position = round(float_camera_position)
-	# remember last position
-	last_camera_position = global_position
+	# final
+	if pixel_rounding:
+		global_position = round(float_camera_position)
+	else:
+		global_position = float_camera_position
 
 # TARGET
 func set_target(_target):
@@ -154,6 +158,12 @@ func target_ahead_camera(delta):
 	# final move camera
 	float_camera_position = lerp(float_camera_position, target.global_position + target_point, camera_speed)
 
+func force_position(_position):
+	_position = round(_position)
+	global_position = _position
+	target_point = _position
+	float_camera_position = _position
+
 # TRIGGER
 func setup_camera_triggers():
 	if camera_trigger_areas:
@@ -167,6 +177,15 @@ func setup_camera_triggers():
 func on_camera_trigger(camera_trigger: CameraTrigger):
 	if camera_trigger.name != last_trigger_area:
 		enter_trigger_area(camera_trigger)
+
+func check_all_triggers():
+	if camera_trigger_areas:
+		trigger_areas = get_node(camera_trigger_areas)
+		# connect triggers
+		for trigger in trigger_areas.get_children():
+			var camera_trigger: CameraTrigger = trigger
+			if camera_trigger.has_overlapping_bodies():
+				on_camera_trigger(camera_trigger)
 
 func enter_trigger_area(trigger_area: CameraTrigger):
 	# tween
@@ -196,6 +215,13 @@ func enter_trigger_area(trigger_area: CameraTrigger):
 	if trigger_area.new_target_ahead:
 		target_ahead_pixels = trigger_area.target_ahead_pixels
 		target_behind_pixels = trigger_area.target_behind_pixels
+	# lighting
+	if trigger_area.new_darkness:
+		trigger_area.on_new_lighting()
+	# lighting
+	if trigger_area.new_rounding:
+		pixel_rounding = trigger_area.pixel_rounding
+
 	last_trigger_area = trigger_area.name
 	call_deferred("check_empty_triggers")
 
@@ -379,7 +405,7 @@ func is_point_on_screen(position: Vector2):
 	return rect.has_point(position)
 
 # SMOOTHING
-func set_smoothing_speed_temporarily(speed=1, time=2.5):
+func set_smoothing_speed_temporarily(speed=1, time=5.0):
 	var old_speed = position_smoothing_speed
 	position_smoothing_speed = speed
 	var tween: Tween = create_tween()

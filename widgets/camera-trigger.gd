@@ -19,9 +19,27 @@ class_name CameraTrigger
 @export var target_ahead_pixels := 0
 @export var target_behind_pixels := 0
 
+# darkness
+@export var new_darkness := false
+@export var lighting := false
+@export var darkness_y := 370
+@export var darkness_depth := 800
+
+# camera rounding
+@export var new_rounding := false
+@export var pixel_rounding := true
+
 signal triggered()
 
 func on_camera_target_entered(body):
 	emit_signal("triggered")
 	if disappears_after:
 		queue_free()
+
+func on_update_lighting():
+	if lighting:
+		if not game.level.lighting:
+			game.level.enable_lighting()
+		game.level.update_lighting()
+	else:
+		game.level.fade_off_lighting()
