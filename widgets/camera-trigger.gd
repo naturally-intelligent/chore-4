@@ -36,7 +36,7 @@ func on_camera_target_entered(body):
 	if disappears_after:
 		queue_free()
 
-func on_update_lighting():
+func on_new_lighting():
 	if lighting:
 		if not game.level.lighting:
 			game.level.enable_lighting()
