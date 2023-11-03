@@ -88,6 +88,10 @@ func random_array_index(a):
 		return i
 	return null
 
+func random_child(n):
+	var i = math.random_int(0, n.get_child_count()-1)
+	return n.get_child(i)
+
 func random_set(_s):
 	return random_array(_s)
 
