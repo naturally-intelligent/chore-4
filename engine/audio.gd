@@ -29,7 +29,7 @@ func _ready():
 
 ### SOUNDS
 
-func play_sound(sound_name: String, volume:=1.0, allow_multiple:=false):
+func play_sound(sound_name: String, volume:=1.0, allow_multiple:=false, pitch:={}):
 	if dev.silence: return
 	# find sound resource link (res://dir/file.ext)
 	var resource_link = _sound_resource(sound_name)
@@ -51,8 +51,14 @@ func play_sound(sound_name: String, volume:=1.0, allow_multiple:=false):
 		debug.print('ERROR: Bad Audio Stream load failed', resource_link)
 		return null
 	player.set_stream(stream)
+	if pitch:
+		var pitch_start = pitch[0]
+		var pitch_end = pitch[1]
+		var pitch_step = pitch[2]
+		player.pitch_scale = math.random_float_step(pitch_start, pitch_end, pitch_step)
+	else:
+		player.pitch_scale = 1.0
 	player.volume_db = convert_percent_to_db(volume)
-	player.pitch_scale = 1.0
 	player.set_meta('resource_link', resource_link)
 	player.play()
 	return player
@@ -247,10 +253,10 @@ func play_distant_sound(sound_name: String, base_volume:float, origin:Vector2, l
 func play_once(sound_name, volume=1.0):
 	return play_sound(sound_name, volume, true)
 
-func play_random_sound(sound_name, total, volume=1.0, origin=false, listener=false):
+func play_random_sound(sound_name, total, volume=1.0, pitch={}):
 	if dev.silence: return
 	var c = math.random_int(1,total)
-	return play_sound(sound_name + str(c), volume)
+	return play_sound(sound_name + str(c), volume, false, pitch)
 
 func play_sound_pitched(sound_name, pitch_start=0.8, pitch_end=1.2, pitch_step:=0.02):
 	var player = play_sound(sound_name)
@@ -270,7 +276,7 @@ func play_ambience_sound(sound_name, total=1, origin=false, listener=false, time
 		if total == 1:
 			play_sound(sound_name, 1.0)
 		else:
-			play_random_sound(sound_name, total, 1.0, origin, listener)
+			play_random_sound(sound_name, total, 1.0)
 		if random:
 			time = math.random_float(time/2,time+time/2)
 		timer.start(time)
