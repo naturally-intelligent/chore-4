@@ -3,7 +3,7 @@
 #  This is a scene base class for menus that contain
 # dialog style scenes
 
-extends "res://engine/base.gd"
+extends Node
 
 var loaded_scene = false
 var current_scene = false

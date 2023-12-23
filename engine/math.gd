@@ -33,6 +33,9 @@ func random_vector_position(vector1: Vector2i, vector2: Vector2i):
 func random_vector(x_factor = 1.0, y_factor = 1.0):
 	return Vector2(random_float(-1.0,1.0)*x_factor, random_float(-1.0,1.0)*y_factor).normalized()
 
+func random_vector_offset(x_factor := 1, y_factor := 1):
+	return Vector2(random_int(-x_factor,x_factor), random_int(-y_factor,y_factor))
+
 ### VECTORS AND ANGLES
 
 # rounds a vector2d

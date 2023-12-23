@@ -265,13 +265,15 @@ func play_sound_pitched(sound_name, pitch_start=0.8, pitch_end=1.2, pitch_step:=
 
 func play_ambience_sound(sound_name, total=1, origin=false, listener=false, time=0.33, random=true):
 	if dev.silence: return
+	var timer: Timer
 	if not sound_name in ambience_timers:
-		var timer = Timer.new()
+		timer = Timer.new()
 		timer.one_shot = true
 		timer.autostart = false
 		$Timers.add_child(timer)
 		ambience_timers[sound_name] = timer
-	var timer = ambience_timers[sound_name]
+	else:
+		timer = ambience_timers[sound_name]
 	if timer.is_stopped():
 		if total == 1:
 			play_sound(sound_name, 1.0)
