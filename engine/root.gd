@@ -1352,12 +1352,12 @@ func command_line_start():
 	if 'monitor' in settings.args:
 		var mon = int(settings.args['monitor'])-1
 		if DisplayServer.get_screen_count() >= mon:
-			get_window().set_current_screen(mon)
+			DisplayServer.window_set_current_screen(mon)
 		if 'position' in settings.args:
 			debug.print("WARNING: monitor may be ignored if position also set.")
 	# fullscreen
 	if 'fullscreen' in settings.args:
-		get_window().mode = Window.MODE_EXCLUSIVE_FULLSCREEN if (true) else Window.MODE_WINDOWED
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
 	# screen size (windowed)
 	elif 'screen' in settings.args:
 		var xstr = settings.args['screen']
@@ -1367,16 +1367,15 @@ func command_line_start():
 			var h = int(split[1])
 			if w>0 && h>0:
 				var v2 = Vector2(w,h)
-				get_window().mode = Window.MODE_EXCLUSIVE_FULLSCREEN if (false) else Window.MODE_WINDOWED
-				get_window().set_size(v2)
+				DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+				DisplayServer.window_set_size(v2)
 	# windowed
 	elif 'window' in settings.args:
-		get_window().mode = Window.MODE_EXCLUSIVE_FULLSCREEN if (false) else Window.MODE_WINDOWED
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
 	# debug info\
 	if 'debug' in settings.args:
 		debug.print("Display size: ", DisplayServer.screen_get_size())
-		debug.print("Decorated size: ", get_window().get_size_with_decorations())
-		debug.print("Window size: ", get_window().get_size())
+		debug.print("Window size: ", DisplayServer.window_get_size())
 		ProjectSettings.set_setting("display/window/size/viewport_width", 320)
 		ProjectSettings.set_setting("display/window/size/viewport_height", 180)
 		root.set_scale(Vector2(1,1))
@@ -1391,7 +1390,7 @@ func command_line_start():
 			var h = int(split[1])
 			if w>0 && h>0:
 				var v2 = Vector2(w,h)
-				get_window().set_position(v2)
+				DisplayServer.window_set_position(v2)
 	# FIRST MENU TO SHOW
 	if !game.release:
 		if '-menu' in settings.args:
