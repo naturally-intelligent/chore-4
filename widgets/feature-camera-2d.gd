@@ -188,15 +188,15 @@ func check_all_triggers():
 				on_camera_trigger(camera_trigger)
 
 func enter_trigger_area(trigger_area: CameraTrigger):
-	# tween
-	if trigger_tween:
-		trigger_tween.kill()
-	trigger_tween = create_tween()
-	var time = 1.0
-	var trans_type = Tween.TRANS_CUBIC
-	var ease_type = Tween.EASE_IN
 	# y limits
 	if trigger_area.new_y_limits:
+		# tween
+		if trigger_tween:
+			trigger_tween.kill()
+		trigger_tween = create_tween()
+		var time = 1.5
+		var trans_type = Tween.TRANS_CUBIC
+		var ease_type = Tween.EASE_IN
 		# set these limits to what is current, so that animation to new limits is smoother
 		limit_top = camera_edge_top_y()
 		limit_bottom = camera_edge_bottom_y()
@@ -225,7 +225,7 @@ func enter_trigger_area(trigger_area: CameraTrigger):
 	last_trigger_area = trigger_area.name
 	call_deferred("check_empty_triggers")
 
-func tween_change_camera_limits_x(new_limit_left, new_limit_right, time=1.0):
+func tween_change_camera_limits_x(new_limit_left, new_limit_right, time=1.5):
 	if trigger_tween:
 		trigger_tween.kill()
 	trigger_tween = create_tween()
