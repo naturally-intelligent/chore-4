@@ -109,10 +109,10 @@ func new_yarn_fibre(line):
 		fibre['text'] = line.strip_edges(true, true)
 		return fibre
 	# text fibre
-	var fibre = {}
-	fibre['kind'] = 'text'
-	fibre['text'] = line.strip_edges(true, true)
-	return fibre
+	var new_fibre = {}
+	new_fibre['kind'] = 'text'
+	new_fibre['text'] = line.strip_edges(true, true)
+	return new_fibre
 
 # Create Yarn data structure from file (must be *.yarn.txt Yarn format)
 func load_yarn(path):
