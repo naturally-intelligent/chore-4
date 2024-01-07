@@ -353,7 +353,7 @@ func play_random_node(player, sound_name, total):
 ### MUSIC
 ###
 
-func play_music(song_name:String, volume:=1.0, resume_if_previous:=true, stop_music:=true, loop:=true):
+func play_music(song_name:String, volume:=1.0, resume_if_previous:=true, and_stop_music:=true, loop:=true):
 	if dev.silence: return
 	if dev.no_music: return
 	if dev.skip_first_song:
@@ -386,7 +386,7 @@ func play_music(song_name:String, volume:=1.0, resume_if_previous:=true, stop_mu
 			$MusicPlayer.stream_paused = false
 			return true
 	# stop
-	if stop_music:
+	if and_stop_music:
 		stop_and_reset_music()
 	# load stream
 	var stream = load(resource_link)

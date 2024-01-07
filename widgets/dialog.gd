@@ -471,9 +471,9 @@ func fade():
 	var total = get_child_count()
 	for child in get_children():
 		count = count + 1
-		var position = total - count + 1
-		if position > fading_bubbles:
-			var alpha = (1.0 + fading_bubbles*fade_step) - (position*fade_step)
+		var _position = total - count + 1
+		if _position > fading_bubbles:
+			var alpha = (1.0 + fading_bubbles*fade_step) - (_position*fade_step)
 			#print(position, ' ', fade_bubbles, ' = ', alpha)
 			child.modulate.a = alpha
 	#$Tween.tween_property($AnimatedSprite2D, "modulate",

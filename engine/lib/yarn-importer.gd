@@ -116,10 +116,10 @@ func new_yarn_fibre(line):
 
 # Create Yarn data structure from file (must be *.yarn.txt Yarn format)
 func load_yarn(path):
-	var yarn = {}
-	yarn['threads'] = {}
-	yarn['start'] = ''
-	yarn['file'] = path
+	var new_yarn = {}
+	new_yarn['threads'] = {}
+	new_yarn['start'] = ''
+	new_yarn['file'] = path
 	var file = FileAccess.open(path, FileAccess.READ)
 	if file.is_open():
 		# yarn reading flags
@@ -149,12 +149,12 @@ func load_yarn(path):
 								thread_kind = title_split[0]
 							thread['title'] = thread_title
 							thread['kind'] = thread_kind
-							if yarn['start'] == '':
-								yarn['start'] = thread_title
+							if new_yarn['start'] == '':
+								new_yarn['start'] = thread_title
 			# end of thread
 			elif line == '===':
 				header = true
-				yarn['threads'][thread['title']] = thread
+				new_yarn['threads'][thread['title']] = thread
 				thread = new_yarn_thread()
 			# fibre read mode
 			else:
@@ -163,7 +163,7 @@ func load_yarn(path):
 					thread['fibres'].append(fibre)
 	else:
 		print('ERROR: Yarn file missing: ', path)
-	return yarn
+	return new_yarn
 
 # Main logic for node handling
 #
