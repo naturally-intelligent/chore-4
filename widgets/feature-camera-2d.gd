@@ -79,7 +79,7 @@ func _ready():
 		target = get_node(target_node)
 
 # PROCESS
-func _process(delta):
+func _process(delta: float):
 	# target valid?
 	if not target_ref or not target_ref.get_ref():
 		target_ref = null
@@ -188,29 +188,41 @@ func check_all_triggers():
 				on_camera_trigger(camera_trigger)
 
 func enter_trigger_area(trigger_area: CameraTrigger):
-	# y limits
-	if trigger_area.new_y_limits:
-		# tween
+	if trigger_area.new_y_limits or trigger_area.new_x_limits:
 		if trigger_tween:
 			trigger_tween.kill()
 		trigger_tween = create_tween()
-		var time = 1.5
 		var trans_type = Tween.TRANS_CUBIC
 		var ease_type = Tween.EASE_IN
-		# set these limits to what is current, so that animation to new limits is smoother
-		limit_top = camera_edge_top_y()
-		limit_bottom = camera_edge_bottom_y()
 		trigger_tween.set_trans(trans_type)
 		trigger_tween.set_ease(ease_type)
 		trigger_tween.set_parallel()
+	# y limits
+	if trigger_area.new_y_limits:
+		# tween
+		var time = 1.0
+		# set these limits to what is current, so that animation to new limits is smoother
+		limit_top = camera_edge_top_y()
+		limit_bottom = camera_edge_bottom_y()
 		trigger_tween.tween_property(self, "limit_top", trigger_area.limit_y_top, time)
 		trigger_tween.tween_property(self, "limit_bottom", trigger_area.limit_y_bottom, time)
 	# x limits
 	if trigger_area.new_x_limits:
-		limit_left = trigger_area.limit_x_left
-		limit_right = trigger_area.limit_x_right
-		initial_camera_left_limit = limit_left
-		initial_camera_right_limit = limit_right
+		#limit_left = trigger_area.limit_x_left
+		#limit_right = trigger_area.limit_x_right
+		#initial_camera_left_limit = limit_left
+		#initial_camera_right_limit = limit_right
+		initial_camera_left_limit = trigger_area.limit_x_left
+		initial_camera_right_limit = trigger_area.limit_x_right
+		limit_left = camera_edge_left_x()
+		limit_right = camera_edge_right_x()
+		var time = abs(initial_camera_left_limit - trigger_area.limit_x_left) + abs(initial_camera_right_limit - trigger_area.limit_x_right)
+		time *= 0.01
+		if time < 1.0: time = 1.0
+		trigger_tween.tween_property(self, "limit_left", trigger_area.limit_x_left, time)
+		trigger_tween.tween_property(self, "limit_right", trigger_area.limit_x_right, time)
+		if position_smoothing_speed > 1:
+			set_smoothing_speed_temporarily()
 	# target distance pixels
 	if trigger_area.new_target_ahead:
 		target_ahead_pixels = trigger_area.target_ahead_pixels
@@ -400,9 +412,9 @@ func get_visible_screen_rect():
 	rect.size = Vector2(ProjectSettings.get_setting("display/window/size/viewport_width"), ProjectSettings.get_setting("display/window/size/viewport_height"))
 	return rect
 
-func is_point_on_screen(position: Vector2):
+func is_point_on_screen(point: Vector2):
 	var rect = get_visible_screen_rect()
-	return rect.has_point(position)
+	return rect.has_point(point)
 
 # SMOOTHING
 func set_smoothing_speed_temporarily(speed=1, time=5.0):
