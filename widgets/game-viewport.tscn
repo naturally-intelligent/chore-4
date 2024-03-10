@@ -1,15 +1,15 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=2 format=3 uid="uid://pjesa6dq460e"]
 
-[ext_resource path="res://widgets/game-viewport.gd" type="Script" id=1]
+[ext_resource type="Script" path="res://widgets/game-viewport.gd" id="1"]
 
 [node name="GameViewport" type="SubViewportContainer"]
 offset_right = 640.0
 offset_bottom = 360.0
-custom_minimum_size = Vector2( 640, 360 )
+custom_minimum_size = Vector2(640, 360)
 stretch = true
-script = ExtResource( 1 )
+script = ExtResource("1")
 
 [node name="SubViewport" type="SubViewport" parent="."]
-size = Vector2( 640, 360 )
+size = Vector2(640, 360)
 handle_input_locally = false
 render_target_update_mode = 3

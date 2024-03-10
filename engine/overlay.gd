@@ -53,7 +53,7 @@ func update_info_nodes():
 	if info_refs.is_empty():
 		set_process(false)
 
-func set_info_text(text):
+func set_info_text(text: String):
 	$Info.set_text(text)
 
 func next_debug_info(container: Node):

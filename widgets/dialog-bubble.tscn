@@ -1,10 +1,6 @@
-[gd_scene load_steps=6 format=3 uid="uid://d2f8tvfy07xvi"]
+[gd_scene load_steps=2 format=3 uid="uid://d2f8tvfy07xvi"]
 
 [ext_resource type="Script" path="res://widgets/dialog-bubble.gd" id="1"]
-[ext_resource type="Texture2D" uid="uid://drp5c2vhskgu0" path="res://art/hud/dialog-9patch.png" id="5"]
-[ext_resource type="Texture2D" uid="uid://dqkposbjoaor5" path="res://art/hud/action9p-normal.png" id="6"]
-[ext_resource type="Texture2D" uid="uid://d1assgemyfwyw" path="res://art/hud/choice9p-normal.png" id="7"]
-[ext_resource type="Texture2D" uid="uid://ci3v15t3xlxs4" path="res://art/hud/button-red9p-normal.png" id="9"]
 
 [node name="Root" type="Control"]
 layout_mode = 3
@@ -36,7 +32,7 @@ layout_mode = 2
 [node name="Red9P" type="NinePatchRect" parent="Bubble/Backgrounds"]
 visible = false
 layout_mode = 2
-texture = ExtResource("9")
+texture = null
 patch_margin_left = 2
 patch_margin_top = 2
 patch_margin_right = 2
@@ -48,7 +44,7 @@ modulate = Color(0.583984, 0.583984, 0.583984, 1)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-texture = ExtResource("7")
+texture = null
 patch_margin_left = 8
 patch_margin_top = 8
 patch_margin_right = 8
@@ -60,7 +56,7 @@ modulate = Color(0.609375, 0.609375, 0.609375, 1)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-texture = ExtResource("6")
+texture = null
 patch_margin_left = 8
 patch_margin_top = 8
 patch_margin_right = 8
@@ -75,7 +71,7 @@ modulate = Color(0.945312, 0.945312, 0.945312, 1)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-texture = ExtResource("5")
+texture = null
 patch_margin_left = 6
 patch_margin_top = 6
 patch_margin_right = 6

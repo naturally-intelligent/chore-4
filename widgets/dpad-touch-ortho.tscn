@@ -1,19 +1,19 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=4 format=3 uid="uid://d2oicxsgc0imn"]
 
-[ext_resource path="res://art/hud/touch/dpad-3d-ortho.png" type="Texture2D" id=1]
-[ext_resource path="res://widgets/dpad-touch.gd" type="Script" id=2]
+[ext_resource type="Texture2D" uid="uid://dtk53dndd0dqy" path="res://art/hud/touch/dpad-3d-ortho.png" id="1"]
+[ext_resource type="Script" path="res://widgets/dpad-touch.gd" id="2"]
 
-[sub_resource type="CircleShape2D" id=1]
+[sub_resource type="CircleShape2D" id="1"]
 radius = 64.0
 
 [node name="DPadOrtho" type="TouchScreenButton"]
-position = Vector2( 8, 225 )
-shape = SubResource( 1 )
+position = Vector2(8, 225)
+shape = SubResource("1")
 passby_press = true
-script = ExtResource( 2 )
+script = ExtResource("2")
 diagonal = false
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2( 65, 66 )
-texture = ExtResource( 1 )
+position = Vector2(65, 66)
+texture = ExtResource("1")
 hframes = 5

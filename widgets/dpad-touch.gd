@@ -50,7 +50,7 @@ func _process(_delta):
 	if active:
 		press_events()
 
-func _input(event):
+func _input(event: InputEvent):
 	if event is InputEventScreenTouch \
 	and event.get_index() == touch_idx \
 	and !event.is_pressed():

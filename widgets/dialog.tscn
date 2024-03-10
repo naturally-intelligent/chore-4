@@ -1,11 +1,11 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=2 format=3 uid="uid://e8b1fbmdi7kr"]
 
-[ext_resource path="res://widgets/dialog.gd" type="Script" id=1]
+[ext_resource type="Script" path="res://widgets/dialog.gd" id="1"]
 
 [node name="Dialog" type="VBoxContainer"]
 offset_right = 262.0
 offset_bottom = 106.0
 mouse_filter = 2
 custom_constants/separation = 2
-script = ExtResource( 1 )
+script = ExtResource("1")
 fade_alpha = 0.33

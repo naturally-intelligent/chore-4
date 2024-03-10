@@ -339,7 +339,7 @@ func bubble_press(bubble):
 	else:
 		dialog_press()
 
-func _unhandled_key_input(event):
+func _unhandled_key_input(event: InputEvent):
 	if dialog_closed:
 		return
 	if check_key_input:

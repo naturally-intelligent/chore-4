@@ -3,11 +3,12 @@
 [resource]
 background_mode = 4
 background_canvas_max_layer = 2
-glow_enabled = true
 glow_levels/1 = 1.0
 glow_levels/2 = 1.0
 glow_levels/5 = 0.0
-glow_intensity = 1.0
+glow_intensity = 5.95
 glow_strength = 0.9
+glow_bloom = 1.0
 glow_blend_mode = 0
-glow_hdr_luminance_cap = 2.0
+glow_hdr_scale = 3.0
+glow_hdr_luminance_cap = 143.15

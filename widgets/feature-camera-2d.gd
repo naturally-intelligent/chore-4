@@ -251,6 +251,24 @@ func tween_change_camera_limits_x(new_limit_left, new_limit_right, time=1.5):
 	trigger_tween.tween_property(self, "limit_left", new_limit_left, time)
 	trigger_tween.tween_property(self, "limit_right", new_limit_right, time)
 
+func tween_change_camera_limits(new_limit_left, new_limit_right, new_limit_top, new_limit_bottom, time=1.5):
+	if trigger_tween:
+		trigger_tween.kill()
+	trigger_tween = create_tween()
+	var trans_type = Tween.TRANS_CUBIC
+	var ease_type = Tween.EASE_OUT
+	limit_left = camera_edge_left_x()
+	limit_right = camera_edge_right_x()
+	limit_bottom = camera_edge_bottom_y()
+	limit_top = camera_edge_top_y()
+	trigger_tween.set_trans(trans_type)
+	trigger_tween.set_ease(ease_type)
+	trigger_tween.set_parallel()
+	trigger_tween.tween_property(self, "limit_left", new_limit_left, time)
+	trigger_tween.tween_property(self, "limit_right", new_limit_right, time)
+	trigger_tween.tween_property(self, "limit_top", new_limit_top, time)
+	trigger_tween.tween_property(self, "limit_bottom", new_limit_bottom, time)
+
 # SHAKE / QUAKE
 func start_shaking():
 	shaking = true

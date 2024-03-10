@@ -1,6 +1,6 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=2 format=3 uid="uid://bn8l7v3f78qah"]
 
-[ext_resource path="res://engine/overlay.gd" type="Script" id=1]
+[ext_resource type="Script" path="res://engine/overlay.gd" id="1"]
 
 [node name="Debug" type="Control"]
 offset_left = 5.72081
@@ -8,7 +8,7 @@ offset_top = 4.61069
 offset_right = 45.7198
 offset_bottom = 44.6107
 mouse_filter = 2
-script = ExtResource( 1 )
+script = ExtResource("1")
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -40,4 +40,4 @@ offset_top = -1.61069
 offset_right = 168.279
 offset_bottom = 92.3893
 mouse_filter = 1
-color = Color( 0.317647, 0.317647, 0.317647, 0.164706 )
+color = Color(0.317647, 0.317647, 0.317647, 0.164706)

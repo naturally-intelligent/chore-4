@@ -24,7 +24,7 @@ func _ready():
 
 # call this from another object such as your game object
 # - this way you can control if logs are created or not since debug is first autoload
-func open_log():
+func open_log() -> void:
 	var logs_subdir = "logs"
 	var dir = "user://" + logs_subdir
 	util.ensure_dir(logs_subdir, "user://")
@@ -49,9 +49,9 @@ func open_log():
 		print('ERROR: Cannot open log for writing!')
 		log_file_name = false
 
-func print(s1, s2='',s3='',s4='',s5='',s6='',s7='',s8='',s9='',s10='',s11='',s12='',s13='',s14=''):
+func print(s1, s2='',s3='',s4='',s5='',s6='',s7='',s8='',s9='',s10='',s11='',s12='',s13='',s14='') -> void:
 	if echo or log_file_name:
-		var s = convert_string(s1,s2,s3,s4,s5,s6,s7,s8,s9,s10,s11,s12,s13,s14)
+		var s := convert_string(s1,s2,s3,s4,s5,s6,s7,s8,s9,s10,s11,s12,s13,s14)
 		if echo:
 			print(s)
 		if log_file_name:
@@ -59,16 +59,22 @@ func print(s1, s2='',s3='',s4='',s5='',s6='',s7='',s8='',s9='',s10='',s11='',s12
 		if print_callback and callback_object.get_ref():
 			callback_object.get_ref().call(print_callback, s)
 
+func log(s1, s2='',s3='',s4='',s5='',s6='',s7='',s8='',s9='',s10='',s11='',s12='',s13='',s14='') -> void:
+	if log_file_name:
+		var s := convert_string(s1,s2,s3,s4,s5,s6,s7,s8,s9,s10,s11,s12,s13,s14)
+		if log_file_name:
+			append_log(s)
+
 # Give an object and method, for example ->
 #   MyGameConsole.print_to_console(line: String)
 #    calls ->
 #   debug.print(MyGameConsole, "print_to_console")
-func set_callback(object: Object, method: String):
+func set_callback(object: Object, method: String) -> void:
 	callback_object = weakref(object)
 	print_callback = method
 
 # print a dictionary
-func dict(d, title=false):
+func dict(d: Dictionary, title:='') -> void:
 	if title:
 		print('Dict: '+title)
 	for key in d:
@@ -76,7 +82,7 @@ func dict(d, title=false):
 		print(str(key)+' = '+str(value))
 
 # print an array
-func array(a, title=false):
+func array(a, title:='') -> void:
 	if title:
 		print('Array: '+title)
 	if a is Array:
@@ -87,9 +93,9 @@ func array(a, title=false):
 		dict(a)
 
 # ignore; used by debug,print()
-func convert_string(s1,s2,s3,s4,s5,s6,s7,s8,s9,s10,s11,s12,s13,s14):
-	var s = str(s1)
-	var c = ' '
+func convert_string(s1,s2,s3,s4,s5,s6,s7,s8,s9,s10,s11,s12,s13,s14) -> String:
+	var s := str(s1)
+	var c := ' '
 	if s2 or s2 is bool: s+=c+str(s2);
 	else: return s
 	if s3 or s3 is bool: s+=c+str(s3); 
@@ -119,25 +125,25 @@ func convert_string(s1,s2,s3,s4,s5,s6,s7,s8,s9,s10,s11,s12,s13,s14):
 	return s
 
 # same as print(), but forced to print
-func error(s1, s2='',s3='',s4='',s5='',s6='',s7='',s8='',s9='',s10='',s11='',s12='',s13='',s14=''):
-	var s = convert_string(s1,s2,s3,s4,s5,s6,s7,s8,s9,s10,s11,s12,s13,s14)
+func error(s1, s2='',s3='',s4='',s5='',s6='',s7='',s8='',s9='',s10='',s11='',s12='',s13='',s14='') -> void:
+	var s := convert_string(s1,s2,s3,s4,s5,s6,s7,s8,s9,s10,s11,s12,s13,s14)
 	print(s)
 	append_log(s)
 
 # debug printing by "category"
 # any categories enabled will be printed to console
 #  but all will still be recorded to log
-func cat(_cat, s1, s2='',s3='',s4='',s5='',s6='',s7='',s8='',s9='',s10='',s11='',s12='',s13='',s14=''):
+func cat(_cat: String, s1, s2='',s3='',s4='',s5='',s6='',s7='',s8='',s9='',s10='',s11='',s12='',s13='',s14='') -> void:
 	if echo:
 		if echo_all_categories or _cat in categories:
-			var _s = _cat+': '+convert_string(s1,s2,s3,s4,s5,s6,s7,s8,s9,s10,s11,s12,s13,s14)
+			var _s := _cat+': '+convert_string(s1,s2,s3,s4,s5,s6,s7,s8,s9,s10,s11,s12,s13,s14)
 			print(_s)
 	if log_file_name:
-		var _s = _cat+': '+convert_string(s1,s2,s3,s4,s5,s6,s7,s8,s9,s10,s11,s12,s13,s14)
+		var _s := _cat+': '+convert_string(s1,s2,s3,s4,s5,s6,s7,s8,s9,s10,s11,s12,s13,s14)
 		append_log(_s)
 
 # add mode to keep log file open isntead of opening/closing each line?
-func append_log(s):
+func append_log(s: String) -> void:
 	if log_file_name:
 		var log_file = FileAccess.open(log_file_name, FileAccess.READ_WRITE)
 		if log_file:
@@ -149,17 +155,17 @@ func append_log(s):
 			log_file_name = false
 
 # built-in console (not very good)
-func console(s1, s2='',s3='',s4='',s5='',s6='',s7='',s8='',s9='',s10='',s11='',s12='',s13='',s14=''):
-	var s = convert_string(s1,s2,s3,s4,s5,s6,s7,s8,s9,s10,s11,s12,s13,s14)
+func console(s1, s2='',s3='',s4='',s5='',s6='',s7='',s8='',s9='',s10='',s11='',s12='',s13='',s14='') -> void:
+	var s := convert_string(s1,s2,s3,s4,s5,s6,s7,s8,s9,s10,s11,s12,s13,s14)
 	print(s)
 	root.add_debug_line(s)
 
-func print_instance(id):
-	var object = instance_from_id(id)
+func print_instance(id: int) -> void:
+	var object := instance_from_id(id)
 	if object:
 		print_object(object)
 
-func print_object(object):
-	var property_list = object.get_property_list()
+func print_object(object: Object) -> void:
+	var property_list := object.get_property_list()
 	for prop in property_list:
 		debug.print (prop.name, object.get(prop.name))

@@ -1,4 +1,4 @@
-[gd_scene format=2]
+[gd_scene format=3 uid="uid://c7in3mnx6gp8r"]
 
 [node name="Control" type="Control"]
 anchor_right = 1.0
@@ -9,7 +9,7 @@ anchor_right = 1.0
 offset_left = 31.0
 offset_right = -36.0
 offset_bottom = 40.0
-color = Color( 0, 0.529412, 0.0941176, 1 )
+color = Color(0, 0.529412, 0.0941176, 1)
 
 [node name="Label" type="Label" parent="."]
 offset_right = 1919.0

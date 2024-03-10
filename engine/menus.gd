@@ -23,10 +23,10 @@ func current_menu():
 		return root.menus_root.get_children()[menu_count-1]
 	return null
 
-func show(menu_name, transitions={}, info={}, menu_data=false):
+func show(menu_name: String, transitions={}, info={}, menu_data=false):
 	return thaw(menu_name, transitions, info, menu_data)
 
-func thaw(menu_name, transitions={}, info={}, menu_data=false):
+func thaw(menu_name: String, transitions={}, info={}, menu_data=false):
 	#debug.print('menus.show ', menu_name)
 	# smooth arguments
 	if info is bool: info = {}
@@ -52,12 +52,12 @@ func thaw(menu_name, transitions={}, info={}, menu_data=false):
 	root.switch_to_menu(menu, menu_name, menu_data, info, transitions)
 	return menu
 
-func fresh(scene_name, transitions={}, info={}, scene_data=false):
+func fresh(scene_name: String, transitions={}, info={}, scene_data=false):
 	if info == '': 
 		info = 'remove_at'
 	return thaw(scene_name, transitions, info, scene_data)
 
-func hard(menu_name, menu_data=false):
+func hard(menu_name: String, menu_data:=false):
 	var transitions = {}
 	transitions['out'] = 'none'
 	transitions['middle'] = 'none'
@@ -65,14 +65,14 @@ func hard(menu_name, menu_data=false):
 	return thaw(menu_name, transitions, {}, menu_data)
 
 # restore top menu
-func reveal():
+func reveal() -> bool:
 	var next_menu = current_menu()
 	if next_menu:
 		root.switch_to_menu(next_menu, next_menu.name)
 		return true
 	return false
 
-func remove_at(menu_name):
+func remove_at(menu_name: String):
 	if has_in_memory(menu_name):
 		var menu = retrieve_menu(menu_name)
 		if menu_name:
@@ -92,7 +92,7 @@ func back():
 
 ### MAINTENANCE FUNCTIONS - Not recommended to call these in your game
 
-func create_menu(menu_name):
+func create_menu(menu_name: String):
 	var menu_file_name = find_menu_file(menu_name)
 	if menu_file_name:
 		var tscn = load(menu_file_name)
@@ -100,13 +100,13 @@ func create_menu(menu_name):
 		menu.set_name(menu_name)
 		return menu
 
-func find_menu_file(menu_name):
+func find_menu_file(menu_name: String):
 	# search in directories
-	for dir in search_dirs:
-		var file_name_tscn = 'res://' + dir + '/' + menu_name + ".tscn"
+	for dir: String in search_dirs:
+		var file_name_tscn := 'res://' + dir + '/' + menu_name + ".tscn"
 		if util.file_exists(file_name_tscn):
 			return file_name_tscn
-		var file_name = 'res://' + dir + '/' + menu_name
+		var file_name := 'res://' + dir + '/' + menu_name
 		if util.file_exists(file_name):
 			return file_name
 	# search from root directory if allowed
@@ -117,27 +117,27 @@ func find_menu_file(menu_name):
 			return menu_name+".tscn"
 	return false
 
-func delete_on_hide(menu_name):
+func delete_on_hide(menu_name: String) -> bool:
 	if has_in_memory(menu_name):
 		return false
 	return true
 
-func restore_on_show(menu_name):
+func restore_on_show(menu_name: String) -> bool:
 	if has_in_memory(menu_name):
 		return true
 	return false
 
-func load_menu_file(menu_file):
+func load_menu_file(menu_file: String):
 	if util.file_exists(menu_file):
 		return load(menu_file)
 	else:
 		debug.print('ERROR: Missing menu file: ', menu_file)
 
 # find menu from stack and remove_at any menus above it
-func retrieve_menu(menu_name):
-	var found = false
+func retrieve_menu(menu_name: String):
+	var found := false
 	var found_menu = null
-	var to_remove = []
+	var to_remove := []
 	for menu in root.menus_root.get_children():
 		if found:
 			to_remove.append(menu)
@@ -150,18 +150,18 @@ func retrieve_menu(menu_name):
 	#	root.menus_root.remove_child(menu)
 	return found_menu
 
-func has_in_memory(menu_name):
+func has_in_memory(menu_name: String) -> bool:
 	for menu in root.menus_root.get_children():
 		if menu.name == menu_name:
 			return true
 	return false
 
-func menu_or_scene(menu):
+func menu_or_scene(menu: String) -> String:
 	if find_menu_file(menu):
 		return 'menu'
 	return 'scene'
 
-func is_menu(_menu_or_scene):
+func is_menu(_menu_or_scene: String) -> bool:
 	if find_menu_file(_menu_or_scene):
 		return true
 	return false

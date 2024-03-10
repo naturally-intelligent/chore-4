@@ -24,16 +24,16 @@ func random_float_step(start: float, end: float, step: float) -> float:
 func randomf(s: float, e: float) -> float: # shortened version of random_float
 	return randf_range(s, e)
 
-func random_position(minx:int,maxx:int, miny:int,maxy:int):
+func random_position(minx:int,maxx:int, miny:int,maxy:int) -> Vector2:
 	return Vector2(random_int(minx,maxx), random_int(miny,maxy))
 
-func random_vector_position(vector1: Vector2, vector2: Vector2):
+func random_vector_position(vector1: Vector2, vector2: Vector2) -> Vector2:
 	return Vector2(random_int(int(vector1.x),int(vector2.x)), random_int(int(vector1.y),int(vector2.y)))
 
-func random_vector(x_factor = 1.0, y_factor = 1.0):
+func random_vector(x_factor = 1.0, y_factor = 1.0) -> Vector2:
 	return Vector2(random_float(-1.0,1.0)*x_factor, random_float(-1.0,1.0)*y_factor).normalized()
 
-func random_vector_offset(x_factor := 1, y_factor := 1):
+func random_vector_offset(x_factor := 1, y_factor := 1) -> Vector2:
 	return Vector2(random_int(-x_factor,x_factor), random_int(-y_factor,y_factor))
 
 ### VECTORS AND ANGLES
@@ -62,28 +62,28 @@ func rad2deg360(radians) -> int:
 		degrees += 360
 	return int(degrees)
 
-func normal_to_degrees(n):
+func normal_to_degrees(n) -> float:
 	return atan2(n.y, n.x) * 180 / PI
 
-func normal_to_360_degrees(n):
-	var theta = atan2(n.y, n.x)
-	var deg = rad_to_deg(theta)
+func normal_to_360_degrees(n: Vector2) -> float:
+	var theta := atan2(n.y, n.x)
+	var deg := rad_to_deg(theta)
 	if deg < 0: deg += 360
 	return deg
 
-func normal_to_45(n):
-	var deg = normal_to_360_degrees(n)
-	return snapped(deg, 45)
+func normal_to_45(n: Vector2) -> float:
+	var deg := normal_to_360_degrees(n)
+	return snappedf(deg, 45)
 
-func normal_to_90(n):
-	var deg = normal_to_360_degrees(n)
+func normal_to_90(n: Vector2) -> float:
+	var deg := normal_to_360_degrees(n)
 	if deg >= 360: deg -= 360
-	return snapped(deg, 90)
+	return snappedf(deg, 90)
 
-func radians_to_vector(radians):
+func radians_to_vector(radians: float) -> Vector2:
 	return Vector2(cos(radians), sin(radians))
 
-func cap_vector(v, xy_max):
+func cap_vector(v: Vector2, xy_max: float) -> Vector2:
 	if v.x > xy_max: v.x = xy_max
 	if v.y > xy_max: v.y = xy_max
 	if v.x < -xy_max: v.x = -xy_max
@@ -92,7 +92,7 @@ func cap_vector(v, xy_max):
 
 ### POSITIONS
 
-func nearest_position(parent, position):
+func nearest_position(parent: Node, position: Vector2):
 	var nearest = 1000*1000
 	var nearest_pos = false
 	for node in parent.get_children():
@@ -102,7 +102,7 @@ func nearest_position(parent, position):
 			nearest = dist2
 	return nearest_pos
 
-func nearest_global_position(parent, position):
+func nearest_global_position(parent: Node, position: Vector2):
 	var nearest = 1000*1000
 	var nearest_pos = false
 	for node in parent.get_children():
@@ -114,25 +114,25 @@ func nearest_global_position(parent, position):
 
 ### CURVES
 
-func quadratic_bezier(p0: Vector2, p1: Vector2, p2: Vector2, t: float):
+func quadratic_bezier(p0: Vector2, p1: Vector2, p2: Vector2, t: float) -> Array:
 	var q0 = p0.lerp(p1, t)
 	var q1 = p1.lerp(p2, t)
 	return [q0, q1]
 
-func cubic_bezier(p0: Vector2, p1: Vector2, p2: Vector2, p3: Vector2, t: float):
-	var q0 = p0.lerp(p1, t)
-	var q1 = p1.lerp(p2, t)
-	var q2 = p2.lerp(p3, t)
+func cubic_bezier(p0: Vector2, p1: Vector2, p2: Vector2, p3: Vector2, t: float) -> Vector2:
+	var q0 := p0.lerp(p1, t)
+	var q1 := p1.lerp(p2, t)
+	var q2 := p2.lerp(p3, t)
 
-	var r0 = q0.lerp(q1, t)
-	var r1 = q1.lerp(q2, t)
+	var r0 := q0.lerp(q1, t)
+	var r1 := q1.lerp(q2, t)
 
-	var s = r0.lerp(r1, t)
+	var s := r0.lerp(r1, t)
 	return s
 
 ### VALUES
 
-func move_towards(target, current, amount):
+func move_towards(target: int, current: int, amount: int) -> int:
 	if target > current:
 		if current + amount >= target:
 			return target

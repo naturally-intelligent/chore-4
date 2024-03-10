@@ -24,16 +24,16 @@ func current_scene():
 		return root.scenes_root.get_children()[scene_count-1]
 	return null
 
-func has_scene():
+func has_scene() -> bool:
 	var scene_count = root.scenes_root.get_child_count()
 	if scene_count > 0:
 		return true
 	return false
 
-func show(scene_name, transitions={}, info={}, scene_data=false):
+func show(scene_name: String, transitions={}, info={}, scene_data=false):
 	return thaw(scene_name, transitions, info, scene_data)
 
-func thaw(scene_name, transitions={}, info={}, scene_data=false):
+func thaw(scene_name: String, transitions={}, info={}, scene_data=false):
 	#debug.print('scenes.show ', scene_name)
 	# smooth arguments
 	if info is bool: info = {}
@@ -61,43 +61,43 @@ func thaw(scene_name, transitions={}, info={}, scene_data=false):
 		infos[info] = true
 	if util.is_not(scene):
 		debug.print("ERROR: scene.thaw() can't find scene: ", scene_name)
-		return false
+		return null
 	root.switch_to_scene(scene, scene_name, scene_data, infos, transitions)
 	return scene
 
-func fresh(scene_name, transitions=false, info=false, scene_data=false):
+func fresh(scene_name: String, transitions=false, info=false, scene_data=false):
 	if info is bool and info == false: 
 		info = 'remove_at'
 	if info == null: 
 		info = 'remove_at'
 	return thaw(scene_name, transitions, info, scene_data)
 
-func hard(scene_name, scene_data=false):
+func hard(scene_name: String, scene_data=false):
 	var transitions = {}
 	transitions['out'] = 'none'
 	transitions['middle'] = 'none'
 	transitions['in'] = 'none'
 	return thaw(scene_name, transitions, {}, scene_data)
 
-func reload_current_scene():
+func reload_current_scene() -> void:
 	fresh(root.current_scene_name)
 
 # restore top scene
-func reveal():
+func reveal() -> bool:
 	var next_scene = current_scene()
 	if next_scene:
 		root.switch_to_scene(next_scene, next_scene.name)
 		return true
 	return false
 
-func remove_at(scene_name):
+func remove_at(scene_name) -> void:
 	if has_in_memory(scene_name):
 		var scene = retrieve_scene(scene_name)
 		if scene_name:
 			scene.queue_free()
 			root.scenes_root.remove_child(scene)
 
-func back():
+func back() -> void:
 	if settings.has_method('back'):
 		settings.back()
 		return
@@ -108,12 +108,12 @@ func back():
 	else:
 		scenes.show(settings.main_scene_name)
 
-func clear():
+func clear() -> void:
 	root.clear_scenes()
 
 ### MAINTENANCE FUNCTIONS - Not recommended to call these in your game
 
-func create_scene(scene_name):
+func create_scene(scene_name: String):
 	var scene_file_name = find_scene_file(scene_name)
 	if scene_file_name:
 		var tscn = load(scene_file_name)
@@ -124,9 +124,9 @@ func create_scene(scene_name):
 		debug.print("FATAL: create_scene(): MISSING SCENE FILE:",scene_file_name)
 		return null
 
-func find_scene_file(scene_name):
+func find_scene_file(scene_name: String) -> String:
 	# search in directories
-	for dir in search_dirs:
+	for dir: String in search_dirs:
 		var file_name_tscn = 'res://' + dir + '/' + scene_name + ".tscn"
 		if util.file_exists(file_name_tscn):
 			return file_name_tscn
@@ -139,39 +139,40 @@ func find_scene_file(scene_name):
 			return scene_name
 		if util.file_exists(scene_name+".tscn"):
 			return scene_name+".tscn"
-	return false
+	return ''
 
-func delete_on_hide(scene_name):
+func delete_on_hide(scene_name: String) -> bool:
 	if has_in_memory(scene_name):
 		return false
 	return true
 
-func restore_on_show(scene_name):
+func restore_on_show(scene_name: String) -> bool:
 	if has_in_memory(scene_name):
 		return true
 	return false
 
-func load_scene_file(scene_file):
+func load_scene_file(scene_file: String) -> Resource:
 	if util.file_exists(scene_file):
 		return load(scene_file)
 	else:
 		debug.print('ERROR: Missing scene file: ', scene_file)
+		return null
 
 # find scene from stack and remove_at any scenes above it
-func retrieve_scene(scene_name):
+func retrieve_scene(scene_name: String):
 	var found_scene = null
 	for scene in root.scenes_root.get_children():
 		if scene.name == scene_name:
 			found_scene = scene
 	return found_scene
 
-func has_in_memory(scene_name):
+func has_in_memory(scene_name: String) -> bool:
 	for scene in root.scenes_root.get_children():
 		if scene.name == scene_name:
 			return true
 	return false
 
-func scene_or_menu(scene):
+func scene_or_menu(scene) -> String:
 	if find_scene_file(scene):
 		return 'scene'
 	return 'menu'

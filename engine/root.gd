@@ -48,13 +48,13 @@ var scene_container_style := 'pool'
 var menu_container_style := 'stack'
 @onready var menus_root: Control = $Overlay/Menus
 # overlay pointers
-@onready var Overlay = $Overlay
-@onready var OverlayHUD = $Overlay/HUD
-@onready var Mouse = $Overlay/Mouse
-@onready var Cursor = $Overlay/Mouse/Cursor
-@onready var Transitions = $Overlay/Transitions
-@onready var Shaders = $Overlay/Shaders
-@onready var Debug = $Overlay/Debug
+@onready var Overlay := $Overlay
+@onready var OverlayHUD := $Overlay/HUD
+@onready var Mouse := $Overlay/Mouse
+@onready var Cursor := $Overlay/Mouse/Cursor
+@onready var Transitions := $Overlay/Transitions
+@onready var Shaders := $Overlay/Shaders
+@onready var Debug := $Overlay/Debug
 # optional big screen node
 var big_screen_node = null
 
@@ -64,7 +64,7 @@ signal switch_transition_finished()
 signal pre_scene_deleted(current_scene_name)
 signal scene_deleted(current_scene_name)
 
-func _ready():
+func _ready() -> void:
 	# Special Display Modes
 	if settings.pixel_perfect:
 		get_tree().set_screen_stretch(settings.stretch_mode, settings.stretch_aspect, settings.pixel_resolution)
@@ -106,7 +106,7 @@ func _ready():
 		DisplayServer.call_deferred("window_move_to_foreground")
 
 # called by menus.show()
-func switch_to_menu(menu, menu_name, menu_data=false, info={}, transitions={}):
+func switch_to_menu(menu, menu_name, menu_data=false, info={}, transitions={}) -> void:
 	if 'switch_target' in info:
 		info['switch_target'] = info['switch_target']
 	else:
@@ -122,10 +122,10 @@ func switch_to_menu(menu, menu_name, menu_data=false, info={}, transitions={}):
 	_switch_prepare(menu, menu_name, menu_data, info, transitions)
 
 # called by scenes.show()
-func switch_to_scene(scene, scene_name, scene_data=false, info={}, transitions={}):
+func switch_to_scene(scene, scene_name, scene_data=false, info={}, transitions={}) -> void:
 	if util.is_not(scene):
 		debug.print("ERROR: root.switch_to_scene called without scene, aborting")
-		return false
+		return
 	if 'switch_target' in info:
 		info['switch_target'] = info['switch_target']
 	else:
@@ -136,7 +136,7 @@ func switch_to_scene(scene, scene_name, scene_data=false, info={}, transitions={
 		info['switch_origin'] = current_scene_type
 	_switch_prepare(scene, scene_name, scene_data, info, transitions)
 
-func _switch_prepare(scene, scene_name, scene_data=false, info={}, transitions={}):
+func _switch_prepare(scene, scene_name, scene_data=false, info={}, transitions={}) -> void:
 	var switch_target = info['switch_target']
 	var switch_origin = info['switch_origin']
 	# TRANSITION OUT
@@ -200,7 +200,7 @@ func _switch_prepare(scene, scene_name, scene_data=false, info={}, transitions={
 	_soft_switch(scene, scene_name, scene_data, info, transitions)
 
 # called by scenes.show()
-func _soft_switch(scene, scene_name, scene_data, info, transitions):
+func _soft_switch(scene, scene_name, scene_data, info, transitions) -> void:
 	#debug.print('--------------------------------')
 	#debug.print('switching_scene',scene_name)
 	#debug_scene_roots()
@@ -210,7 +210,7 @@ func _soft_switch(scene, scene_name, scene_data, info, transitions):
 	# already switching?
 	if switching_scene:
 		debug.print('WARNING: repeating scene switching:', scene_name)
-		return false
+		return
 	# semaphore
 	switching_scene = true
 	# notify current scene
@@ -271,7 +271,7 @@ func _soft_switch(scene, scene_name, scene_data, info, transitions):
 	#debug_scene_roots()
 	#debug.print('--------------------------------')
 
-func _add_next_scene(scene, scene_name, info):
+func _add_next_scene(scene, scene_name, info) -> void:
 	# notify engine we have a proper root scene
 	root_scene = true
 	# gather info
@@ -317,7 +317,7 @@ func _add_next_scene(scene, scene_name, info):
 		if not inside:
 			target_root.add_child(_next_scene)
 
-func _pre_delete_scenes(info):
+func _pre_delete_scenes(info) -> void:
 	var switch_origin = info['switch_origin']
 	var switch_target = info['switch_target']
 	var origin_root = get_scene_container(switch_origin)
@@ -351,7 +351,7 @@ func _pre_delete_scenes(info):
 			emit_signal("pre_scene_deleted", current_scene_name)
 
 # removing may not mean deleting, could be hiding
-func _remove_current_scene(info):
+func _remove_current_scene(info) -> void:
 	# gather info
 	var switch_target = info['switch_target']
 	var switch_origin = info['switch_origin']
@@ -415,7 +415,7 @@ func _remove_current_scene(info):
 	hide_shaders()
 
 # do not call directly
-func _hard_switch_scene():
+func _hard_switch_scene() -> void:
 	if _next_scene:
 		current_scene = _next_scene
 		current_scene_name = _next_scene_name
@@ -427,7 +427,7 @@ func _hard_switch_scene():
 	_next_scene_name = ''
 	_next_scene_type = ''
 
-func _pause_current_scene():
+func _pause_current_scene() -> void:
 	if current_scene:
 		current_scene.set_process(false)
 		current_scene.set_physics_process(false)
@@ -438,7 +438,7 @@ func _pause_current_scene():
 			if current_scene_type == 'scene':
 				pause()
 
-func _resume_current_scene():
+func _resume_current_scene() -> void:
 	if current_scene:
 		current_scene.set_process(true)
 		current_scene.set_physics_process(true)
@@ -467,7 +467,7 @@ func get_container_style(scene_type: String) -> String:
 
 # CLEAR / DELETE / HIDE / SHOW SCENES
 
-func clear_scenes():
+func clear_scenes() -> void:
 	var remove_at = []
 	for child in root.scenes_root.get_children():
 		if current_scene == child:
@@ -479,7 +479,7 @@ func clear_scenes():
 	for child in remove_at:
 		root.scenes_root.remove_child(child)
 
-func clear_menus():
+func clear_menus() -> void:
 	var remove_at = []
 	for child in root.menus_root.get_children():
 		if current_scene == child:
@@ -491,7 +491,7 @@ func clear_menus():
 	for child in remove_at:
 		root.menus_root.remove_child(child)
 
-func clear_menus_above(menu):
+func clear_menus_above(menu) -> void:
 	var remove_at = []
 	var found = false
 	for child in root.menus_root.get_children():
@@ -511,7 +511,7 @@ func clear_menus_above(menu):
 #   to use, add a check to top of ready() function in any scene:
 #  	if not root.check_is_root_scene(self, scene_file_path):
 #		return
-func check_is_root_scene(scene, scene_name, scene_type='scene'):
+func check_is_root_scene(scene, scene_name, scene_type='scene') -> bool:
 	if not root_scene and dev.dev_mode_enabled:
 		debug.print('F6 root scene override')
 		settings.allow_res_scenes = true # have to set this to load by filename
@@ -529,30 +529,30 @@ func check_is_root_scene(scene, scene_name, scene_type='scene'):
 		return false
 	return true
 
-func _notification(note):
+func _notification(note) -> void:
 	if note == NOTIFICATION_PREDELETE:
 		current_scene = null
 		_next_scene = null
 
-func enable_menus():
+func enable_menus() -> void:
 	menus_root.visible = true
 
-func hide_menus():
+func hide_menus() -> void:
 	menus_root.visible = false
 	for menu in menus_root.get_children():
 		menu.visible = false
 
-func enable_scenes():
+func enable_scenes() -> void:
 	scenes_root.visible = true
 
-func hide_scenes():
+func hide_scenes() -> void:
 	scenes_root.visible = false
 	for scene in scenes_root.get_children():
 		scene.visible = false
 
 # WINDOW / SCALING
 
-func scale_root():
+func scale_root() -> void:
 	var orig_w = game.pixel_width
 	var orig_h = game.pixel_height
 	var proj_w = ProjectSettings.get_setting("display/window/size/viewport_width")
@@ -564,14 +564,14 @@ func scale_root():
 	#  scenes_root.set_scale(view_scale)
 	#  menus_root.set_scale(view_scale)
 
-func scale_transitions():
+func scale_transitions() -> void:
 	pass
 
-func scale_cursor():
+func scale_cursor() -> void:
 	Cursor.scale = settings.scale_mouse_cursor
 
 # https://godotengine.org/qa/25504/pixel-perfect-scaling
-func pixel_perfect_resize():
+func pixel_perfect_resize() -> void:
 	var viewport: SubViewport = get_viewport()
 	var window_size = get_window().get_size()
 
@@ -592,7 +592,7 @@ func pixel_perfect_resize():
 
 # INPUT
 
-func _input(event):
+func _input(event: InputEvent) -> void:
 	# help
 	if Input.is_action_just_pressed("ui_help"):
 		if game.has_method("help"):
@@ -678,7 +678,7 @@ func _input(event):
 
 # UPDATES
 
-func update_ui():
+func update_ui() -> void:
 	if settings.hide_system_cursor:
 		Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 	if last_input_mouse:
@@ -707,7 +707,7 @@ func update_mouse():
 	else:
 		hide_cursor()
 
-func update_mouse_position():
+func update_mouse_position() -> void:
 	var mouse_pos = get_viewport().get_mouse_position()
 	mouse_pos.x /= view_scale.x
 	mouse_pos.y /= view_scale.y
@@ -718,30 +718,30 @@ func set_cursor(file):
 		var tex = load(file)
 		Cursor.texture = tex
 
-func is_cursor_visible():
+func is_cursor_visible() -> bool:
 	return Mouse.visible
 
-func show_cursor():
+func show_cursor() -> void:
 	if settings.custom_mouse_cursor:
 		if settings.allow_mouse_cursor:
 			Mouse.visible = true
 		if dev.hide_mouse_cursor:
 			Mouse.visible = false
 
-func hide_cursor():
+func hide_cursor() -> void:
 	Mouse.visible = false
 	if dev.emulate_touch and dev.emulate_touch_mouse:
 		show_cursor()
 		mouse = true
 
-func show_mouse_cursor():
+func show_mouse_cursor() -> void:
 	Input.set_mouse_mode( Input.MOUSE_MODE_VISIBLE )
 
-func hide_mouse_cursor():
+func hide_mouse_cursor() -> void:
 	if dev.hide_system_cursor:
 		Input.set_mouse_mode( Input.MOUSE_MODE_HIDDEN )
 
-func capture_mouse_cursor():
+func capture_mouse_cursor() -> void:
 	Input.set_mouse_mode( Input.MOUSE_MODE_CAPTURED )
 
 # SHADERS
@@ -764,18 +764,18 @@ func enable_shader(shader_name):
 	#elif name == 'film':
 	#	Shaders.get_node("FilmShader").visible = true
 
-func hide_shaders():
+func hide_shaders() -> void:
 	Shaders.visible = false
 	for shader in Shaders.get_children():
 		shader.visible = false
 
 # TRANSITIONS
 
-func enable_transitions():
+func enable_transitions() -> void:
 	hide_transitions()
 	Transitions.visible = true
 
-func hide_transitions():
+func hide_transitions() -> void:
 	#Transitions.visible = false
 	for node in Transitions.get_children():
 		node.visible = false
@@ -820,7 +820,7 @@ func _transition_middle(info, transitions):
 			await self.transition_finished
 	emit_signal("switch_transition_finished")
 
-func _transition_in(transitions):
+func _transition_in(transitions) -> void:
 	var transition_in = transitions['in']
 	if transition_in and transition_in != 'none':
 		if transition_in == 'fade':
@@ -832,7 +832,7 @@ func _transition_in(transitions):
 		hide_transitions()
 	emit_signal("switch_transition_finished")
 
-func fade_out_and_quit():
+func fade_out_and_quit() -> void:
 	resume()
 	# transition?
 	if settings.transition_quit != 'none':
@@ -846,7 +846,7 @@ func fade_out_and_quit():
 	# quit
 	quit()
 
-func transition_wait(middle_time=0.3):
+func transition_wait(middle_time=0.3) -> void:
 	if dev.skip_transitions:
 		emit_signal("transition_finished")
 		return
@@ -859,7 +859,7 @@ func transition_wait(middle_time=0.3):
 	middle_timer.queue_free()
 	emit_signal("transition_finished")
 
-func transition_fade_out(fade_time=0.3):
+func transition_fade_out(fade_time=0.3) -> void:
 	if dev.skip_transitions:
 		emit_signal("transition_finished")
 		return
@@ -874,7 +874,7 @@ func transition_fade_out(fade_time=0.3):
 	await tween.finished
 	emit_signal("transition_finished")
 
-func transition_fade_in(fade_time=0.3):
+func transition_fade_in(fade_time=0.3) -> void:
 	if dev.skip_transitions:
 		emit_signal("transition_finished")
 		return
@@ -890,7 +890,7 @@ func transition_fade_in(fade_time=0.3):
 	await tween.finished
 	emit_signal("transition_finished")
 
-func transition_fade_out_stagger(fade_out_time=0.2):
+func transition_fade_out_stagger(fade_out_time=0.2) -> void:
 	if dev.skip_transitions:
 		emit_signal("transition_finished")
 		return
@@ -909,7 +909,7 @@ func transition_fade_out_stagger(fade_out_time=0.2):
 		timer.queue_free()
 	emit_signal('transition_finished')
 
-func transition_fade_in_stagger(fade_in_time=0.3):
+func transition_fade_in_stagger(fade_in_time=0.3) -> void:
 	if dev.skip_transitions:
 		emit_signal("transition_finished")
 		return
@@ -928,7 +928,7 @@ func transition_fade_in_stagger(fade_in_time=0.3):
 		timer.queue_free()
 	emit_signal('transition_finished')
 
-func transition_slide(scene, in_out, direction, time=0.5):
+func transition_slide(scene, in_out, direction, time=0.5) -> void:
 	scene.visible = true
 	var off_screen
 	var on_screen
@@ -968,7 +968,7 @@ func transition_slide(scene, in_out, direction, time=0.5):
 	await tween.finished
 	emit_signal('transition_finished')
 
-func transition_slide_both(old, new, direction, time=0.5):
+func transition_slide_both(old, new, direction, time=0.5) -> void:
 	#new.position = Vector2(game.pixel_width*dir, 0)
 	new.visible = true
 	old.visible = true
@@ -1013,7 +1013,7 @@ func transition_slide_both(old, new, direction, time=0.5):
 	await old_tween.finished
 	emit_signal('transition_finished')
 
-func black_box_slide():
+func black_box_slide() -> void:
 	enable_transitions()
 	Transitions.visible = true
 	hide_cursor()
@@ -1040,19 +1040,19 @@ func black_box_slide():
 	show_cursor()
 	update_ui()
 
-func set_box_slide(value):
+func set_box_slide(value) -> void:
 	var transition = Transitions.get_node("Box")
 	var material = transition.get_material()
 	material.set_shader_parameter("slide", value)
 
 # SCREENSHOTS
 
-func auto_screenshot():
+func auto_screenshot() -> void:
 	debug.print('autoscreenshot')
 	if current_scene:
 		util.screenshot(self, dev.autoscreenshot_resolution, false, settings.screenshot_auto_directory)
 
-func flip_autoscreenshot():
+func flip_autoscreenshot() -> void:
 	if not game.release:
 		if $Timers/Screenshot.is_stopped():
 			debug.print('autoscreenshot started')
@@ -1071,16 +1071,16 @@ func flip_autoscreenshot():
 
 # DEBUG / CONSOLE
 
-func update_debug():
+func update_debug() -> void:
 	Debug.visible = false
 	if dev.debug_overlay:
 		Debug.visible = true
 
-func set_debug_info(text):
+func set_debug_info(text) -> void:
 	Debug.visible = true
 	Debug.get_node("Info").set_text(text)
 
-func add_debug_line(text):
+func add_debug_line(text) -> void:
 	# check for duplicate with last line
 	if debug_lines.size() > 0 and debug_lines[debug_lines.size()-1] == text:
 		return
@@ -1093,24 +1093,24 @@ func add_debug_line(text):
 		full += line + "\n"
 	Debug.set_info_text(full)
 
-func show_console():
+func show_console() -> void:
 	Debug.visible = true
 	#print_tree_pretty()
 	#print_orphan_nodes()
 
-func hide_console():
+func hide_console() -> void:
 	Debug.visible = false
 
-func flip_console():
+func flip_console() -> void:
 	if not Debug.visible:
 		show_console()
 	else:
 		hide_console()
 
-func is_console_visible():
+func is_console_visible() -> bool:
 	return Debug.visible
 
-func show_console_readme():
+func show_console_readme() -> void:
 	debug_lines = []
 	add_debug_line('~ show/hide')
 	add_debug_line('[ slow')
@@ -1118,10 +1118,10 @@ func show_console_readme():
 	add_debug_line('\\ step')
 	add_debug_line('backspace resumes')
 
-func debug_reset():
+func debug_reset() -> void:
 	debug_lines = []
 
-func debug_scene_roots():
+func debug_scene_roots() -> void:
 	debug.print('SCENE ROOT')
 	var count = 0
 	for child in scenes_root.get_children():
@@ -1135,34 +1135,34 @@ func debug_scene_roots():
 	debug.print('current_scene_name = ' + current_scene_name)
 	debug.print('current_scene_type = ' + current_scene_type)
 
-func debug_info_next():
+func debug_info_next() -> void:
 	if game.has_method('debug_info_next'):
 		game.debug_info_next()
 
-func debug_info_prev():
+func debug_info_prev() -> void:
 	if game.has_method('debug_info_prev'):
 		game.debug_info_prev()
 
-func debug_info_point():
+func debug_info_point() -> void:
 	if game.has_method('debug_info_point'):
 		game.debug_info_point(Cursor.position, 16)
 
-func add_debug_info_node(node: Node):
+func add_debug_info_node(node: Node) -> void:
 	Debug.add_info_node(node)
 
-func remove_debug_info_node(node: Node):
+func remove_debug_info_node(node: Node) -> void:
 	Debug.remove_info_node(node)
 
-func next_debug_info(container: Node):
+func next_debug_info(container: Node) -> void:
 	Debug.next_debug_info(container)
 
-func prev_debug_info(container: Node):
+func prev_debug_info(container: Node) -> void:
 	Debug.prev_debug_info(container)
 
 # HUD
 # - an empty node that you can add scenes to with some convenience methods
 
-func update_hud():
+func update_hud() -> void:
 	if not hud_allowed or dev.no_hud_ever:
 		hide_hud()
 		return
@@ -1182,47 +1182,47 @@ func update_hud():
 	else:
 		hide_hud()
 
-func show_hud():
+func show_hud() -> void:
 	OverlayHUD.visible = true
 	for child in OverlayHUD.get_children():
 		child.visible = true
 
-func hide_hud():
+func hide_hud() -> void:
 	OverlayHUD.visible = false
 	if current_scene and current_scene.has_method("on_focus"):
 		current_scene.on_focus()
 
-func is_hud_visible():
+func is_hud_visible() -> bool:
 	return OverlayHUD.visible
 
-func set_hud_text(text):
+func set_hud_text(text) -> void:
 	for child in OverlayHUD.get_children():
 		if child.has_method('set_text'):
 			child.set_text(text)
 
-func has_hud():
+func has_hud() -> bool:
 	return OverlayHUD.get_child_count() > 0
 
-func get_hud():
+func get_hud() -> Node:
 	if OverlayHUD.get_child_count() > 0:
 		return OverlayHUD.get_children()[0]
 	else:
 		return null
 
-func add_hud(hud):
+func add_hud(hud) -> bool:
 	for child in OverlayHUD.get_children():
 		if child == hud:
 			return false
 	OverlayHUD.add_child(hud)
 	return true
 
-func remove_hud():
+func remove_hud() -> void:
 	for child in OverlayHUD.get_children():
 		child.queue_free()
 
 # SMALL VIEWPORT (Experimental)
 
-func setup_small_viewport(big_resolution=Vector2(1920,1080), small_resolution=Vector2(640,360)):
+func setup_small_viewport(big_resolution=Vector2(1920,1080), small_resolution=Vector2(640,360)) -> void:
 	var viewport: SubViewport = get_viewport()
 	# create viewport scene to hold smaller game view
 	var gvc_tscn = load("res://widgets/game-viewport.tscn")
@@ -1274,7 +1274,7 @@ func setup_small_viewport(big_resolution=Vector2(1920,1080), small_resolution=Ve
 
 # TOUCH
 
-func touch_display():
+func touch_display() -> bool:
 	if settings.disable_touch_ui:
 		return false
 	if settings.touch_controls == 'auto':
@@ -1292,7 +1292,7 @@ func touch_display():
 
 # MISC
 
-func has_text_entry():
+func has_text_entry() -> bool:
 	if current_scene:
 		if current_scene.get('text_entry'):
 			return true
@@ -1300,20 +1300,20 @@ func has_text_entry():
 
 # SPEED / PAUSE / RESUME
 
-func pause():
+func pause() -> void:
 	get_tree().paused = true
 
-func resume():
+func resume() -> void:
 	get_tree().paused = false
 
-func stop_frame():
+func stop_frame() -> void:
 	pause()
 	Engine.time_scale = 0
 
-func reset():
+func reset() -> void:
 	Engine.time_scale = 1
 
-func reset_time_scale():
+func reset_time_scale() -> void:
 	if Engine.time_scale != 1:
 		Engine.time_scale = 1
 
@@ -1322,7 +1322,7 @@ func reset_time_scale():
 #  -menu=name
 #  -fullscreen
 #  -screen=1200x800
-func command_line_start():
+func command_line_start() -> void:
 	# store command line arguments
 	var commands = OS.get_cmdline_args()
 	for i in range(commands.size()):
@@ -1398,7 +1398,7 @@ func command_line_start():
 
 # QUIT
 
-func quit():
+func quit() -> void:
 	if not has_quit:
 		has_quit = true
 		debug.print('quit')
