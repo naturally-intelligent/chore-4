@@ -18,7 +18,7 @@ func _ready() -> void:
 
 ### USER FUNCTIONS - call these to use scene system
 
-func current_scene():
+func current_scene() -> Node:
 	var scene_count = root.scenes_root.get_child_count()
 	if scene_count > 0:
 		return root.scenes_root.get_children()[scene_count-1]
@@ -30,10 +30,10 @@ func has_scene() -> bool:
 		return true
 	return false
 
-func show(scene_name: String, transitions={}, info={}, scene_data=false):
+func show(scene_name: String, transitions={}, info={}, scene_data=false) -> Variant:
 	return thaw(scene_name, transitions, info, scene_data)
 
-func thaw(scene_name: String, transitions={}, info={}, scene_data=false):
+func thaw(scene_name: String, transitions={}, info={}, scene_data=false) -> Variant:
 	#debug.print('scenes.show ', scene_name)
 	# smooth arguments
 	if info is bool: info = {}
@@ -65,14 +65,14 @@ func thaw(scene_name: String, transitions={}, info={}, scene_data=false):
 	root.switch_to_scene(scene, scene_name, scene_data, infos, transitions)
 	return scene
 
-func fresh(scene_name: String, transitions=false, info=false, scene_data=false):
+func fresh(scene_name: String, transitions=false, info=false, scene_data=false) -> Variant:
 	if info is bool and info == false: 
 		info = 'remove_at'
 	if info == null: 
 		info = 'remove_at'
 	return thaw(scene_name, transitions, info, scene_data)
 
-func hard(scene_name: String, scene_data=false):
+func hard(scene_name: String, scene_data=false) -> Variant:
 	var transitions = {}
 	transitions['out'] = 'none'
 	transitions['middle'] = 'none'
@@ -113,8 +113,8 @@ func clear() -> void:
 
 ### MAINTENANCE FUNCTIONS - Not recommended to call these in your game
 
-func create_scene(scene_name: String):
-	var scene_file_name = find_scene_file(scene_name)
+func create_scene(scene_name: String) -> Node:
+	var scene_file_name := find_scene_file(scene_name)
 	if scene_file_name:
 		var tscn = load(scene_file_name)
 		var scene = tscn.instantiate()
@@ -159,7 +159,7 @@ func load_scene_file(scene_file: String) -> Resource:
 		return null
 
 # find scene from stack and remove_at any scenes above it
-func retrieve_scene(scene_name: String):
+func retrieve_scene(scene_name: String) -> Node:
 	var found_scene = null
 	for scene in root.scenes_root.get_children():
 		if scene.name == scene_name:

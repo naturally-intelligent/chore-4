@@ -22,7 +22,7 @@ const silent_db = -60
 signal music_volume_changed()
 signal sound_volume_changed()
 
-func _ready():
+func _ready() -> void:
 	set_sound_volume(settings.sound_volume)
 	set_music_volume(settings.music_volume)
 
@@ -31,7 +31,7 @@ func _ready():
 func play_sound(sound_name: String, volume:=1.0, allow_multiple:=false, pitch:={}) -> AudioStreamPlayer:
 	if dev.silence: return
 	# find sound resource link (res://dir/file.ext)
-	var resource_link = _sound_resource(sound_name)
+	var resource_link := _sound_resource(sound_name)
 	if resource_link == '':
 		return null
 	# find a sound player
@@ -45,7 +45,7 @@ func play_sound(sound_name: String, volume:=1.0, allow_multiple:=false, pitch:={
 		player = _find_empty_sound_player()
 	if not player:
 		return null
-	var stream = load(resource_link)
+	var stream := load(resource_link)
 	if not stream:
 		debug.print('ERROR: Bad Audio Stream load failed', resource_link)
 		return null
@@ -63,21 +63,21 @@ func play_sound(sound_name: String, volume:=1.0, allow_multiple:=false, pitch:={
 	return player
 
 func is_sound_playing(sound_name) -> bool:
-	var resource_link = _sound_resource(sound_name)
+	var resource_link := _sound_resource(sound_name)
 	return _is_sound_resource_playing(resource_link)
 
 func is_sound_looping(sound_name) -> bool:
-	var resource_link = _sound_resource(sound_name)
+	var resource_link := _sound_resource(sound_name)
 	return _is_sound_resource_looping(resource_link)
 
 func stop_sound(sound_name) -> void:
-	var resource_link = _sound_resource(sound_name)
+	var resource_link := _sound_resource(sound_name)
 	_stop_sound_resource(resource_link)
 
 func loop_sound(sound_name: String, volume:=1.0, fade_in:=false, fade_in_time:=0.5) -> AudioStreamPlayer:
 	if dev.silence: return
 	# find sound resource link (res://dir/file.ext)
-	var resource_link = _sound_resource(sound_name)
+	var resource_link := _sound_resource(sound_name)
 	if resource_link == '':
 		return null
 	# find a sound player
@@ -90,7 +90,7 @@ func loop_sound(sound_name: String, volume:=1.0, fade_in:=false, fade_in_time:=0
 		player = _find_empty_sound_looper()
 	if not player:
 		return null
-	var stream = load(resource_link)
+	var stream := load(resource_link)
 	if not stream:
 		debug.print('ERROR: Bad Audio Loop load failed', resource_link)
 		return null
@@ -102,20 +102,20 @@ func loop_sound(sound_name: String, volume:=1.0, fade_in:=false, fade_in_time:=0
 		player.connect("finished", Callable(self,"_on_loop_sound").bind(player))
 	player.play()
 	if fade_in:
-		var desired_db = player.volume_db
+		var desired_db := player.volume_db
 		player.volume_db = silent_db
-		var tween = create_tween()
+		var tween := create_tween()
 		tween.set_trans(Tween.TRANS_CUBIC)
 		tween.set_ease(Tween.EASE_OUT)
 		tween.tween_property(player, "volume_db", desired_db, fade_in_time)
 	return player
 
 func fade_in_sound(sound_name: String, volume:=1.0, fade_in_time:=1.5) -> AudioStreamPlayer:
-	var player = play_sound(sound_name, volume)
+	var player := play_sound(sound_name, volume)
 	if player:
-		var desired_db = player.volume_db
+		var desired_db := player.volume_db
 		player.volume_db = silent_db
-		var tween = create_tween()
+		var tween := create_tween()
 		tween.set_trans(Tween.TRANS_CUBIC)
 		tween.set_ease(Tween.EASE_OUT)
 		tween.tween_property(player, "volume_db", desired_db, fade_in_time)
@@ -153,7 +153,7 @@ func _sound_resource(sound_name: String) -> String:
 	if sound_name in settings.sound_alias:
 		var alias_name = settings.sound_alias[sound_name]
 		if alias_name:
-			var file_name2 = _find_sound_file(alias_name)
+			var file_name2 := _find_sound_file(alias_name)
 			if file_name2:
 				file_locations[sound_name] = file_name2
 			return file_name2
@@ -330,10 +330,10 @@ func rogue(player: Object, load_with_sound_name:='') -> void:
 	if dev.silence: return
 	# load with sound from settings?
 	if load_with_sound_name != '':
-		var resource_link = _sound_resource(load_with_sound_name)
+		var resource_link := _sound_resource(load_with_sound_name)
 		if not player.has_meta('resource_link') or player.get_meta('resource_link') != resource_link:
 			player.set_meta('resource_link', resource_link)
-			var stream = load(resource_link)
+			var stream := load(resource_link)
 			if not stream:
 				debug.print('ERROR: Bad Audio Stream external load failed', resource_link)
 				return
@@ -385,7 +385,7 @@ func play_music(song_name:String, volume:=1.0, resume_if_previous:=true, and_sto
 	if and_stop_music:
 		stop_and_reset_music()
 	# load stream
-	var stream = load(resource_link)
+	var stream := load(resource_link)
 	if stream:
 		$MusicPlayer.volume_db = convert_percent_to_db(volume)
 		$MusicPlayer.set_stream(stream)
@@ -454,8 +454,8 @@ func fade_in_music(song_name: String, _fade_in_time:=1.0, _do_play:=true, _stop_
 		if _stop_music:
 			stop_and_reset_music()
 		play_music(song_name, 1.0, false, _stop_music)
-	var target_volume = _get_volume_for_song(song_name)
-	var target_db = convert_percent_to_db(target_volume)
+	var target_volume := _get_volume_for_song(song_name)
+	var target_db := convert_percent_to_db(target_volume)
 	$MusicPlayer.volume_db = silent_db
 	if _stop_music:
 		stop_music_animations()

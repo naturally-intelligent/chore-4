@@ -15,11 +15,11 @@ var console := false
 # touch
 var touch := false
 
-func _ready():
+func _ready() -> void:
 	platform_detection()
 	input_detection()
 
-func platform_detection():
+func platform_detection() -> void:
 	mobile = OS.has_feature('mobile')
 	desktop = OS.has_feature('pc')
 	web = OS.has_feature('web')
@@ -35,7 +35,7 @@ func platform_detection():
 		'FreeBSD', 'NetBSD', 'OpenBSD', 'BSD':
 			linux = true
 
-func input_detection():
+func input_detection() -> void:
 	touch = DisplayServer.is_touchscreen_available()
 
 # SORT CLASSES
@@ -61,7 +61,7 @@ class SecondElementGreatest:
 #  these are all static, meaning they arent part of the 'util' object
 #  but still called like -> util.fullscreen_flip()
 
-func fullscreen_flip():
+func fullscreen_flip() -> void:
 	if ((get_window().mode == Window.MODE_EXCLUSIVE_FULLSCREEN) or (get_window().mode == Window.MODE_FULLSCREEN)):
 		get_window().mode = Window.MODE_EXCLUSIVE_FULLSCREEN if (false) else Window.MODE_WINDOWED
 	else:
@@ -82,11 +82,11 @@ func random_array(a):
 		return a[i]
 	return null
 
-func random_array_index(a):
+func random_array_index(a) -> int:
 	if a.size() > 0:
 		var i = math.random_int(0,a.size()-1)
 		return i
-	return null
+	return -1
 
 func random_child(n):
 	var i = math.random_int(0, n.get_child_count()-1)

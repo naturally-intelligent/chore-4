@@ -92,9 +92,9 @@ func cap_vector(v: Vector2, xy_max: float) -> Vector2:
 
 ### POSITIONS
 
-func nearest_position(parent: Node, position: Vector2):
+func nearest_position(parent: Node, position: Vector2) -> Vector2:
 	var nearest = 1000*1000
-	var nearest_pos = false
+	var nearest_pos = Vector2.ZERO
 	for node in parent.get_children():
 		var dist2 = position.distance_squared_to(node.position)
 		if dist2 < nearest:
@@ -102,9 +102,9 @@ func nearest_position(parent: Node, position: Vector2):
 			nearest = dist2
 	return nearest_pos
 
-func nearest_global_position(parent: Node, position: Vector2):
+func nearest_global_position(parent: Node, position: Vector2) -> Vector2:
 	var nearest = 1000*1000
-	var nearest_pos = false
+	var nearest_pos = Vector2.ZERO
 	for node in parent.get_children():
 		var dist2 = position.distance_squared_to(node.global_position)
 		if dist2 < nearest:

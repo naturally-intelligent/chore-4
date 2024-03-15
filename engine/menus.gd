@@ -17,16 +17,16 @@ func _ready() -> void:
 
 ### USER FUNCTIONS - call these to use menu system
 
-func current_menu():
+func current_menu() -> Node:
 	var menu_count = root.menus_root.get_child_count()
 	if menu_count > 0:
 		return root.menus_root.get_children()[menu_count-1]
 	return null
 
-func show(menu_name: String, transitions={}, info={}, menu_data=false):
+func show(menu_name: String, transitions={}, info={}, menu_data=false) -> Variant:
 	return thaw(menu_name, transitions, info, menu_data)
 
-func thaw(menu_name: String, transitions={}, info={}, menu_data=false):
+func thaw(menu_name: String, transitions={}, info={}, menu_data=false) -> Variant:
 	#debug.print('menus.show ', menu_name)
 	# smooth arguments
 	if info is bool: info = {}
@@ -43,21 +43,21 @@ func thaw(menu_name: String, transitions={}, info={}, menu_data=false):
 		menu = retrieve_menu(menu_name)
 		if util.is_not(menu):
 			debug.print("ERROR: menu.thaw() can't find menu: ", menu_name)
-			return false
+			return null
 	else:
 		menu = find_menu_file(menu_name)
 		if util.is_not(menu):
 			debug.print("ERROR: menu.thaw() can't find menu: ", menu_name)
-			return false
+			return null
 	root.switch_to_menu(menu, menu_name, menu_data, info, transitions)
 	return menu
 
-func fresh(scene_name: String, transitions={}, info={}, scene_data=false):
+func fresh(scene_name: String, transitions={}, info={}, scene_data=false) -> Variant:
 	if info == '': 
 		info = 'remove_at'
 	return thaw(scene_name, transitions, info, scene_data)
 
-func hard(menu_name: String, menu_data:=false):
+func hard(menu_name: String, menu_data:=false) -> Variant:
 	var transitions = {}
 	transitions['out'] = 'none'
 	transitions['middle'] = 'none'
@@ -92,15 +92,16 @@ func back():
 
 ### MAINTENANCE FUNCTIONS - Not recommended to call these in your game
 
-func create_menu(menu_name: String):
+func create_menu(menu_name: String) -> Node:
 	var menu_file_name = find_menu_file(menu_name)
 	if menu_file_name:
 		var tscn = load(menu_file_name)
 		var menu = tscn.instantiate()
 		menu.set_name(menu_name)
 		return menu
-
-func find_menu_file(menu_name: String):
+	return null
+	
+func find_menu_file(menu_name: String) -> String:
 	# search in directories
 	for dir: String in search_dirs:
 		var file_name_tscn := 'res://' + dir + '/' + menu_name + ".tscn"
@@ -115,7 +116,7 @@ func find_menu_file(menu_name: String):
 			return menu_name
 		if util.file_exists(menu_name+".tscn"):
 			return menu_name+".tscn"
-	return false
+	return ''
 
 func delete_on_hide(menu_name: String) -> bool:
 	if has_in_memory(menu_name):
@@ -127,14 +128,15 @@ func restore_on_show(menu_name: String) -> bool:
 		return true
 	return false
 
-func load_menu_file(menu_file: String):
+func load_menu_file(menu_file: String) -> Resource:
 	if util.file_exists(menu_file):
 		return load(menu_file)
 	else:
 		debug.print('ERROR: Missing menu file: ', menu_file)
+		return null
 
 # find menu from stack and remove_at any menus above it
-func retrieve_menu(menu_name: String):
+func retrieve_menu(menu_name: String) -> Node:
 	var found := false
 	var found_menu = null
 	var to_remove := []
