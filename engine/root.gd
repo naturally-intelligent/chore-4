@@ -1050,7 +1050,7 @@ func set_box_slide(value) -> void:
 func auto_screenshot() -> void:
 	debug.print('autoscreenshot')
 	if current_scene:
-		util.screenshot(self, dev.autoscreenshot_resolution, false, settings.screenshot_auto_directory)
+		util.screenshot(self, dev.autoscreenshot_resolution, '', settings.screenshot_auto_directory)
 
 func flip_autoscreenshot() -> void:
 	if not game.release:

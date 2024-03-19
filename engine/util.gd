@@ -502,10 +502,14 @@ func create_import_files_for_export(texture_dir):
 			return load(texture_dir + file_name)
 
 # SCREENSHOT (F5)
-func screenshot(scene, scale=false, logo=false, savedir="screenshots"):
+func screenshot(scene: Node, scale:=Vector2.ZERO, logo:='', savedir:="screenshots"):
 	debug.print('Screenshot...')
+	# setup
+	var viewport: Viewport = scene.get_viewport()
+	var tree: SceneTree = scene.get_tree()
+	
 	# clear next frame
-	RenderingServer.viewport_set_clear_mode(scene.get_viewport(), RenderingServer.VIEWPORT_CLEAR_ONLY_NEXT_FRAME)
+	RenderingServer.viewport_set_clear_mode(viewport, RenderingServer.VIEWPORT_CLEAR_ONLY_NEXT_FRAME)
 
 	# hide cursor?
 	var show_cursor = root.is_cursor_visible()
@@ -513,17 +517,17 @@ func screenshot(scene, scale=false, logo=false, savedir="screenshots"):
 		root.hide_cursor()
 
 	if settings.screenshot_transparent_bg:
-		scene.get_viewport().transparent_bg = true
+		viewport.transparent_bg = true
 
 	# Let two sprite_frames pass to make sure the screen was captured
-	await scene.get_tree().process_frame
-	await scene.get_tree().process_frame
+	await tree.process_frame
+	await tree.process_frame
 
 	# Retrieve the captured image
-	var img: Image = scene.get_viewport().get_texture().get_image()
+	var img: Image = viewport.get_texture().get_image()
 
 	if settings.screenshot_transparent_bg:
-		scene.get_viewport().transparent_bg = false
+		viewport.transparent_bg = false
 
 	# scale after (note, doesn't upscale pixel-art nicely)
 	if scale:

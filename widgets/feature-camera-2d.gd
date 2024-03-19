@@ -55,6 +55,10 @@ var float_camera_position: Vector2 = global_position
 var initial_camera_left_limit := 0
 var initial_camera_right_limit := 0
 
+# free roam
+var free_roam_mode := false
+var free_roam_data := {}
+
 # coop
 @export var coop_camera_limits := true
 
@@ -444,3 +448,40 @@ func set_smoothing_speed_temporarily(speed=1, time=5.0):
 	tween.tween_property(self, 'position_smoothing_speed', old_speed, time)
 	await tween.finished
 
+# FREE ROAM MODE
+
+func flip_free_roam_mode():
+	if free_roam_mode:
+		disable_free_roam()
+	else:
+		enable_free_roam()
+
+func enable_free_roam():
+	free_roam_mode = true
+	free_roam_data['limit_left'] = limit_left
+	free_roam_data['limit_right'] = limit_right
+	free_roam_data['limit_top'] = limit_top
+	free_roam_data['limit_bottom'] = limit_bottom
+	limit_left = -1000000
+	limit_right = 1000000
+	limit_top = -1000000
+	limit_bottom = 1000000
+	set_process(false)
+	root.show_console()
+	root.add_debug_line("Free Roam Camera Enabled")
+	root.add_debug_line("- Press Numpad to move Camera")
+	root.add_debug_line("- Press C to disable")
+	
+func disable_free_roam():
+	free_roam_mode = false
+	if free_roam_data:
+		limit_left = free_roam_data['limit_left']
+		limit_right = free_roam_data['limit_right']
+		limit_top = free_roam_data['limit_top']
+		limit_bottom = free_roam_data['limit_bottom']
+	set_process(true)
+	root.hide_console()
+
+func free_roam(direction: Vector2):
+	const free_roam_speed = 20
+	position += direction * free_roam_speed
