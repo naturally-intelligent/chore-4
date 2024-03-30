@@ -287,6 +287,28 @@ func calculate_total(data: Dictionary) -> void:
 			var amount = data[col]
 			data['total'] += amount
 
+func dictionary_next_key(dict: Dictionary, current_key: Variant) -> Variant:
+	if dict.size() == 0:
+		return null
+	var found := false
+	for key in dict.keys():
+		if found:
+			return key
+		if key == current_key:
+			found = true
+	return dict.keys()[0]
+	
+func dictionary_prev_key(dict: Dictionary, current_key: Variant) -> Variant:
+	if dict.size() == 0:
+		return null
+	var last_key: Variant = dict.keys()[dict.size()-1]
+	var prev_key: Variant = last_key
+	for key in dict.keys():
+		if key == current_key:
+			return prev_key
+		prev_key = key
+	return last_key
+	
 func clean_string(_s: String) -> String:
 	return _s.replace("\n", '').replace(" ",'')
 

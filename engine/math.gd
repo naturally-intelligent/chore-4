@@ -36,6 +36,12 @@ func random_vector(x_factor = 1.0, y_factor = 1.0) -> Vector2:
 func random_vector_offset(x_factor := 1, y_factor := 1) -> Vector2:
 	return Vector2(random_int(-x_factor,x_factor), random_int(-y_factor,y_factor))
 
+func random_left_right_vector() -> Vector2:
+	if ((randi()%2) == 0):
+		return Vector2.LEFT
+	else:
+		return Vector2.RIGHT
+
 ### VECTORS AND ANGLES
 
 # rounds a vector2d
