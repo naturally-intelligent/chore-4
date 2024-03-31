@@ -287,6 +287,10 @@ func calculate_total(data: Dictionary) -> void:
 			var amount = data[col]
 			data['total'] += amount
 
+func if_dict(data: Dictionary, index) -> Dictionary:
+	if index in data: return data[index]
+	else: return {}
+
 func dictionary_next_key(dict: Dictionary, current_key: Variant) -> Variant:
 	if dict.size() == 0:
 		return null
@@ -515,6 +519,20 @@ func wait(time: float, parent=null) -> Timer:
 	#await t.timeout # must call this and queue_free outside of function!
 	return t
 
+func time_to_string(time: float, show_milliseconds := false) -> String:
+	var seconds := floori(fmod(time, 60))
+	var minutes := floori(time / 60)
+	var hours := floori(minutes / 60)
+	var text := ''
+	if hours > 0:
+		text = "%d:%02d:%02d" % [hours, minutes, seconds]
+	else:
+		text = "%d:%02d" % [minutes, seconds]
+	if show_milliseconds:
+		var millis := int(fmod(time, 1)*100)
+		text += ".%02d" % [millis]
+	return text
+		
 # https://github.com/godotengine/godot/issues/14562
 func create_import_files_for_export(texture_dir):
 	var file_list = list_files_in_directory(texture_dir)

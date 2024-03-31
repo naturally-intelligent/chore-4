@@ -352,6 +352,8 @@ func play_random_node(player: Object, sound_name: String, total: int):
 func play_music(song_name:String, volume:=1.0, resume_if_previous:=true, and_stop_music:=true, loop:=true) -> bool:
 	if dev.silence: return false
 	if dev.no_music: return false
+	if settings.music_volume == 0.0:
+		return false
 	if dev.skip_first_song:
 		dev.skip_first_song = false
 		return false
@@ -405,6 +407,8 @@ func force_music(song_name:String, volume:=1.0) -> void:
 	play_music(song_name, volume, false)
 
 func is_music_playing(song_name='') -> bool:
+	if settings.music_volume == 0.0:
+		return false
 	if song_name == '':
 		return $MusicPlayer.is_playing() and not $MusicPlayer.stream_paused
 	else:
