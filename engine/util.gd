@@ -225,10 +225,16 @@ func thousands_sep(number, prefix:='') -> String:
 func percent_string(f: float) -> String:
 	return str(int(f*100)) + '%'
 
-func file_exists(file) -> bool:
+func file_exists(file: String) -> bool:
 	if FileAccess.file_exists(file):
 		return true
 	if ResourceLoader.exists(file):
+		return true
+	return false
+
+func dir_exists(space: String, dir: String) -> bool:
+	var base = DirAccess.open(space) # ex: res:// or user://
+	if base and base.dir_exists(dir):
 		return true
 	return false
 
@@ -290,6 +296,12 @@ func calculate_total(data: Dictionary) -> void:
 func if_dict(data: Dictionary, index) -> Dictionary:
 	if index in data: return data[index]
 	else: return {}
+
+func int_dict(data: Dictionary) -> Dictionary:
+	var int_data := {}
+	for loop in data:
+		int_data[int(loop)] = data[loop]
+	return int_data
 
 func dictionary_next_key(dict: Dictionary, current_key: Variant) -> Variant:
 	if dict.size() == 0:
@@ -542,7 +554,7 @@ func create_import_files_for_export(texture_dir):
 			return load(texture_dir + file_name)
 
 # SCREENSHOT (F5)
-func screenshot(scene: Node, scale:=Vector2.ZERO, logo:='', savedir:="screenshots"):
+func screenshot(scene: Node, scale:=Vector2i.ZERO, logo:='', savedir:="screenshots"):
 	debug.print('Screenshot...')
 	# setup
 	var viewport: Viewport = scene.get_viewport()
@@ -720,8 +732,8 @@ func opposite_direction(direction: String) -> String:
 
 # TILES
 
-func tilemap_closest_used_cell(map: TileMap, position: Vector2, direction: Vector2 = Vector2.ZERO):
-	var desired_cell = map.local_to_map(position)
+func tilemap_closest_used_cell(map: TileMap, position: Vector2, direction: Vector2 = Vector2.ZERO) -> Vector2i:
+	var desired_cell := map.local_to_map(position)
 	if map.get_cell_source_id(0, desired_cell) == 0:#:TileMap.INVALID_CELL:
 		var closest_cell = false
 		var closest_distance = 1000000

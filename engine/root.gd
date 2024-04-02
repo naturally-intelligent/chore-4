@@ -1201,10 +1201,11 @@ func set_hud_text(text: String) -> void:
 			child.set_text(text)
 
 func has_hud() -> bool:
+	if not OverlayHUD: return false
 	return OverlayHUD.get_child_count() > 0
 
 func get_hud() -> Node:
-	if OverlayHUD.get_child_count() > 0:
+	if OverlayHUD and OverlayHUD.get_child_count() > 0:
 		return OverlayHUD.get_children()[0]
 	else:
 		return null
