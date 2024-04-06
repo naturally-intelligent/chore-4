@@ -222,8 +222,8 @@ func thousands_sep(number, prefix:='') -> String:
 	else: res = prefix+res
 	return res
 
-func percent_string(f: float) -> String:
-	return str(int(f*100)) + '%'
+func percent_string(decimal_number, multiply_by:=100) -> String:
+	return str(int(float(decimal_number)*multiply_by)) + '%'
 
 func file_exists(file: String) -> bool:
 	if FileAccess.file_exists(file):
@@ -235,6 +235,12 @@ func file_exists(file: String) -> bool:
 func dir_exists(space: String, dir: String) -> bool:
 	var base = DirAccess.open(space) # ex: res:// or user://
 	if base and base.dir_exists(dir):
+		return true
+	return false
+
+func delete_file(space: String, dir: String) -> bool:
+	var base = DirAccess.open(space) # ex: res:// or user://
+	if base and base.remove(dir):
 		return true
 	return false
 
@@ -519,6 +525,19 @@ func prev_in_list(current, list : Array):
 			index = list.size()-1
 		return list[index]
 	return current
+
+func array_has_pattern(check: Array, find: Array) -> bool:
+	if find.size() > 0:
+		for c: int in check.size():
+			if check[c] == find[0]:
+				var found := true
+				for f: int in find.size():
+					if c+f >= check.size() or check[c+f] != find[f]:
+						found = false
+						break
+				if found:
+					return true
+	return false
 
 # must call yield checked t after return
 # because gdscript wont wait for a yield in an outside function call
