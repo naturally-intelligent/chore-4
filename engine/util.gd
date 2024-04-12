@@ -738,6 +738,20 @@ func get_all_children(node: Node) -> Array:
 			nodes.append(c)
 	return nodes
 
+func get_children_in_group(container: Node, group: String) -> Array:
+	var nodes: Array = []
+	for n in container.get_children():
+		if n.is_in_group(group):
+			nodes.append(n)
+	return nodes
+
+func count_children_in_group(container: Node, group: String) -> int:
+	var count := 0
+	for n in container.get_children():
+		if n.is_in_group(group):
+			count += 1
+	return count
+
 func opposite_direction(direction: String) -> String:
 	if direction == 'up':
 		return 'down'
