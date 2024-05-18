@@ -88,7 +88,7 @@ func random_array_index(a) -> int:
 		return i
 	return -1
 
-func random_child(n):
+func random_child(n: Node) -> Node:
 	var i = math.random_int(0, n.get_child_count()-1)
 	return n.get_child(i)
 
@@ -549,6 +549,17 @@ func wait(time: float, parent=null) -> Timer:
 	t.start()
 	#await t.timeout # must call this and queue_free outside of function!
 	return t
+
+func hide_after_time(node: Node, time := 1.0) -> void:
+	var t := Timer.new()
+	t.set_wait_time(time)
+	t.set_one_shot(true)
+	node.add_child(t)
+	t.start()
+	await t.timeout
+	node.visible = false
+	t.queue_free()
+	
 
 func time_to_string(time: float, show_milliseconds := false) -> String:
 	var seconds := floori(fmod(time, 60))
