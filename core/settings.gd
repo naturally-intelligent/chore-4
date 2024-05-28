@@ -68,6 +68,7 @@ var stretch_mode = false # SceneTree.STRETCH_MODE_VIEWPORT
 var stretch_aspect = false # SceneTree.STRETCH_ASPECT_KEEP
 var small_root_viewport := false
 var expanded_resolution = false # Vector2
+var camera_shake := true
 
 # CONFIG FILE
 var settings_config = {}

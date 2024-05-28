@@ -275,7 +275,8 @@ func tween_change_camera_limits(new_limit_left, new_limit_right, new_limit_top, 
 
 # SHAKE / QUAKE
 func start_shaking():
-	shaking = true
+	if settings.camera_shake:
+		shaking = true
 
 func stop_shaking():
 	shaking = false
@@ -323,13 +324,15 @@ func _do_shake(_shake, _shake_power):
 	#rotation = clamp(rotation, -max_shake_roll, max_shake_roll)
 
 func quake_shake(amount):
-	quake = min(quake + amount, 1.0)
-	start_shaking()
+	if settings.camera_shake:
+		quake = min(quake + amount, 1.0)
+		start_shaking()
 
 func shooty_shake(_direction, _threshold=1.0):
-	if shoot_shake <= _threshold:
-		shoot_shake = 1.0
-	start_shaking()
+	if settings.camera_shake:
+		if shoot_shake <= _threshold:
+			shoot_shake = 1.0
+		start_shaking()
 
 # DRAMA
 func zoom_drama(wait=0.25, zoom_factor=0.5):
