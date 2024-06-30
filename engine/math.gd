@@ -96,6 +96,33 @@ func cap_vector(v: Vector2, xy_max: float) -> Vector2:
 	if v.y < -xy_max: v.y = -xy_max
 	return v
 
+# GEOMETRY
+
+func segment_intersect_rect2(from: Vector2, to: Vector2, rect2: Rect2) -> Variant:
+	var intersections := []
+	var left_test = Geometry2D.segment_intersects_segment(from, to, Vector2(rect2.position.x, rect2.position.y), Vector2(rect2.position.x, rect2.end.y))
+	var right_test = Geometry2D.segment_intersects_segment(from, to, Vector2(rect2.end.x, rect2.position.y), Vector2(rect2.end.x, rect2.end.y))
+	var top_test = Geometry2D.segment_intersects_segment(from, to, Vector2(rect2.position.x, rect2.position.y), Vector2(rect2.end.x, rect2.position.y))
+	var bottom_test = Geometry2D.segment_intersects_segment(from, to, Vector2(rect2.position.x, rect2.end.y), Vector2(rect2.end.x, rect2.end.y))
+	if left_test: intersections.append(left_test)
+	if right_test: intersections.append(right_test)
+	if top_test: intersections.append(top_test)
+	if bottom_test: intersections.append(bottom_test)
+	if intersections.size() == 1:
+		return intersections[0]
+	return closest_point(from, intersections)
+
+func closest_point(origin: Vector2, targets: Array, closest_distance := 1000000.0) -> Vector2:
+	var closest = null
+	for target: Vector2 in targets:
+		var target_distance := origin.distance_to(target)
+		if target_distance < closest_distance:
+			closest_distance = target_distance
+			closest = target
+	if closest:
+		return closest
+	return origin
+	
 ### POSITIONS
 
 func nearest_position(parent: Node, position: Vector2) -> Vector2:
