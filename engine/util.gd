@@ -214,7 +214,7 @@ func thousands_sep(number, prefix:='') -> String:
 	var string := str(number)
 	var mod := string.length() % 3
 	var res := ""
-	for i in range(0, string.length()):
+	for i: int in range(0, string.length()):
 		if i != 0 && i % 3 == mod:
 			res += ","
 		res += string[i]
@@ -389,7 +389,7 @@ func load_config(_filename: String, split_commas:=true, convert_numbers:=true):
 						if value.find(',') >= 0:
 							var a = value.split(',')
 							var d = {}
-							for i in range(0,a.size()):
+							for i: int in range(0,a.size()):
 								var sub_value = a[i].strip_edges(true, true)
 								if convert_numbers: sub_value = util.convert_string_to_number(sub_value)
 								d[i] = sub_value
@@ -612,7 +612,7 @@ func screenshot(scene: Node, scale:=Vector2i.ZERO, logo:='', savedir:="screensho
 		viewport.transparent_bg = false
 
 	# scale after (note, doesn't upscale pixel-art nicely)
-	if scale:
+	if scale and scale != Vector2i(1,1):
 		img.resize(scale.x, scale.y, Image.INTERPOLATE_NEAREST)
 
 	# Flip it checked the y-axis (because it's flipped)
@@ -735,13 +735,13 @@ func open_browser(www_url: String) -> void:
 	return OS.shell_open(www_url)
 
 func delete_children(node: Node) -> void:
-	for n in node.get_children():
+	for n: Node in node.get_children():
 		node.remove_child(n)
 		n.queue_free()
 
 func get_all_children(node: Node) -> Array:
 	var nodes: Array = []
-	for c in node.get_children():
+	for c: Node in node.get_children():
 		if c.get_child_count() > 0:
 			nodes.append(c)
 			nodes.append_array(get_all_children(c))
@@ -751,14 +751,14 @@ func get_all_children(node: Node) -> Array:
 
 func get_children_in_group(container: Node, group: String) -> Array:
 	var nodes: Array = []
-	for n in container.get_children():
+	for n: Node in container.get_children():
 		if n.is_in_group(group):
 			nodes.append(n)
 	return nodes
 
 func count_children_in_group(container: Node, group: String) -> int:
 	var count := 0
-	for n in container.get_children():
+	for n: Node in container.get_children():
 		if n.is_in_group(group):
 			count += 1
 	return count

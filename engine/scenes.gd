@@ -176,4 +176,3 @@ func scene_or_menu(scene) -> String:
 	if find_scene_file(scene):
 		return 'scene'
 	return 'menu'
-

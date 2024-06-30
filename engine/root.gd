@@ -901,7 +901,7 @@ func transition_fade_out_stagger(fade_out_time:=0.2) -> void:
 	var fade_out_step_time = fade_out_time/float(fade_out_steps)
 	var transition = Transitions.get_node("Fader")
 	transition.visible = true
-	for i in range(fade_out_steps+1):
+	for i: int in range(fade_out_steps+1):
 		var a = i/float(fade_out_steps)
 		transition.modulate = Color(1, 1, 1, a)
 		var timer = util.wait(game.time(fade_out_step_time), self)
@@ -920,7 +920,7 @@ func transition_fade_in_stagger(fade_in_time:=0.3) -> void:
 	var transition = Transitions.get_node("Fader")
 	transition.visible = true
 	# fade back in from black to new scene
-	for i in range(fade_in_steps+1):
+	for i: int in range(fade_in_steps+1):
 		var a = 1-i/float(fade_in_steps)
 		transition.modulate = Color(1, 1, 1, a)
 		var timer = util.wait(game.time(fade_in_step_time), self)
@@ -1326,7 +1326,7 @@ func reset_time_scale() -> void:
 func command_line_start() -> void:
 	# store command line arguments
 	var commands := OS.get_cmdline_args()
-	for i in range(commands.size()):
+	for i: int in range(commands.size()):
 		var arg: String = commands[i]
 		#debug.print(i,'-',arg)
 		var split := arg.split('=')
