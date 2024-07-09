@@ -301,6 +301,10 @@ func if_dict(data: Dictionary, index: Variant) -> Dictionary:
 	if index in data: return data[index]
 	else: return {}
 
+func if_array(data: Dictionary, index: Variant) -> Array:
+	if index in data: return data[index]
+	else: return []
+
 func int_dict(data: Dictionary) -> Dictionary:
 	var int_data := {}
 	for loop in data:
