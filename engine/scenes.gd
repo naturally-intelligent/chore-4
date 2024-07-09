@@ -9,7 +9,7 @@ extends Node
 # use level() for easier way to launch persistent levels
 
 # tracking variables
-var search_dirs = []
+var search_dirs := []
 
 func _ready() -> void:
 	search_dirs = settings.scene_dirs
@@ -19,13 +19,13 @@ func _ready() -> void:
 ### USER FUNCTIONS - call these to use scene system
 
 func current_scene() -> Node:
-	var scene_count = root.scenes_root.get_child_count()
+	var scene_count: int = root.scenes_root.get_child_count()
 	if scene_count > 0:
 		return root.scenes_root.get_children()[scene_count-1]
 	return null
 
 func has_scene() -> bool:
-	var scene_count = root.scenes_root.get_child_count()
+	var scene_count: int = root.scenes_root.get_child_count()
 	if scene_count > 0:
 		return true
 	return false
@@ -56,7 +56,7 @@ func thaw(scene_name: String, transitions={}, info={}, scene_data=false) -> Vari
 		scene = retrieve_scene(scene_name)
 	else:
 		scene = find_scene_file(scene_name)
-	var infos = {}
+	var infos := {}
 	if info:
 		infos[info] = true
 	if util.is_not(scene):
@@ -73,7 +73,7 @@ func fresh(scene_name: String, transitions=false, info=false, scene_data=false) 
 	return thaw(scene_name, transitions, info, scene_data)
 
 func hard(scene_name: String, scene_data=false) -> Variant:
-	var transitions = {}
+	var transitions := {}
 	transitions['out'] = 'none'
 	transitions['middle'] = 'none'
 	transitions['in'] = 'none'
@@ -92,7 +92,7 @@ func reveal() -> bool:
 
 func remove_at(scene_name) -> void:
 	if has_in_memory(scene_name):
-		var scene = retrieve_scene(scene_name)
+		var scene := retrieve_scene(scene_name)
 		if scene_name:
 			scene.queue_free()
 			root.scenes_root.remove_child(scene)
@@ -116,8 +116,8 @@ func clear() -> void:
 func create_scene(scene_name: String) -> Node:
 	var scene_file_name := find_scene_file(scene_name)
 	if scene_file_name:
-		var tscn = load(scene_file_name)
-		var scene = tscn.instantiate()
+		var tscn := load(scene_file_name)
+		var scene: Node = tscn.instantiate()
 		scene.set_name(scene_name)
 		return scene
 	else:
@@ -127,10 +127,10 @@ func create_scene(scene_name: String) -> Node:
 func find_scene_file(scene_name: String) -> String:
 	# search in directories
 	for dir: String in search_dirs:
-		var file_name_tscn = 'res://' + dir + '/' + scene_name + ".tscn"
+		var file_name_tscn := 'res://' + dir + '/' + scene_name + ".tscn"
 		if util.file_exists(file_name_tscn):
 			return file_name_tscn
-		var file_name = 'res://' + dir + '/' + scene_name
+		var file_name := 'res://' + dir + '/' + scene_name
 		if util.file_exists(file_name):
 			return file_name
 	# search from root directory if allowed
@@ -160,7 +160,7 @@ func load_scene_file(scene_file: String) -> Resource:
 
 # find scene from stack and remove_at any scenes above it
 func retrieve_scene(scene_name: String) -> Node:
-	var found_scene = null
+	var found_scene: Node = null
 	for scene in root.scenes_root.get_children():
 		if scene.name == scene_name:
 			found_scene = scene
@@ -172,7 +172,7 @@ func has_in_memory(scene_name: String) -> bool:
 			return true
 	return false
 
-func scene_or_menu(scene) -> String:
+func scene_or_menu(scene: String) -> String:
 	if find_scene_file(scene):
 		return 'scene'
 	return 'menu'

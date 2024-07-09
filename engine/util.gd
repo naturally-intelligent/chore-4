@@ -137,7 +137,7 @@ func random_left_right_up_vector(left_right_scale:=1.0, up_scale:=1.0) -> Vector
 	return v.normalized()
 
 # dict is {} you want key from, exclude is array [] with keys you dont want again
-func random_key_excluding(dict: Dictionary, exclude: Array):
+func random_key_excluding(dict: Dictionary, exclude: Array) -> Variant:
 	var keysT := dict.keys()
 	var keys := Array()
 	for key in keysT:
@@ -247,8 +247,8 @@ func int_to_currency(i: int, pennies:=false) -> String:
 	if pennies:	cash_text += '.00'
 	return cash_text
 
-func trim_decimals(f: float, places: int):
-	return snapped(f, pow(0.1,places))
+func trim_decimals(f: float, places: int) -> float:
+	return snappedf(f, pow(0.1,places))
 
 func string_upper_first(id: String) -> String:
 	return id.substr(0,1).to_upper() + id.substr(1, id.length())
@@ -292,12 +292,12 @@ func first_upper_only(string: String) -> String:
 
 func calculate_total(data: Dictionary) -> void:
 	data['total'] = 0
-	for col in data:
+	for col: String in data:
 		if col != 'total':
 			var amount: int = data[col]
 			data['total'] += amount
 
-func if_dict(data: Dictionary, index) -> Dictionary:
+func if_dict(data: Dictionary, index: Variant) -> Dictionary:
 	if index in data: return data[index]
 	else: return {}
 
@@ -433,7 +433,7 @@ func save_config(_filename: String, config_data: Dictionary, header:={}, _conver
 				var value = section_data[key]
 				var tabs = 3 - key.length()/4
 				if tabs < 0: tabs = 0
-				var tabs_str = "\t".repeat(tabs)
+				var tabs_str := "\t".repeat(tabs)
 				file.store_string(str(key)+tabs_str+ " = "+str(value)+"\n")
 			file.store_string("\n")
 		file = null
@@ -450,7 +450,7 @@ func convert_string_to_number(value: String):
 
 func set_texture(sprite: Sprite2D, file: String) -> void:
 	if util.file_exists(file):
-		var tex = load(file)
+		var tex := load(file)
 		sprite.texture = tex
 	else:
 		debug.print('MISSING TEXTURE: ' + file)
@@ -578,7 +578,7 @@ func create_import_files_for_export(texture_dir: String) -> Resource:
 	var file_list := list_files_in_directory(texture_dir)
 	for file: String in file_list:
 		if file.ends_with(".import"):
-			var file_name = file.replace(".import", "")
+			var file_name := file.replace(".import", "")
 			return load(texture_dir + file_name)
 	return null
 	
@@ -624,7 +624,7 @@ func screenshot(scene: Node, scale:=Vector2i.ZERO, logo:='', savedir:="screensho
 	if logo:
 		if util.file_exists(logo):
 			var logo_tex := load(logo)
-			var logo_img = logo_tex.get_image()
+			var logo_img: Image = logo_tex.get_image()
 			var logo_rect := Rect2(0,0, settings.screenshot_size.x, settings.screenshot_size.y)
 			logo_img.convert(img.get_format())
 			img.blend_rect(logo_img, logo_rect, Vector2(0,0))
@@ -637,7 +637,7 @@ func screenshot(scene: Node, scale:=Vector2i.ZERO, logo:='', savedir:="screensho
 	var file_name: String = files[1]
 	debug.print('Saving '+file+'...')
 	img.save_png(file)
-	var dir_plus_file = append_separator(OS.get_user_data_dir()) + append_separator(savedir) + file_name
+	var dir_plus_file := append_separator(OS.get_user_data_dir()) + append_separator(savedir) + file_name
 	debug.print('PNG saved to:', dir_plus_file)
 	# restore cursor?
 	if show_cursor:
@@ -657,7 +657,7 @@ func auto_screenshot_dir(auto_prefix:="auto"):
 	util.ensure_dir(auto_dir)
 	return auto_dir
 
-func numbered_filename(dir="user://", file_prefix='', file_ext='.png') -> Array:
+func numbered_filename(dir:="user://", file_prefix:='', file_ext:='.png') -> Array:
 	if file_prefix == '':
 		file_prefix = ProjectSettings.get_setting('application/config/name').replace(' ','')
 	var count := 1
@@ -669,15 +669,15 @@ func numbered_filename(dir="user://", file_prefix='', file_ext='.png') -> Array:
 		file_dir = append_separator(dir) + file_name
 	return [file_dir, file_name]
 
-func ensure_dir(subdir: String, res="user://"):
-	var directory = DirAccess.open(res)
+func ensure_dir(subdir: String, res:="user://"):
+	var directory := DirAccess.open(res)
 	if not directory.dir_exists(subdir):
 		directory.make_dir(subdir)
 
 # https://godotengine.org/qa/5175/how-to-get-all-the-files-inside-a-folder
 # - sort_by = date
 # - sort_order = newest/oldest
-func list_files_in_directory(path: String, sort_by=false, sort_order=false) -> Array:
+func list_files_in_directory(path: String, sort_by:='', sort_order:='') -> Array:
 	var files := []
 	var sort := []
 	var dir := DirAccess.open(path)
@@ -702,12 +702,12 @@ func list_files_in_directory(path: String, sort_by=false, sort_order=false) -> A
 		if sort_order == 'newest':
 			sort.sort_custom(Callable(util.FirstElementGreatest,"sort"))
 			files = []
-			for data in sort:
+			for data: Array in sort:
 				files.append(data[0])
 		elif sort_order == 'oldest':
 			sort.sort_custom(Callable(util.FirstElementLeast,"sort"))
 			files = []
-			for data in sort:
+			for data: Array in sort:
 				files.append(data[0])
 
 	return files
@@ -779,12 +779,12 @@ func tilemap_closest_used_cell(map: TileMap, position: Vector2, direction: Vecto
 	var desired_cell := map.local_to_map(position)
 	if map.get_cell_source_id(0, desired_cell) == 0:#:TileMap.INVALID_CELL:
 		var closest_cell = null
-		var closest_distance = 1000000
+		var closest_distance := 1000000
 		for cell in map.get_used_cells(0):
-			var world_direction = position.direction_to(map.map_to_local(cell))
+			var world_direction := position.direction_to(map.map_to_local(cell))
 			if direction.x == 0 or sign(world_direction.x) == sign(direction.x):
 				# we don't need to call sqrt() on distance here, just use squared values
-				var distance = (desired_cell.x-cell.x)*(desired_cell.x-cell.x)+(desired_cell.y-cell.y)*(desired_cell.y-cell.y)
+				var distance := (desired_cell.x-cell.x)*(desired_cell.x-cell.x)+(desired_cell.y-cell.y)*(desired_cell.y-cell.y)
 				if distance < closest_distance:
 					closest_cell = cell
 					closest_distance = distance
@@ -859,7 +859,7 @@ func map_input_keys(config: Dictionary, allowed:=[]) -> void:
 		var ui_action: String = config[key_code]
 		var allow := (allowed.is_empty()) or ('all' in allowed) or (ui_action in allowed)
 		if allow:
-			var scan_code = keycode_to_scancode(key_code)
+			var scan_code := keycode_to_scancode(key_code)
 			#debug.print('Input Map Request: ', ui_action, key_code, scan_code)
 			if scan_code:
 				# Check if already mapped
@@ -900,7 +900,7 @@ func map_gamepad_input(config: Dictionary) -> void:
 		if device_section in config:
 			debug.print("Loading input map for GAMEPAD", str(device_id))
 			# Erase buttons
-			for button in config[device_section]:
+			for button: String in config[device_section]:
 				var ui_action: String = config[device_section][button]
 				var button_index := int(button.substr(9))
 				var input_events := InputMap.action_get_events(ui_action)
@@ -910,7 +910,7 @@ func map_gamepad_input(config: Dictionary) -> void:
 							debug.print("- Erasing Button:", ui_action, '<- button', str(input_event.button_index))
 							InputMap.action_erase_event(ui_action, input_event)
 			# Map buttons
-			for button in config[device_section]:
+			for button: String in config[device_section]:
 				var ui_action: String = config[device_section][button]
 				var button_index = int(button.substr(7)) # Ex: Button_3
 				debug.print("- Mapping Button: button", str(button_index), '-> to ->', ui_action)

@@ -162,7 +162,7 @@ func target_ahead_camera(delta: float):
 	# final move camera
 	float_camera_position = lerp(float_camera_position, target.global_position + target_point, camera_speed)
 
-func force_position(_position):
+func force_position(_position: Vector2):
 	_position = round(_position)
 	global_position = _position
 	target_point = _position

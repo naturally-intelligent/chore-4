@@ -8,10 +8,10 @@ extends Node
 # echo to console (print)
 var echo: bool = true
 # log file
-var log_file_name = false
+var log_file_name := ''
 # hook to print to your own widget
 var callback_object: WeakRef = null
-var print_callback = false
+var print_callback := ''
 # debug.cat
 var categories := {}
 var echo_all_categories := false
@@ -47,7 +47,7 @@ func open_log() -> void:
 		log_file.close()
 	else:
 		print('ERROR: Cannot open log for writing!')
-		log_file_name = false
+		log_file_name = ''
 
 func print(s1, s2='',s3='',s4='',s5='',s6='',s7='',s8='',s9='',s10='',s11='',s12='',s13='',s14='') -> void:
 	if echo or log_file_name:
@@ -153,7 +153,7 @@ func append_log(s: String) -> void:
 			log_file.close()
 		else:
 			print('ERROR: Cannot write to log file! Aborting log.')
-			log_file_name = false
+			log_file_name = ''
 
 # built-in console (not very good)
 func console(s1, s2='',s3='',s4='',s5='',s6='',s7='',s8='',s9='',s10='',s11='',s12='',s13='',s14='') -> void:

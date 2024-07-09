@@ -1,23 +1,23 @@
 extends TouchScreenButton
 
-@export var diagonal = true
+@export var diagonal := true
 
-var outer_boundary = 128
-var inner_boundary = 8
-var touch_idx = -1
-var direction = Vector2.RIGHT
-var active = false
-var instant_direction = false
-var instant_threshold = 1
-var last_position = Vector2.ZERO
+var outer_boundary := 128
+var inner_boundary := 8
+var touch_idx := -1
+var direction := Vector2.RIGHT
+var active := false
+var instant_direction := false
+var instant_threshold := 1
+var last_position := Vector2.ZERO
 
-var up = false
-var down = false
-var left = false
-var right = false
+var up := false
+var down := false
+var left := false
+var right := false
 
-var last_degrees = -1
-var wiggle = 23
+var last_degrees := -1
+var wiggle := 23
 
 # sprite sprite_frames
 const eight_directions = {
@@ -46,7 +46,7 @@ func _ready():
 	else:
 		sprite_frames = four_directions
 
-func _process(_delta):
+func _process(_delta: float):
 	if active:
 		press_events()
 
@@ -62,8 +62,8 @@ func _input(event: InputEvent):
 
 	if event is InputEventScreenDrag \
 	or (event is InputEventScreenTouch and event.is_pressed()):
-		var valid_touch = false
-		var new_touch = false
+		var valid_touch := false
+		var new_touch := false
 
 		if touch_idx == -1:
 			touch_idx = event.get_index()
@@ -73,10 +73,10 @@ func _input(event: InputEvent):
 			valid_touch = true
 
 		if valid_touch:
-			var new_position = event.position
-			var vector = new_position - $Sprite2D.global_position
-			var distance = vector.length()
-			var dpad_normal = vector.normalized()
+			var new_position: Vector2 = event.position
+			var vector: Vector2 = new_position - $Sprite2D.global_position
+			var distance := vector.length()
+			var dpad_normal := vector.normalized()
 			if new_touch:
 				last_position = event.position
 			if new_touch and distance > outer_boundary:
@@ -84,8 +84,8 @@ func _input(event: InputEvent):
 				touch_idx = -1
 				return
 			if not new_touch and instant_direction:
-				var instant_vector = new_position - last_position
-				var instant_distance = instant_vector.length()
+				var instant_vector := new_position - last_position
+				var instant_distance := instant_vector.length()
 				if instant_distance > instant_threshold:
 					direction = instant_vector.normalized()
 					active = true
@@ -105,9 +105,8 @@ func reset_dpad():
 	last_degrees = -1
 
 func update_dpad(vector):
-	var deg360 = math.normal_to_360_degrees(vector)
-	var degrees
-	degrees = math.normal_to_45(vector)
+	var deg360 := math.normal_to_360_degrees(vector)
+	var degrees := math.normal_to_45(vector)
 	if not diagonal:
 		#degrees = math.normal_to_90(vector)
 		# right diagonals into right
