@@ -67,7 +67,7 @@ func load_scene_file(filename):
 		# beats
 		var beat_count = 0
 		scene['beats'] = []
-		for i in range(2,section.size()+1):
+		for i: int in range(2,section.size()+1):
 			var line = section[i]
 			var data = line.split(',', true, 3)
 			if data.size()>=4:

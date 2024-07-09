@@ -31,7 +31,7 @@ class_name CameraTrigger
 
 signal triggered()
 
-func on_camera_target_entered(body):
+func on_camera_target_entered(body: Node):
 	emit_signal("triggered")
 	if disappears_after:
 		queue_free()

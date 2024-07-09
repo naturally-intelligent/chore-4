@@ -25,14 +25,14 @@ func _ready():
 # call this from another object such as your game object
 # - this way you can control if logs are created or not since debug is first autoload
 func open_log() -> void:
-	var logs_subdir = "logs"
-	var dir = "user://" + logs_subdir
+	var logs_subdir := "logs"
+	var dir := "user://" + logs_subdir
 	util.ensure_dir(logs_subdir, "user://")
 
-	var project_name = ProjectSettings.get_setting('application/config/name')
-	var count = 1
-	var file = project_name + "-Gameplay-%04d.txt" % count
-	var file_dir = dir + '/' + file
+	var project_name: String = ProjectSettings.get_setting('application/config/name')
+	var count := 1
+	var file := project_name + "-Gameplay-%04d.txt" % count
+	var file_dir := dir + '/' + file
 	while(util.file_exists(file_dir)):
 		count = count + 1
 		file = project_name + "-Gameplay-%04d.txt" % count
@@ -41,7 +41,7 @@ func open_log() -> void:
 	log_file_name = file_dir
 	print('Log Location: ', OS.get_user_data_dir())
 	print('Debug log: ', log_file_name)
-	var log_file = FileAccess.open(log_file_name, FileAccess.WRITE)
+	var log_file := FileAccess.open(log_file_name, FileAccess.WRITE)
 	if log_file:
 		log_file.store_line("Log started: "+log_file_name)
 		log_file.close()
@@ -77,18 +77,19 @@ func set_callback(object: Object, method: String) -> void:
 func dict(d: Dictionary, title:='') -> void:
 	if title:
 		print('Dict: '+title)
-	for key in d:
-		var value = d[key]
+	for key: String in d:
+		var value: Variant = d[key]
 		print(str(key)+' = '+str(value))
 
 # print an array
-func array(a, title:='') -> void:
+func array(a: Variant, title:='') -> void:
 	if title:
 		print('Array: '+title)
 	if a is Array:
-		var count = 0
+		var count := 0
 		for value in a:
 			print(str(count)+' = '+str(value))
+			count += 1
 	elif a is Dictionary:
 		dict(a)
 

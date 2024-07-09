@@ -430,7 +430,7 @@ func auto_remove_bubbles():
 func remove_max_bubbles(limit):
 	if auto_remove_timers.size() > limit:
 		var removes = auto_remove_timers.size() - limit
-		for i in range(0,removes):
+		for i: int in range(0,removes):
 			var top = 10000
 			var top_bubble = false
 			for name_id in auto_remove_timers:

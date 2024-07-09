@@ -40,19 +40,19 @@ func input_detection() -> void:
 
 # SORT CLASSES
 class FirstElementGreatest:
-	static func sort(a, b) -> bool:
+	static func sort(a: Array, b: Array) -> bool:
 		if a[0] > b[0]:
 			return true
 		return false
 
 class FirstElementLeast:
-	static func sort(a, b) -> bool:
+	static func sort(a: Array, b: Array) -> bool:
 		if a[0] < b[0]:
 			return true
 		return false
 
 class SecondElementGreatest:
-	static func sort(a, b) -> bool:
+	static func sort(a: Array, b: Array) -> bool:
 		if a[1] > b[1]:
 			return true
 		return false
@@ -67,7 +67,7 @@ func fullscreen_flip() -> void:
 	else:
 		get_window().mode = Window.MODE_EXCLUSIVE_FULLSCREEN if (true) else Window.MODE_WINDOWED
 
-func random(_s, _e):
+func random(_s: Variant, _e: Variant):
 	if typeof(_s) == TYPE_INT:
 		return math.random_int(_s, _e)
 	else:
@@ -76,40 +76,39 @@ func random(_s, _e):
 func random_boolean() -> bool:
 	return ((randi()%2) == 0)
 
-func random_array(a):
+func random_array(a: Array) -> Variant:
 	if a.size() > 0:
-		var i = math.random_int(0,a.size()-1)
+		var i := math.random_int(0,a.size()-1)
 		return a[i]
 	return null
 
-func random_array_index(a) -> int:
+func random_array_index(a: Array) -> int:
 	if a.size() > 0:
-		var i = math.random_int(0,a.size()-1)
+		var i := math.random_int(0,a.size()-1)
 		return i
 	return -1
 
 func random_child(n: Node) -> Node:
-	var i = math.random_int(0, n.get_child_count()-1)
+	var i := math.random_int(0, n.get_child_count()-1)
 	return n.get_child(i)
 
-func random_set(_s):
+func random_set(_s: Array) -> Variant:
 	return random_array(_s)
 
-func random_key(dict: Dictionary):
+func random_key(dict: Dictionary) -> Variant:
 	var keys := dict.keys()
 	if keys.size() > 0:
-		var i = randi() % keys.size()
-		var key = keys[i]
-		return key
+		var i := randi() % keys.size()
+		return keys[i]
 	else:
 		return null
 
-func random_value(dict: Dictionary):
+func random_value(dict: Dictionary) -> Variant:
 	var key = random_key(dict)
 	if key: return dict[key]
 	return false
 
-func random_integer_key(dict: Dictionary):
+func random_integer_key(dict: Dictionary) -> int:
 	var keysT := dict.keys()
 	var keys := Array()
 	for key in keysT:
@@ -117,17 +116,17 @@ func random_integer_key(dict: Dictionary):
 			keys.append(key)
 	if keys.size() > 0:
 		var i := randi() % keys.size()
-		var key = keys[i]
+		var key: int = keys[i]
 		return key
 	else:
-		return null
+		return -1
 
 func random_vector() -> Vector2:
-	var angle = math.random_float(0,PI)
+	var angle := math.random_float(0,PI)
 	return Vector2(cos(angle), sin(angle))
 
 func random_direction(excluding:=[]) -> Vector2:
-	var dirs = [Vector2.UP, Vector2.DOWN, Vector2.LEFT, Vector2.RIGHT]
+	var dirs := [Vector2.UP, Vector2.DOWN, Vector2.LEFT, Vector2.RIGHT]
 	return random_array_excluding(dirs, excluding)
 
 func random_left_right_up_vector(left_right_scale:=1.0, up_scale:=1.0) -> Vector2:
@@ -151,7 +150,7 @@ func random_key_excluding(dict: Dictionary, exclude: Array):
 	else:
 		return null
 
-func random_value_excluding(dict: Dictionary, exclude:=[]):
+func random_value_excluding(dict: Dictionary, exclude:=[]) -> Variant:
 	var keysT := dict.keys()
 	var keys := Array()
 	for key in keysT:
@@ -164,15 +163,14 @@ func random_value_excluding(dict: Dictionary, exclude:=[]):
 	else:
 		return null
 
-func random_array_excluding(array: Array, exclude: Array):
+func random_array_excluding(array: Array, exclude: Array) -> Variant:
 	var pool := Array()
 	for a in array:
 		if not a in exclude:
 			pool.append(a)
 	if pool.size() > 0:
 		var i := randi() % pool.size()
-		var v = pool[i]
-		return v
+		return pool[i]
 	else:
 		return null
 
@@ -182,7 +180,7 @@ func random_sign() -> int:
 	else:
 		return -1
 
-func random_color(modifier) -> Color:
+func random_color(modifier: float) -> Color:
 	return Color(math.random_float(0,1)*modifier,
 				math.random_float(0,1)*modifier,
 				math.random_float(0,1)*modifier, 1)
@@ -196,7 +194,7 @@ func randomize_color(color: Color, modifier: float) -> Color:
 	color.b = clamp(color.b, 0, 1)
 	return color
 
-func random_colors(one: Color, two: Color):
+func random_colors(one: Color, two: Color) -> Color:
 	return Color(math.randomf(one.r,two.r), math.randomf(one.g,two.g), math.randomf(one.b,two.b), 1)
 
 func rgb100_to_color(r: float, g: float, b: float) -> Color:
@@ -205,7 +203,7 @@ func rgb100_to_color(r: float, g: float, b: float) -> Color:
 func rgb256_to_color(r: float, g: float, b: float,a:=1.0) -> Color:
 	return Color(r/256.0, g/256.0, b/256.0, a)
 
-func thousands_sep(number, prefix:='') -> String:
+func thousands_sep(number: Variant, prefix:='') -> String:
 	number = int(number)
 	var neg := false
 	if number < 0:
@@ -222,7 +220,7 @@ func thousands_sep(number, prefix:='') -> String:
 	else: res = prefix+res
 	return res
 
-func percent_string(decimal_number, multiply_by:=100) -> String:
+func percent_string(decimal_number: Variant, multiply_by:=100) -> String:
 	return str(int(float(decimal_number)*multiply_by)) + '%'
 
 func file_exists(file: String) -> bool:
@@ -233,19 +231,19 @@ func file_exists(file: String) -> bool:
 	return false
 
 func dir_exists(space: String, dir: String) -> bool:
-	var base = DirAccess.open(space) # ex: res:// or user://
+	var base := DirAccess.open(space) # ex: res:// or user://
 	if base and base.dir_exists(dir):
 		return true
 	return false
 
 func delete_file(space: String, dir: String) -> bool:
-	var base = DirAccess.open(space) # ex: res:// or user://
+	var base := DirAccess.open(space) # ex: res:// or user://
 	if base and base.remove(dir):
 		return true
 	return false
 
 func int_to_currency(i: int, pennies:=false) -> String:
-	var cash_text = util.thousands_sep(str(i), '$')
+	var cash_text := util.thousands_sep(str(i), '$')
 	if pennies:	cash_text += '.00'
 	return cash_text
 
@@ -262,15 +260,15 @@ func upper_first_letter(id: String) -> String:
 	return id.substr(0,1).to_upper()
 
 func a_an(word: String):
-	var first = word.substr(0,1).to_upper()
-	var vowels = ['a','e','i','o','u']
+	var first := word.substr(0,1).to_upper()
+	var vowels := ['a','e','i','o','u']
 	if first in vowels:
 		return 'an'
 	else:
 		return 'a'
 
-func name_full(object) -> void:
-	var full = ''
+func name_full(object: Dictionary) -> void:
+	var full := ''
 	if 'prefix' in object:
 		full = object['prefix'] + ' '
 	full+= object['first'] + ' '
@@ -280,7 +278,7 @@ func name_full(object) -> void:
 		full+= object['last']
 	object['full'] = full
 
-func name_fills(object) -> void:
+func name_fills(object: Dictionary) -> void:
 	name_full(object)
 	object['first_upper'] = object['first'].to_upper()
 	if 'last' in object:
@@ -296,7 +294,7 @@ func calculate_total(data: Dictionary) -> void:
 	data['total'] = 0
 	for col in data:
 		if col != 'total':
-			var amount = data[col]
+			var amount: int = data[col]
 			data['total'] += amount
 
 func if_dict(data: Dictionary, index) -> Dictionary:
@@ -350,7 +348,7 @@ func random_phone_number() -> String:
 # keys = values
 # keys = array # if split_commas and comma detected
 # values converted to ints/floats if convert_numbers, otherwise strings
-func load_config(_filename: String, split_commas:=true, convert_numbers:=true):
+func load_config(_filename: String, split_commas:=true, convert_numbers:=true) -> Dictionary:
 	var path := _filename
 	var file := FileAccess.open(path, FileAccess.READ)
 	var records := {}
@@ -362,7 +360,7 @@ func load_config(_filename: String, split_commas:=true, convert_numbers:=true):
 	if file:
 		while !file.eof_reached():
 			# read a line
-			var line = file.get_line()
+			var line := file.get_line()
 			# comments (strip edges checked left?)
 			if line.find('#')==0:
 				pass
@@ -372,8 +370,8 @@ func load_config(_filename: String, split_commas:=true, convert_numbers:=true):
 				if new_record and not added_record:
 					records[title] = record
 				# start new record
-				var start = line.find('[')+1
-				var end = line.find(']') - start
+				var start := line.find('[')+1
+				var end := line.find(']') - start
 				title = line.substr(start, end)
 				record = {}
 				new_record = true
@@ -381,14 +379,14 @@ func load_config(_filename: String, split_commas:=true, convert_numbers:=true):
 				line_count = 0
 			# add key=value line pairs to record
 			elif line.find('=') >= 0:
-				var data = line.split('=')
+				var data := line.split('=')
 				if len(data) == 2:
-					var key = data[0].strip_edges(true, true)
+					var key := data[0].strip_edges(true, true)
 					var value = data[1].strip_edges(true, true)
 					if split_commas:
 						if value.find(',') >= 0:
-							var a = value.split(',')
-							var d = {}
+							var a := value.split(',')
+							var d := {}
 							for i: int in range(0,a.size()):
 								var sub_value = a[i].strip_edges(true, true)
 								if convert_numbers: sub_value = util.convert_string_to_number(sub_value)
@@ -505,11 +503,11 @@ func str_no_zero(i: int) -> String:
 	else:
 		return str(i)
 
-func index_in_list(current, list : Array):
+func index_in_list(current: Variant, list : Array) -> int:
 	return list.find(current)
 
-func next_in_list(current, list : Array):
-	var index = list.find(current, 0)
+func next_in_list(current: Variant, list : Array) -> Variant:
+	var index := list.find(current, 0)
 	if index >= 0:
 		index = index + 1
 		if index >= list.size():
@@ -517,8 +515,8 @@ func next_in_list(current, list : Array):
 		return list[index]
 	return current
 
-func prev_in_list(current, list : Array):
-	var index = list.find(current, 0)
+func prev_in_list(current: Variant, list : Array) -> Variant:
+	var index := list.find(current, 0)
 	if index >= 0:
 		index = index - 1
 		if index < 0:
@@ -541,7 +539,7 @@ func array_has_pattern(check: Array, find: Array) -> bool:
 
 # must call yield checked t after return
 # because gdscript wont wait for a yield in an outside function call
-func wait(time: float, parent=null) -> Timer:
+func wait(time: float, parent:Node=null) -> Timer:
 	var t := Timer.new()
 	t.set_wait_time(time)
 	t.set_one_shot(true)
@@ -576,13 +574,14 @@ func time_to_string(time: float, show_milliseconds := false) -> String:
 	return text
 		
 # https://github.com/godotengine/godot/issues/14562
-func create_import_files_for_export(texture_dir):
-	var file_list = list_files_in_directory(texture_dir)
-	for file in file_list:
+func create_import_files_for_export(texture_dir: String) -> Resource:
+	var file_list := list_files_in_directory(texture_dir)
+	for file: String in file_list:
 		if file.ends_with(".import"):
 			var file_name = file.replace(".import", "")
 			return load(texture_dir + file_name)
-
+	return null
+	
 # SCREENSHOT (F5)
 func screenshot(scene: Node, scale:=Vector2i.ZERO, logo:='', savedir:="screenshots"):
 	debug.print('Screenshot...')
@@ -594,7 +593,7 @@ func screenshot(scene: Node, scale:=Vector2i.ZERO, logo:='', savedir:="screensho
 	RenderingServer.viewport_set_clear_mode(viewport, RenderingServer.VIEWPORT_CLEAR_ONLY_NEXT_FRAME)
 
 	# hide cursor?
-	var show_cursor = root.is_cursor_visible()
+	var show_cursor: bool = root.is_cursor_visible()
 	if show_cursor:
 		root.hide_cursor()
 
@@ -624,18 +623,18 @@ func screenshot(scene: Node, scale:=Vector2i.ZERO, logo:='', savedir:="screensho
 	# optional logo (filename like "res://art/logo.png")
 	if logo:
 		if util.file_exists(logo):
-			var logo_tex = load(logo)
+			var logo_tex := load(logo)
 			var logo_img = logo_tex.get_image()
-			var logo_rect = Rect2(0,0, settings.screenshot_size.x, settings.screenshot_size.y)
+			var logo_rect := Rect2(0,0, settings.screenshot_size.x, settings.screenshot_size.y)
 			logo_img.convert(img.get_format())
 			img.blend_rect(logo_img, logo_rect, Vector2(0,0))
 
 	# Linux: ~/.local/share/godot/app_userdata/project_name
 	util.ensure_dir(savedir, "user://")
-	var dir = "user://" + savedir
-	var files = numbered_filename(dir)
-	var file = files[0]
-	var file_name = files[1]
+	var dir := "user://" + savedir
+	var files := numbered_filename(dir)
+	var file: String = files[0]
+	var file_name: String = files[1]
 	debug.print('Saving '+file+'...')
 	img.save_png(file)
 	var dir_plus_file = append_separator(OS.get_user_data_dir()) + append_separator(savedir) + file_name
@@ -644,12 +643,12 @@ func screenshot(scene: Node, scale:=Vector2i.ZERO, logo:='', savedir:="screensho
 	if show_cursor:
 		root.show_cursor()
 
-func auto_screenshot_dir(auto_prefix="auto"):
+func auto_screenshot_dir(auto_prefix:="auto"):
 	# create a new subdirectory for autoscreenshots (or they spiral out of control)
-	var screenshots_dir = "screenshots"
-	var directory = DirAccess.open("user://")
-	var auto_dir_num = 1
-	var auto_dir = screenshots_dir + "/" + auto_prefix + str(auto_dir_num)
+	var screenshots_dir := "screenshots"
+	var directory := DirAccess.open("user://")
+	var auto_dir_num := 1
+	var auto_dir := screenshots_dir + "/" + auto_prefix + str(auto_dir_num)
 	while directory.dir_exists(auto_dir):
 		auto_dir_num += 1
 		auto_dir = screenshots_dir + "/" + auto_prefix + str(auto_dir_num)
@@ -658,19 +657,19 @@ func auto_screenshot_dir(auto_prefix="auto"):
 	util.ensure_dir(auto_dir)
 	return auto_dir
 
-func numbered_filename(dir="user://", file_prefix='', file_ext='.png'):
+func numbered_filename(dir="user://", file_prefix='', file_ext='.png') -> Array:
 	if file_prefix == '':
 		file_prefix = ProjectSettings.get_setting('application/config/name').replace(' ','')
-	var count = 1
-	var file_name = file_prefix + "-%03d" % count + file_ext
-	var file_dir = append_separator(dir) + file_name
+	var count := 1
+	var file_name: String = file_prefix + "-%03d" % count + file_ext
+	var file_dir := append_separator(dir) + file_name
 	while(file_exists(file_dir)):
 		count = count + 1
 		file_name = file_prefix + "-%03d" % count + file_ext
 		file_dir = append_separator(dir) + file_name
 	return [file_dir, file_name]
 
-func ensure_dir(subdir, res="user://"):
+func ensure_dir(subdir: String, res="user://"):
 	var directory = DirAccess.open(res)
 	if not directory.dir_exists(subdir):
 		directory.make_dir(subdir)
@@ -685,7 +684,7 @@ func list_files_in_directory(path: String, sort_by=false, sort_order=false) -> A
 	dir.list_dir_begin() # TODOGODOT4 fill missing arguments https://github.com/godotengine/godot/pull/40547
 
 	while true:
-		var file = dir.get_next()
+		var file := dir.get_next()
 		if file == "":
 			break
 		elif not file.begins_with("."):
@@ -731,7 +730,7 @@ func strip_bbcode(text: String) -> String:
 	regex.compile('|[[\\/\\!]*?[^\\[\\]]*?]|')
 	return regex.sub(text, '', true)
 
-func open_browser(www_url: String) -> void:
+func open_browser(www_url: String) -> Error:
 	return OS.shell_open(www_url)
 
 func delete_children(node: Node) -> void:
@@ -779,7 +778,7 @@ func opposite_direction(direction: String) -> String:
 func tilemap_closest_used_cell(map: TileMap, position: Vector2, direction: Vector2 = Vector2.ZERO) -> Vector2i:
 	var desired_cell := map.local_to_map(position)
 	if map.get_cell_source_id(0, desired_cell) == 0:#:TileMap.INVALID_CELL:
-		var closest_cell = false
+		var closest_cell = null
 		var closest_distance = 1000000
 		for cell in map.get_used_cells(0):
 			var world_direction = position.direction_to(map.map_to_local(cell))
@@ -822,7 +821,7 @@ func string_to_bool(_s: String) -> bool:
 	else:
 		return false
 
-func vector_to_string(vector) -> String:
+func vector_to_string(vector: Vector2) -> String:
 	return "x="+str(trim_decimals(vector.x, 1))+" y="+str(trim_decimals(vector.y, 1))
 
 func keycode_to_scancode(key_code: String) -> Key:
@@ -856,16 +855,16 @@ func map_input_keys(config: Dictionary, allowed:=[]) -> void:
 	var to_map := []
 	var cleared := []
 	# Check for validity of input maps, and erase any existing conflicts
-	for key_code in config:
-		var ui_action = config[key_code]
-		var allow = (allowed.is_empty()) or ('all' in allowed) or (ui_action in allowed)
+	for key_code: String in config:
+		var ui_action: String = config[key_code]
+		var allow := (allowed.is_empty()) or ('all' in allowed) or (ui_action in allowed)
 		if allow:
 			var scan_code = keycode_to_scancode(key_code)
 			#debug.print('Input Map Request: ', ui_action, key_code, scan_code)
 			if scan_code:
 				# Check if already mapped
-				var _duplicate = false
-				var input_events = InputMap.action_get_events(ui_action)
+				var _duplicate := false
+				var input_events := InputMap.action_get_events(ui_action)
 				for input_event in input_events:
 					if input_event is InputEventKey:
 						if scan_code == input_event.scancode:
@@ -878,13 +877,13 @@ func map_input_keys(config: Dictionary, allowed:=[]) -> void:
 							InputMap.action_erase_event(ui_action, input_event)
 					to_map.append(ui_action)
 	# Now assign keys (this allows multiple keys per action)
-	for key_code in config:
-		var ui_action = config[key_code]
+	for key_code: String in config:
+		var ui_action: String = config[key_code]
 		if ui_action in to_map:
 			debug.print('Input Map:', key_code, '-> to ->', ui_action)
-			var scan_code = keycode_to_scancode(key_code)
+			var scan_code := keycode_to_scancode(key_code)
 			if scan_code:
-				var new_event = InputEventKey.new()
+				var new_event := InputEventKey.new()
 				new_event.set_keycode(scan_code)
 				InputMap.action_add_event(ui_action, new_event)
 
@@ -897,14 +896,14 @@ func map_input_keys(config: Dictionary, allowed:=[]) -> void:
 # Button_3=ui_flashlight
 func map_gamepad_input(config: Dictionary) -> void:
 	for device_id in range(0,8+1):
-		var device_section = 'GAMEPAD_'+str(device_id)
+		var device_section := 'GAMEPAD_'+str(device_id)
 		if device_section in config:
 			debug.print("Loading input map for GAMEPAD", str(device_id))
 			# Erase buttons
 			for button in config[device_section]:
-				var ui_action = config[device_section][button]
-				var button_index = int(button.substr(9))
-				var input_events = InputMap.action_get_events(ui_action)
+				var ui_action: String = config[device_section][button]
+				var button_index := int(button.substr(9))
+				var input_events := InputMap.action_get_events(ui_action)
 				for input_event in input_events:
 					if input_event is InputEventJoypadButton:
 						if input_event.device == device_id:
@@ -912,23 +911,23 @@ func map_gamepad_input(config: Dictionary) -> void:
 							InputMap.action_erase_event(ui_action, input_event)
 			# Map buttons
 			for button in config[device_section]:
-				var ui_action = config[device_section][button]
+				var ui_action: String = config[device_section][button]
 				var button_index = int(button.substr(7)) # Ex: Button_3
 				debug.print("- Mapping Button: button", str(button_index), '-> to ->', ui_action)
-				var new_event = InputEventJoypadButton.new()
+				var new_event := InputEventJoypadButton.new()
 				new_event.device = device_id
 				new_event.set_button_index(button_index)
 				InputMap.action_add_event(ui_action, new_event)
 		else:
 			return
 
-func find_theme(control: Node):
-	var theme = null
+func find_theme(control: Node) -> Theme:
+	var theme: Theme = null
 	while control != null && "theme" in control:
 		theme = control.theme
 		if theme != null: break
 		control = control.get_parent()
 	return theme
 
-func is_not(variable) -> bool:
+func is_not(variable: Variant) -> bool:
 	return variable == null

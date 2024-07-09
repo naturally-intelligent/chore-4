@@ -104,12 +104,12 @@ func _process(delta: float):
 		global_position = float_camera_position
 
 # TARGET
-func set_target(_target):
+func set_target(_target: Node2D):
 	if target != _target:
 		target_ref = weakref(_target)
 		target = _target
 
-func target_ahead_camera(delta):
+func target_ahead_camera(delta: float):
 	# find direction based on target
 	var current_direction: Vector2
 	current_direction.x = sign(target.direction.x)
@@ -119,7 +119,7 @@ func target_ahead_camera(delta):
 	if current_direction.y == 0:
 		current_direction.y = last_camera_direction.y
 	# switch direction?
-	var direction_changed = false
+	var direction_changed := false
 	if current_direction.x != last_camera_direction.x \
 	or (target_ahead_y and current_direction.y != last_camera_direction.y):
 		if last_camera_direction.x != 0:
@@ -133,7 +133,7 @@ func target_ahead_camera(delta):
 		return
 	# anchored?
 	if target_anchored:
-		var anchor_distance_x = abs(target.global_position.x - target_anchor_position.x)
+		var anchor_distance_x: float = absf(target.global_position.x - target_anchor_position.x)
 		if anchor_distance_x <= TARGET_IGNORE_PIXELS:
 			return
 		target_anchored = false
@@ -150,11 +150,11 @@ func target_ahead_camera(delta):
 			if target_point.x < -target_behind_pixels:
 				target_point.x = -target_behind_pixels
 	# move towards goal
-	var camera_speed = TARGET_CATCHUP_LERP_SPEED * delta
+	var camera_speed := TARGET_CATCHUP_LERP_SPEED * delta
 	# account for fast-moving target?
 	if target_velocity_account:
 		if target.has_method("get_real_velocity"):
-			var real_velocity = target.get_real_velocity()
+			var real_velocity: Vector2 = target.get_real_velocity()
 			if real_velocity.length() > target_velocity_threshold:
 				camera_speed = lerp(camera_speed, 1.0, 0.1)
 	# clamp final speed
@@ -173,8 +173,7 @@ func setup_camera_triggers():
 	if camera_trigger_areas:
 		trigger_areas = get_node(camera_trigger_areas)
 		# connect triggers
-		for trigger in trigger_areas.get_children():
-			var camera_trigger: CameraTrigger = trigger
+		for camera_trigger: CameraTrigger in trigger_areas.get_children():
 			camera_trigger.connect("triggered", Callable(self, "on_camera_trigger").bind(camera_trigger))
 		trigger_areas.visible = false
 
@@ -196,15 +195,15 @@ func enter_trigger_area(trigger_area: CameraTrigger):
 		if trigger_tween:
 			trigger_tween.kill()
 		trigger_tween = create_tween()
-		var trans_type = Tween.TRANS_CUBIC
-		var ease_type = Tween.EASE_IN
+		var trans_type := Tween.TRANS_CUBIC
+		var ease_type := Tween.EASE_IN
 		trigger_tween.set_trans(trans_type)
 		trigger_tween.set_ease(ease_type)
 		trigger_tween.set_parallel()
 	# y limits
 	if trigger_area.new_y_limits:
 		# tween
-		var time = 1.0
+		var time := 1.0
 		# set these limits to what is current, so that animation to new limits is smoother
 		limit_top = camera_edge_top_y()
 		limit_bottom = camera_edge_bottom_y()
@@ -220,7 +219,7 @@ func enter_trigger_area(trigger_area: CameraTrigger):
 		initial_camera_right_limit = trigger_area.limit_x_right
 		limit_left = camera_edge_left_x()
 		limit_right = camera_edge_right_x()
-		var time = abs(initial_camera_left_limit - trigger_area.limit_x_left) + abs(initial_camera_right_limit - trigger_area.limit_x_right)
+		var time: float = abs(initial_camera_left_limit - trigger_area.limit_x_left) + abs(initial_camera_right_limit - trigger_area.limit_x_right)
 		time *= 0.01
 		if time < 1.0: time = 1.0
 		trigger_tween.tween_property(self, "limit_left", trigger_area.limit_x_left, time)
@@ -241,12 +240,12 @@ func enter_trigger_area(trigger_area: CameraTrigger):
 	last_trigger_area = trigger_area.name
 	call_deferred("check_empty_triggers")
 
-func tween_change_camera_limits_x(new_limit_left, new_limit_right, time=1.5):
+func tween_change_camera_limits_x(new_limit_left: int, new_limit_right: int, time:=1.5):
 	if trigger_tween:
 		trigger_tween.kill()
 	trigger_tween = create_tween()
-	var trans_type = Tween.TRANS_CUBIC
-	var ease_type = Tween.EASE_OUT
+	var trans_type := Tween.TRANS_CUBIC
+	var ease_type := Tween.EASE_OUT
 	limit_left = camera_edge_left_x()
 	limit_right = camera_edge_right_x()
 	trigger_tween.set_trans(trans_type)
@@ -255,12 +254,12 @@ func tween_change_camera_limits_x(new_limit_left, new_limit_right, time=1.5):
 	trigger_tween.tween_property(self, "limit_left", new_limit_left, time)
 	trigger_tween.tween_property(self, "limit_right", new_limit_right, time)
 
-func tween_change_camera_limits(new_limit_left, new_limit_right, new_limit_top, new_limit_bottom, time=1.5):
+func tween_change_camera_limits(new_limit_left: int, new_limit_right: int, new_limit_top: int, new_limit_bottom: int, time:=1.5):
 	if trigger_tween:
 		trigger_tween.kill()
 	trigger_tween = create_tween()
-	var trans_type = Tween.TRANS_CUBIC
-	var ease_type = Tween.EASE_OUT
+	var trans_type := Tween.TRANS_CUBIC
+	var ease_type := Tween.EASE_OUT
 	limit_left = camera_edge_left_x()
 	limit_right = camera_edge_right_x()
 	limit_bottom = camera_edge_bottom_y()
@@ -283,9 +282,9 @@ func stop_shaking():
 	shake_vector = Vector2.ZERO
 	offset = Vector2.ZERO
 
-func _shake_camera(delta):
+func _shake_camera(delta: float):
 	# quake
-	var continue_shaking = false
+	var continue_shaking := false
 	if quake:
 		if quake > 0:
 			quake = max(quake - quake_decay * delta, 0)
@@ -301,10 +300,10 @@ func _shake_camera(delta):
 	if not continue_shaking:
 		stop_shaking()
 
-func _do_shake(_shake, _shake_power):
+func _do_shake(_shake: float, _shake_power: float):
 	# get the noise
-	var shake_offset = Vector2.ZERO
-	var shake_amount = pow(_shake, _shake_power)
+	var shake_offset := Vector2.ZERO
+	var shake_amount := pow(_shake, _shake_power)
 	noise_vector.x += 1
 	noise_vector.y += 1
 	shake_offset.x = max_shake_offset.x * shake_amount * noise.get_noise_2d(noise.seed*2, noise_vector.x) * NOISE_FACTOR
@@ -323,19 +322,19 @@ func _do_shake(_shake, _shake_power):
 	#rotation = shake_amount * noise.get_noise_2d(noise.seed, noise_vector.x)
 	#rotation = clamp(rotation, -max_shake_roll, max_shake_roll)
 
-func quake_shake(amount):
+func quake_shake(amount: float):
 	if settings.camera_shake:
 		quake = min(quake + amount, 1.0)
 		start_shaking()
 
-func shooty_shake(_direction, _threshold=1.0):
+func shooty_shake(_direction: Vector2, _threshold:=1.0):
 	if settings.camera_shake:
 		if shoot_shake <= _threshold:
 			shoot_shake = 1.0
 		start_shaking()
 
 # DRAMA
-func zoom_drama(wait=0.25, zoom_factor=0.5):
+func zoom_drama(wait:=0.25, zoom_factor:=0.5):
 	zoom_to(1.0+zoom_factor)
 	$DramaticTimer.wait_time = wait
 	$DramaticTimer.start()
@@ -352,12 +351,12 @@ func zoom_normal():
 	zoom.x = 1.0
 	zoom.y = 1.0
 
-func zoom_to(_target):
+func zoom_to(_target: float):
 	zoom.x = _target
 	zoom.y = _target
 
-func zoom_in(amount):
-	var min_zoom = 4.00
+func zoom_in(amount: float):
+	var min_zoom := 4.00
 	zoom.x += amount
 	zoom.y += amount
 	if zoom.x > min_zoom:
@@ -367,8 +366,8 @@ func zoom_in(amount):
 	if target:
 		global_position = target.global_position
 
-func zoom_out(amount):
-	var max_zoom = 0.5
+func zoom_out(amount: float):
+	var max_zoom := 0.5
 	zoom.x -= amount
 	zoom.y -= amount
 	if zoom.x < max_zoom:
@@ -381,7 +380,7 @@ func zoom_out(amount):
 	if target:
 		global_position = target.global_position
 
-func is_zooming():
+func is_zooming() -> bool:
 	if zoom.x != 1 or zoom.y != 1:
 		return true
 	return false
@@ -390,15 +389,15 @@ func is_zooming():
 func init_limits():
 	# limits?
 	if has_node('LeftLimit'):
-		var node = get_node('LeftLimit')
+		var node := get_node('LeftLimit')
 		limit_left = node.global_position.x
 	if has_node('RightLimit'):
-		var node = get_node('RightLimit')
+		var node := get_node('RightLimit')
 		limit_right = node.global_position.x
 	initial_camera_left_limit = limit_left
 	initial_camera_right_limit = limit_right
 
-func change_camera_limits(left_x, right_x, top_y=false, bottom_y=false):
+func change_camera_limits(left_x: int, right_x: int, top_y=false, bottom_y=false):
 	limit_left = left_x
 	limit_right = right_x
 	if top_y: limit_top = top_y
@@ -419,31 +418,31 @@ func check_empty_triggers():
 	if trigger_areas and trigger_areas.get_child_count() == 0:
 		trigger_areas = null
 
-func camera_edge_left_x():
+func camera_edge_left_x() -> int:
 	return get_screen_center_position().x - ProjectSettings.get_setting("display/window/size/viewport_width") * zoom.x / 2
 
-func camera_edge_right_x():
+func camera_edge_right_x() -> int:
 	return get_screen_center_position().x + ProjectSettings.get_setting("display/window/size/viewport_width") * zoom.x / 2
 
-func camera_edge_bottom_y():
+func camera_edge_bottom_y() -> int:
 	return get_screen_center_position().y + ProjectSettings.get_setting("display/window/size/viewport_height") * zoom.y / 2
 
-func camera_edge_top_y():
+func camera_edge_top_y() -> int:
 	return get_screen_center_position().y - ProjectSettings.get_setting("display/window/size/viewport_height") * zoom.y / 2
 
-func get_visible_screen_rect():
+func get_visible_screen_rect() -> Rect2:
 	var rect: Rect2
 	rect.position = Vector2(camera_edge_left_x(), camera_edge_top_y())
 	rect.size = Vector2(ProjectSettings.get_setting("display/window/size/viewport_width"), ProjectSettings.get_setting("display/window/size/viewport_height"))
 	return rect
 
-func is_point_on_screen(point: Vector2):
-	var rect = get_visible_screen_rect()
+func is_point_on_screen(point: Vector2) -> bool:
+	var rect := get_visible_screen_rect()
 	return rect.has_point(point)
 
 # SMOOTHING
-func set_smoothing_speed_temporarily(speed=1, time=5.0):
-	var old_speed = position_smoothing_speed
+func set_smoothing_speed_temporarily(speed:=1.0, time:=5.0):
+	var old_speed := position_smoothing_speed
 	position_smoothing_speed = speed
 	var tween: Tween = create_tween()
 	tween.set_trans(Tween.TRANS_CUBIC)

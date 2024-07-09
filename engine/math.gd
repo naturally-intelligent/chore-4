@@ -18,7 +18,7 @@ func random_float(start: float, end: float) -> float:
 
 # random float with 'stepify' behavior
 func random_float_step(start: float, end: float, step: float) -> float:
-	var steps = int((end - start) / step)
+	var steps := int((end - start) / step)
 	return start + float(randi()%(steps+1)) * step
 
 func randomf(s: float, e: float) -> float: # shortened version of random_float
@@ -30,7 +30,7 @@ func random_position(minx:int,maxx:int, miny:int,maxy:int) -> Vector2:
 func random_vector_position(vector1: Vector2, vector2: Vector2) -> Vector2:
 	return Vector2(random_int(int(vector1.x),int(vector2.x)), random_int(int(vector1.y),int(vector2.y)))
 
-func random_vector(x_factor = 1.0, y_factor = 1.0) -> Vector2:
+func random_vector(x_factor := 1.0, y_factor := 1.0) -> Vector2:
 	return Vector2(random_float(-1.0,1.0)*x_factor, random_float(-1.0,1.0)*y_factor).normalized()
 
 func random_vector_offset(x_factor := 1, y_factor := 1) -> Vector2:
@@ -46,13 +46,13 @@ func random_left_right_vector() -> Vector2:
 
 # rounds a vector2d
 func round_angle_to_degree(normal: Vector2, angle_in_degrees: float) -> Vector2:
-	var angle = normal.angle()
+	var angle := normal.angle()
 	angle = snapped(angle, deg_to_rad(angle_in_degrees))
 	return Vector2(cos(angle), sin(angle))
 
 # rounds a vector2d and returns angle
 func round_angle_to_degree_with_angle(normal: Vector2, angle_in_degrees: float) -> Array:
-	var angle = normal.angle()
+	var angle := normal.angle()
 	angle = snapped(angle, deg_to_rad(angle_in_degrees))
 	return [Vector2(cos(angle), sin(angle)), rad2deg360(angle)]
 
@@ -62,13 +62,13 @@ func angle_frame_45(angle: int) -> int:
 func angle_frame_90(angle: int) -> int:
 	return int(clamp(angle,0,359) / 90)
 
-func rad2deg360(radians) -> int:
-	var degrees = rad_to_deg(radians)
+func rad2deg360(radians: float) -> int:
+	var degrees := rad_to_deg(radians)
 	if degrees < 0:
 		degrees += 360
 	return int(degrees)
 
-func normal_to_degrees(n) -> float:
+func normal_to_degrees(n: Vector2) -> float:
 	return atan2(n.y, n.x) * 180 / PI
 
 func normal_to_360_degrees(n: Vector2) -> float:
@@ -126,20 +126,20 @@ func closest_point(origin: Vector2, targets: Array, closest_distance := 1000000.
 ### POSITIONS
 
 func nearest_position(parent: Node, position: Vector2) -> Vector2:
-	var nearest = 1000*1000
-	var nearest_pos = Vector2.ZERO
+	var nearest := 100000.0
+	var nearest_pos := Vector2.ZERO
 	for node in parent.get_children():
-		var dist2 = position.distance_squared_to(node.position)
+		var dist2 := position.distance_squared_to(node.position)
 		if dist2 < nearest:
 			nearest_pos = node.position
 			nearest = dist2
 	return nearest_pos
 
 func nearest_global_position(parent: Node, position: Vector2) -> Vector2:
-	var nearest = 1000*1000
-	var nearest_pos = Vector2.ZERO
+	var nearest := 100000.0
+	var nearest_pos := Vector2.ZERO
 	for node in parent.get_children():
-		var dist2 = position.distance_squared_to(node.global_position)
+		var dist2 := position.distance_squared_to(node.global_position)
 		if dist2 < nearest:
 			nearest_pos = node.global_position
 			nearest = dist2
@@ -148,8 +148,8 @@ func nearest_global_position(parent: Node, position: Vector2) -> Vector2:
 ### CURVES
 
 func quadratic_bezier(p0: Vector2, p1: Vector2, p2: Vector2, t: float) -> Array:
-	var q0 = p0.lerp(p1, t)
-	var q1 = p1.lerp(p2, t)
+	var q0 := p0.lerp(p1, t)
+	var q1 := p1.lerp(p2, t)
 	return [q0, q1]
 
 func cubic_bezier(p0: Vector2, p1: Vector2, p2: Vector2, p3: Vector2, t: float) -> Vector2:
