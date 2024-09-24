@@ -62,11 +62,12 @@ class SecondElementGreatest:
 #  but still called like -> util.fullscreen_flip()
 
 func fullscreen_flip() -> void:
-	if ((get_window().mode == Window.MODE_EXCLUSIVE_FULLSCREEN) or (get_window().mode == Window.MODE_FULLSCREEN)):
-		get_window().mode = Window.MODE_EXCLUSIVE_FULLSCREEN if (false) else Window.MODE_WINDOWED
+	var window: Window = get_window()
+	if window.mode == Window.MODE_FULLSCREEN or window.mode == Window.MODE_EXCLUSIVE_FULLSCREEN :
+		window.mode = Window.MODE_WINDOWED
 	else:
-		get_window().mode = Window.MODE_EXCLUSIVE_FULLSCREEN if (true) else Window.MODE_WINDOWED
-
+		window.mode = Window.MODE_FULLSCREEN
+		
 func random(_s: Variant, _e: Variant):
 	if typeof(_s) == TYPE_INT:
 		return math.random_int(_s, _e)
@@ -125,6 +126,12 @@ func random_vector() -> Vector2:
 	var angle := math.random_float(0,PI)
 	return Vector2(cos(angle), sin(angle))
 
+func random_vector_between(v1: Vector2, v2: Vector2) -> Vector2:
+	return Vector2(math.random_float(v1.x, v2.x), math.random_float(v1.y, v2.y))
+	
+func random_vector_betweeni(v1: Vector2, v2: Vector2) -> Vector2i:
+	return Vector2i(math.random_int(int(v1.x), int(v2.x)), math.random_int(int(v1.y), int(v2.y)))
+	
 func random_direction(excluding:=[]) -> Vector2:
 	var dirs := [Vector2.UP, Vector2.DOWN, Vector2.LEFT, Vector2.RIGHT]
 	return random_array_excluding(dirs, excluding)

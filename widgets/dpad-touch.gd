@@ -104,9 +104,9 @@ func reset_dpad():
 	$Sprite2D.frame = sprite_frames['none']
 	last_degrees = -1
 
-func update_dpad(vector):
+func update_dpad(vector: Vector2):
 	var deg360 := math.normal_to_360_degrees(vector)
-	var degrees := math.normal_to_45(vector)
+	var degrees := int(math.normal_to_45(vector))
 	if not diagonal:
 		#degrees = math.normal_to_90(vector)
 		# right diagonals into right

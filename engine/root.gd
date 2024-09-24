@@ -284,7 +284,7 @@ func _add_next_scene(scene, scene_name: String, info: Dictionary) -> void:
 	# load from file?
 	if typeof(scene) == TYPE_STRING:
 		var tscn = load(scene)
-		scene = tscn.instantiate()
+		scene = tscn.instantiate() # if it fails here, file doesn't exist
 		scene.name = scene_name
 	# console info about bad scene
 	if typeof(scene) != TYPE_OBJECT:
@@ -1224,7 +1224,7 @@ func remove_hud() -> void:
 # SMALL VIEWPORT (Experimental)
 
 func setup_small_viewport(big_resolution:=Vector2(1920,1080), small_resolution:=Vector2(640,360)) -> void:
-	var viewport: SubViewport = get_viewport()
+	var viewport:= get_viewport()
 	# create viewport scene to hold smaller game view
 	var gvc_tscn = load("res://widgets/game-viewport.tscn")
 	var game_viewport_container = gvc_tscn.instantiate()
@@ -1236,30 +1236,30 @@ func setup_small_viewport(big_resolution:=Vector2(1920,1080), small_resolution:=
 	viewport = game_viewport
 	# move $Scenes and $Overlay to the new viewport
 	var _scenes = scenes_root
-	var _overlay = Overlay
+	#var _overlay = Overlay
 	remove_child(_scenes)
-	remove_child(_overlay)
+	#remove_child(_overlay)
 	game_viewport.add_child(_scenes)
-	game_viewport.add_child(_overlay)
+	#game_viewport.add_child(_overlay)
 	_scenes = null
-	_overlay = null
+	#_overlay = null
 	# reassign scenes/menus containers
 	scenes_root = game_viewport.get_node("Scenes")
-	menus_root = game_viewport.get_node("Overlay/Menus")
-	# move other nodes to the new viewport
-	Overlay = game_viewport.get_node("Overlay")
-	OverlayHUD = game_viewport.get_node("Overlay/HUD")
-	Mouse = game_viewport.get_node("Overlay/Mouse")
-	Cursor = game_viewport.get_node("Overlay/Mouse/Cursor")
-	Transitions = game_viewport.get_node("Overlay/Transitions")
-	Shaders = game_viewport.get_node("Overlay/Shaders")
-	Debug = game_viewport.get_node("Overlay/Debug")
+	#menus_root = game_viewport.get_node("Overlay/Menus")
+	## move other nodes to the new viewport
+	#Overlay = game_viewport.get_node("Overlay")
+	#OverlayHUD = game_viewport.get_node("Overlay/HUD")
+	#Mouse = game_viewport.get_node("Overlay/Mouse")
+	#Cursor = game_viewport.get_node("Overlay/Mouse/Cursor")
+	#Transitions = game_viewport.get_node("Overlay/Transitions")
+	#Shaders = game_viewport.get_node("Overlay/Shaders")
+	#Debug = game_viewport.get_node("Overlay/Debug")
 	# resize the window
 	ProjectSettings.set_setting("display/window/size/viewport_width", big_resolution.x)
 	ProjectSettings.set_setting("display/window/size/viewport_height", big_resolution.y)
 	# set stretch to window size
-	get_tree().set_screen_stretch(settings.stretch_mode, \
-		settings.stretch_aspect, big_resolution)
+	#get_tree().set_screen_stretch(settings.stretch_mode, \
+	#	settings.stretch_aspect, big_resolution)
 	# this is the new view_scale
 	view_scale = big_resolution / small_resolution
 	game_viewport_container.scale = view_scale

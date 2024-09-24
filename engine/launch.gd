@@ -16,7 +16,10 @@ func _ready():
 		$EditorSplash.visible = false
 	# show first menu
 	if game.release:
-		menus.show(game.launch_menu)
+		if game.launch_scene:
+			scenes.show(game.launch_scene)
+		else:
+			menus.show(game.launch_menu)
 	else:
 		# development launch overrides
 		if dev.launch_menu_override:
@@ -24,6 +27,9 @@ func _ready():
 		elif dev.launch_scene_override:
 			scenes.show(dev.launch_scene_override)
 		else:
-			menus.show(game.launch_menu)
+			if game.launch_scene:
+				scenes.show(game.launch_scene)
+			else:
+				menus.show(game.launch_menu)
 	# then delete this blank scene (don't need it anymore)
 	self.queue_free()

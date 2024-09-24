@@ -145,6 +145,18 @@ func nearest_global_position(parent: Node, position: Vector2) -> Vector2:
 			nearest = dist2
 	return nearest_pos
 
+func nearest_global_node(parent: Node, position: Vector2) -> Node2D:
+	var nearest := 100000.0
+	var nearest_pos := Vector2.ZERO
+	var nearest_node: Node2D = null
+	for node in parent.get_children():
+		var dist2 := position.distance_squared_to(node.global_position)
+		if dist2 < nearest:
+			nearest_pos = node.global_position
+			nearest = dist2
+			nearest_node = node
+	return nearest_node
+
 ### CURVES
 
 func quadratic_bezier(p0: Vector2, p1: Vector2, p2: Vector2, t: float) -> Array:

@@ -5,7 +5,7 @@ var subtitle = ''
 var version = '1.4'
 var state = ''
 var release = false
-var year = '2022-2023'
+var year = '2022-2024'
 
 var demo = true
 var website = "https://www.naturallyintelligent.com"
@@ -14,6 +14,7 @@ var website = "https://www.naturallyintelligent.com"
 @onready var pixel_width = ProjectSettings.get_setting("display/window/size/viewport_width")
 @onready var pixel_height = ProjectSettings.get_setting("display/window/size/viewport_height")
 
+var launch_scene = false
 var launch_menu = 'main'
 var main_menu = 'main'
 
