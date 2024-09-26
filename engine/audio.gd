@@ -258,6 +258,11 @@ func play_sound_pitched(sound_name: String, pitch_start:=0.8, pitch_end:=1.2, pi
 	if player:
 		player.pitch_scale = math.random_float_step(pitch_start, pitch_end, pitch_step)
 
+func play_random_sound_pitched(sound_name: String, total: int, pitch_start:=0.8, pitch_end:=1.2, pitch_step:=0.02) -> void:
+	if dev.silence: return
+	var c := math.random_int(1,total)
+	play_sound_pitched(sound_name + str(c), pitch_start, pitch_end, pitch_step)
+
 func play_ambience_sound(sound_name: String, total:=1, origin=false, listener=false, time:=0.33, random:=true) -> void:
 	if dev.silence: return
 	var timer: Timer
