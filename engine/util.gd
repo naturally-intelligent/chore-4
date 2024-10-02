@@ -57,6 +57,12 @@ class SecondElementGreatest:
 			return true
 		return false
 
+class SecondElementLeast:
+	static func sort(a: Array, b: Array) -> bool:
+		if a[1] < b[1]:
+			return true
+		return false
+
 # HELPER FUNCTIONS
 #  these are all static, meaning they arent part of the 'util' object
 #  but still called like -> util.fullscreen_flip()
