@@ -422,6 +422,13 @@ func is_music_playing(song_name='') -> bool:
 			return not $MusicPlayer.stream_paused
 	return false
 
+func will_music_play() -> bool:
+	if settings.music_volume == 0.0:
+		return false
+	if dev.no_music:
+		return false
+	return true
+	
 func pause_music() -> void:
 	#debug.print('pause_music')
 	stop_music_animations()
