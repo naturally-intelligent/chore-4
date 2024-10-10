@@ -25,7 +25,8 @@ signal sound_volume_changed()
 func _ready() -> void:
 	set_sound_volume(settings.sound_volume)
 	set_music_volume(settings.music_volume)
-
+	if dev.silence: mute_master()
+		
 ### SOUNDS
 
 func play_sound(sound_name: String, volume:=1.0, allow_multiple:=false, pitch:={}) -> AudioStreamPlayer:
@@ -349,6 +350,9 @@ func play_random_node(player: Object, sound_name: String, total: int):
 	if dev.silence: return
 	var c := math.random_int(1,total)
 	rogue(player, sound_name + str(c))
+
+func mute_master():
+	AudioServer.set_bus_volume_db(0, -80) # 0 = Master
 
 ###
 ### MUSIC
