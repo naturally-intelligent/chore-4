@@ -101,7 +101,7 @@ func back() -> void:
 	if settings.has_method('back'):
 		settings.back()
 		return
-	if root.current_scene_type == 'scene':
+	if root.current_scene_type == &'scene':
 		var _current_scene = current_scene()
 		if _current_scene and _current_scene.name != settings.main_scene_name:
 			scenes.show(settings.main_scene_name)
@@ -174,5 +174,5 @@ func has_in_memory(scene_name: String) -> bool:
 
 func scene_or_menu(scene: String) -> String:
 	if find_scene_file(scene):
-		return 'scene'
-	return 'menu'
+		return &'scene'
+	return &'menu'

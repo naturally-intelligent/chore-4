@@ -83,7 +83,7 @@ func back():
 	if settings.has_method('back'):
 		settings.back()
 		return
-	if root.current_scene_type == 'menu':
+	if root.current_scene_type == &'menu':
 		var _current_menu = current_menu()
 		if _current_menu and _current_menu.name != settings.main_menu_name:
 			menus.show(settings.main_menu_name)
@@ -160,8 +160,8 @@ func has_in_memory(menu_name: String) -> bool:
 
 func menu_or_scene(menu: String) -> String:
 	if find_menu_file(menu):
-		return 'menu'
-	return 'scene'
+		return &'menu'
+	return &'scene'
 
 func is_menu(_menu_or_scene: String) -> bool:
 	if find_menu_file(_menu_or_scene):

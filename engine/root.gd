@@ -9,7 +9,7 @@ extends Node
 
 # scene info
 var last_scene_name := ''
-var last_scene_type := 'none'
+var last_scene_type := &'none'
 var switching_scene := false
 var root_scene := false
 var first_scene := true
@@ -17,7 +17,7 @@ var first_scene := true
 # current scene pointer (focus_scene)
 var current_scene: Node = null
 var current_scene_name := ''
-var current_scene_type := 'none'
+var current_scene_type := &'none'
 
 # temporary next scene pointer
 var _next_scene: Node = null
@@ -107,16 +107,16 @@ func _ready() -> void:
 
 # called by menus.show()
 func switch_to_menu(menu, menu_name: String, menu_data=false, info:={}, transitions:={}) -> void:
-	if 'switch_target' in info:
-		info['switch_target'] = info['switch_target']
+	if &'switch_target' in info:
+		info[&'switch_target'] = info[&'switch_target']
 	else:
-		info['switch_target'] = 'menu'
-	if 'switch_origin' in info:
-		info['switch_origin'] = info['switch_origin']
+		info[&'switch_target'] = &'menu'
+	if &'switch_origin' in info:
+		info[&'switch_origin'] = info[&'switch_origin']
 	else:
-		info['switch_origin'] = current_scene_type
+		info[&'switch_origin'] = current_scene_type
 	reset_time_scale()
-	if info['switch_origin'] == 'scene':
+	if info[&'switch_origin'] == &'scene':
 		if game.has_method('on_scene_to_menu'):
 			game.on_scene_to_menu()
 	_switch_prepare(menu, menu_name, menu_data, info, transitions)
@@ -126,52 +126,52 @@ func switch_to_scene(scene, scene_name: String, scene_data=false, info:={}, tran
 	if util.is_not(scene):
 		debug.print("ERROR: root.switch_to_scene called without scene, aborting")
 		return
-	if 'switch_target' in info:
-		info['switch_target'] = info['switch_target']
+	if &'switch_target' in info:
+		info[&'switch_target'] = info[&'switch_target']
 	else:
-		info['switch_target'] = 'scene'
-	if 'switch_origin' in info:
-		info['switch_origin'] = info['switch_origin']
+		info[&'switch_target'] = &'scene'
+	if &'switch_origin' in info:
+		info[&'switch_origin'] = info[&'switch_origin']
 	else:
-		info['switch_origin'] = current_scene_type
+		info[&'switch_origin'] = current_scene_type
 	_switch_prepare(scene, scene_name, scene_data, info, transitions)
 
 func _switch_prepare(scene, scene_name: String, scene_data=false, info:={}, transitions:={}) -> void:
-	var switch_target = info['switch_target']
-	var switch_origin = info['switch_origin']
+	var switch_target = info[&'switch_target']
+	var switch_origin = info[&'switch_origin']
 	# TRANSITION OUT
 	if not 'out' in transitions:
 		transitions['out'] = settings.transition_out
-		if settings.transition_menu_to_menu != 'default' and switch_origin == 'menu' and switch_target == 'menu':
-			transitions['out'] = 'none'
-		if settings.transition_menu_to_scene != 'default' and switch_origin == 'menu' and switch_target == 'scene':
-			transitions['out'] = 'none'
-		if settings.transition_scene_to_menu != 'default' and switch_origin == 'scene' and switch_target == 'menu':
-			transitions['out'] = 'none'
-		if settings.transition_scene_to_scene != 'default' and switch_origin == 'scene' and switch_target == 'scene':
-			transitions['out'] = 'none'
+		if settings.transition_menu_to_menu != 'default' and switch_origin == &'menu' and switch_target == &'menu':
+			transitions['out'] = &'none'
+		if settings.transition_menu_to_scene != 'default' and switch_origin == &'menu' and switch_target == &'scene':
+			transitions['out'] = &'none'
+		if settings.transition_scene_to_menu != 'default' and switch_origin == &'scene' and switch_target == &'menu':
+			transitions['out'] = &'none'
+		if settings.transition_scene_to_scene != 'default' and switch_origin == &'scene' and switch_target == &'scene':
+			transitions['out'] = &'none'
 	# TRANSITION MIDDLE
 	if not 'middle' in transitions:
 		transitions['middle'] = settings.transition_middle
-		if settings.transition_menu_to_menu != 'default' and switch_origin == 'menu' and switch_target == 'menu':
+		if settings.transition_menu_to_menu != 'default' and switch_origin == &'menu' and switch_target == &'menu':
 			transitions['middle'] = settings.transition_menu_to_menu
-		elif settings.transition_scene_to_menu != 'default' and switch_origin == 'scene' and switch_target == 'menu':
+		elif settings.transition_scene_to_menu != 'default' and switch_origin == &'scene' and switch_target == &'menu':
 			transitions['middle'] = settings.transition_scene_to_menu
-		elif settings.transition_menu_to_scene != 'default' and switch_origin == 'menu' and switch_target == 'scene':
+		elif settings.transition_menu_to_scene != 'default' and switch_origin == &'menu' and switch_target == &'scene':
 			transitions['middle'] = settings.transition_menu_to_scene
-		elif settings.transition_scene_to_scene != 'default' and switch_origin == 'scene' and switch_target == 'scene':
+		elif settings.transition_scene_to_scene != 'default' and switch_origin == &'scene' and switch_target == &'scene':
 			transitions['middle'] = settings.transition_scene_to_scene
 	# TRANSITION IN
 	if not 'in' in transitions:
 		transitions['in'] = settings.transition_in
-		if settings.transition_menu_to_menu != 'default' and switch_origin == 'menu' and switch_target == 'menu':
-			transitions['in'] = 'none'
-		if settings.transition_menu_to_scene != 'default' and switch_origin == 'menu' and switch_target == 'scene':
-			transitions['in'] = 'none'
-		if settings.transition_scene_to_menu != 'default' and switch_origin == 'scene' and switch_target == 'menu':
-			transitions['in'] = 'none'
-		if settings.transition_scene_to_scene != 'default' and switch_origin == 'scene' and switch_target == 'scene':
-			transitions['in'] = 'none'
+		if settings.transition_menu_to_menu != 'default' and switch_origin == &'menu' and switch_target == &'menu':
+			transitions['in'] = &'none'
+		if settings.transition_menu_to_scene != 'default' and switch_origin == &'menu' and switch_target == &'scene':
+			transitions['in'] = &'none'
+		if settings.transition_scene_to_menu != 'default' and switch_origin == &'scene' and switch_target == &'menu':
+			transitions['in'] = &'none'
+		if settings.transition_scene_to_scene != 'default' and switch_origin == &'scene' and switch_target == &'scene':
+			transitions['in'] = &'none'
 	# DIRECTIONS
 	if not 'out_direction' in transitions:
 		transitions['out_direction'] = settings.transition_slide_out_direction
@@ -179,22 +179,22 @@ func _switch_prepare(scene, scene_name: String, scene_data=false, info:={}, tran
 		transitions['in_direction'] = settings.transition_slide_in_direction
 	# DISABLE VIA DEV?
 	if dev.skip_transitions:
-		transitions['out'] = 'none'
-		transitions['middle'] = 'none'
-		transitions['in'] = 'none'
+		transitions['out'] = &'none'
+		transitions['middle'] = &'none'
+		transitions['in'] = &'none'
 	# REVERSE THRESHOLD
 	if settings.transition_reverse_threshold and settings.transition_reverse_threshold >= 1:
-		if switch_target == 'menu':
+		if switch_target == &'menu':
 			if menus_root.get_child_count() >= settings.transition_reverse_threshold:
 				transitions['out_direction'] = util.opposite_direction(transitions['out_direction'])
 				transitions['in_direction'] = util.opposite_direction(transitions['in_direction'])
 	# SPECIAL SCENE TO MENU DIRECTION
 	if settings.transition_slide_in_direction_scene_to_menu:
-		if switch_origin == 'scene' and switch_target == 'menu':
+		if switch_origin == &'scene' and switch_target == &'menu':
 			transitions['in_direction'] = settings.transition_slide_in_direction_scene_to_menu
 	# SPECIAL MENU TO SCENE DIRECTION
 	if settings.transition_slide_out_direction_scene_to_menu:
-		if switch_origin == 'menu' and switch_target == 'scene':
+		if switch_origin == &'menu' and switch_target == &'scene':
 			transitions['out_direction'] = settings.transition_slide_out_direction_scene_to_menu
 	# SWITCH
 	_soft_switch(scene, scene_name, scene_data, info, transitions)
@@ -222,7 +222,7 @@ func _soft_switch(scene, scene_name: String, scene_data, info: Dictionary, trans
 	# PAUSE SCENE
 	_pause_current_scene()
 	# TRANSITION OUT
-	if transition_out and transition_out != 'none':
+	if transition_out and transition_out != &'none':
 		_transition_out(transitions)
 		await self.switch_transition_finished
 	# PRE-DELETE SCENES
@@ -230,7 +230,7 @@ func _soft_switch(scene, scene_name: String, scene_data, info: Dictionary, trans
 	# ADD/RESTORE NEW SCENE
 	_add_next_scene(scene, scene_name, info)
 	# TRANSITION MIDDLE
-	if transition_middle and transition_middle != 'none':
+	if transition_middle and transition_middle != &'none':
 		_transition_middle(info, transitions)
 		await self.switch_transition_finished
 	# REMOVE/HIDE OLD SCENE
@@ -248,14 +248,14 @@ func _soft_switch(scene, scene_name: String, scene_data, info: Dictionary, trans
 	reset_overlay()
 	if dev.shader_test:
 		enable_shader(dev.shader_test)
-	if current_scene_type == 'scene':
+	if current_scene_type == &'scene':
 		enable_scenes()
-	if current_scene_type == 'menu':
+	if current_scene_type == &'menu':
 		enable_menus()
 	# RESUME
 	_resume_current_scene()
 	# TRANSITION IN
-	if transition_in and transition_in != 'none':
+	if transition_in and transition_in != &'none':
 		_transition_in(transitions)
 		await self.switch_transition_finished
 	# UPDATE UI
@@ -275,11 +275,11 @@ func _add_next_scene(scene, scene_name: String, info: Dictionary) -> void:
 	# notify engine we have a proper root scene
 	root_scene = true
 	# gather info
-	var switch_target = info['switch_target']
+	var switch_target = info[&'switch_target']
 	var target_root := get_scene_container(switch_target)
 	var target_style := get_container_style(switch_target)
 	#debug.print('_add_next_scene:','switch_origin=',switch_origin,',switch_target=',switch_target,',origin_style=',origin_style,',target_style=',target_style)
-	if switch_target == 'scene':
+	if switch_target == &'scene':
 		hide_menus()
 	# load from file?
 	if typeof(scene) == TYPE_STRING:
@@ -318,8 +318,8 @@ func _add_next_scene(scene, scene_name: String, info: Dictionary) -> void:
 			target_root.add_child(_next_scene)
 
 func _pre_delete_scenes(info: Dictionary) -> void:
-	var switch_origin = info['switch_origin']
-	var switch_target = info['switch_target']
+	var switch_origin = info[&'switch_origin']
+	var switch_target = info[&'switch_target']
 	var origin_root := get_scene_container(switch_origin)
 	var target_root := get_scene_container(switch_target)
 	var removal_method = 'hide'
@@ -327,9 +327,9 @@ func _pre_delete_scenes(info: Dictionary) -> void:
 		removal_method = 'delete'
 	if 'clear' in info:
 		removal_method = 'delete_all'
-	if settings.single_scene_mode and switch_target == 'scene' and switch_origin == 'scene':
+	if settings.single_scene_mode and switch_target == &'scene' and switch_origin == &'scene':
 		removal_method = 'delete'
-	if settings.single_menu_mode and switch_target == 'menu' and switch_origin == 'menu':
+	if settings.single_menu_mode and switch_target == &'menu' and switch_origin == &'menu':
 		removal_method = 'delete'
 	# removal
 	if removal_method == 'delete':
@@ -337,7 +337,7 @@ func _pre_delete_scenes(info: Dictionary) -> void:
 			current_scene.queue_free()
 			origin_root.remove_child(current_scene)
 			current_scene = null
-			if switch_target == 'scene':
+			if switch_target == &'scene':
 				emit_signal("pre_scene_deleted", current_scene_name)
 	# removal?
 	elif removal_method == 'delete_all':
@@ -347,14 +347,14 @@ func _pre_delete_scenes(info: Dictionary) -> void:
 			removal.append(child)
 		for child in removal:
 			target_root.remove_child(child)
-		if switch_target == 'scene':
+		if switch_target == &'scene':
 			emit_signal("pre_scene_deleted", current_scene_name)
 
 # removing may not mean deleting, could be hiding
 func _remove_current_scene(info: Dictionary) -> void:
 	# gather info
-	var switch_target = info['switch_target']
-	var switch_origin = info['switch_origin']
+	var switch_target = info[&'switch_target']
+	var switch_origin = info[&'switch_origin']
 	var origin_root := get_scene_container(switch_origin)
 	var target_root := get_scene_container(switch_target)
 	var origin_style := get_container_style(switch_origin)
@@ -362,7 +362,7 @@ func _remove_current_scene(info: Dictionary) -> void:
 	# remove_at/hide old scene
 	if origin_style == 'pool':
 		# hide other scenes (unless switching to overlay menu)
-		if switch_target == 'scene':
+		if switch_target == &'scene':
 			for child in origin_root.get_children():
 				if child == current_scene:
 					child.visible = false
@@ -381,9 +381,9 @@ func _remove_current_scene(info: Dictionary) -> void:
 			child.queue_free()
 	# special modes
 	var removal_method = 'hide'
-	if settings.single_scene_mode and switch_target == 'scene' and switch_origin == 'scene':
+	if settings.single_scene_mode and switch_target == &'scene' and switch_origin == &'scene':
 		removal_method = 'delete'
-	if settings.single_menu_mode and switch_target == 'menu' and switch_origin == 'menu':
+	if settings.single_menu_mode and switch_target == &'menu' and switch_origin == &'menu':
 		removal_method = 'delete'
 	# removal
 	if removal_method == 'delete':
@@ -391,7 +391,7 @@ func _remove_current_scene(info: Dictionary) -> void:
 			current_scene.queue_free()
 			target_root.remove_child(current_scene)
 			current_scene = null
-			if switch_target == 'scene':
+			if switch_target == &'scene':
 				emit_signal("scene_deleted", current_scene_name)
 	if removal_method == 'hide':
 		if current_scene.has_method('on_hide'):
@@ -401,16 +401,16 @@ func _remove_current_scene(info: Dictionary) -> void:
 	current_scene_type = ''
 	current_scene = null
 	# hide override?
-	if switch_origin == 'menu' and switch_target == 'scene':
+	if switch_origin == &'menu' and switch_target == &'scene':
 		hide_menus()
-	if switch_target == 'menu' and settings.always_hide_scenes_for_menus:
+	if switch_target == &'menu' and settings.always_hide_scenes_for_menus:
 		hide_scenes()
-	if switch_target == 'menu' and settings.destroy_all_scenes_for_menus:
+	if switch_target == &'menu' and settings.destroy_all_scenes_for_menus:
 		clear_scenes()
-	if switch_target == 'menu' and settings.always_hide_underlying_menus:
+	if switch_target == &'menu' and settings.always_hide_underlying_menus:
 		hide_menus()
 		enable_menus()
-	if switch_target == 'scene':
+	if switch_target == &'scene':
 		hide_menus()
 	hide_shaders()
 
@@ -435,7 +435,7 @@ func _pause_current_scene() -> void:
 		if current_scene.has_method('on_pause'):
 			current_scene.on_pause()
 		if settings.pause_tree_during_switch:
-			if current_scene_type == 'scene':
+			if current_scene_type == &'scene':
 				pause()
 
 func _resume_current_scene() -> void:
@@ -446,21 +446,21 @@ func _resume_current_scene() -> void:
 		if current_scene.has_method('on_resume'):
 			current_scene.on_resume()
 		if settings.pause_tree_during_switch:
-			if current_scene_type == 'scene':
+			if current_scene_type == &'scene':
 				resume()
 
 func get_scene_container(scene_type: String) -> Control:
-	if scene_type == 'scene':
+	if scene_type == &'scene':
 		return scenes_root
-	if scene_type == 'menu':
+	if scene_type == &'menu':
 		return menus_root
 	#debug.print("WARNING: unknown scene container type!", scene_type)
 	return scenes_root
 
 func get_container_style(scene_type: String) -> String:
-	if scene_type == 'scene':
+	if scene_type == &'scene':
 		return scene_container_style # pool
-	if scene_type == 'menu':
+	if scene_type == &'menu':
 		return menu_container_style # stack
 	#debug.print("WARNING: unknown scene container type!", scene_type)
 	return 'pool'
@@ -473,7 +473,7 @@ func clear_scenes() -> void:
 		if current_scene == child:
 			current_scene = null
 			current_scene_name = ''
-			current_scene_type = 'none'
+			current_scene_type = &'none'
 		child.queue_free()
 		remove_at.append(child)
 	for child in remove_at:
@@ -485,7 +485,7 @@ func clear_menus() -> void:
 		if current_scene == child:
 			current_scene = null
 			current_scene_name = ''
-			current_scene_type = 'none'
+			current_scene_type = &'none'
 		child.queue_free()
 		remove_at.append(child)
 	for child in remove_at:
@@ -499,7 +499,7 @@ func clear_menus_above(menu) -> void:
 			if current_scene == child:
 				current_scene = null
 				current_scene_name = ''
-				current_scene_type = 'none'
+				current_scene_type = &'none'
 			child.queue_free()
 			remove_at.append(child)
 		if child == menu:
@@ -511,7 +511,7 @@ func clear_menus_above(menu) -> void:
 #   to use, add a check to top of ready() function in any scene:
 #  	if not root.check_is_root_scene(self, scene_file_path):
 #		return
-func check_is_root_scene(scene, scene_name, scene_type='scene') -> bool:
+func check_is_root_scene(scene, scene_name, scene_type=&'scene') -> bool:
 	if not root_scene and dev.dev_mode_enabled:
 		debug.print('F6 root scene override')
 		settings.allow_res_scenes = true # have to set this to load by filename
@@ -520,9 +520,9 @@ func check_is_root_scene(scene, scene_name, scene_type='scene') -> bool:
 		dev.launch_hacks()
 		if dev.forced_window:
 			print('forcing window size')
-			get_window().mode = Window.MODE_EXCLUSIVE_FULLSCREEN if (false) else Window.MODE_WINDOWED
+			get_window().mode = Window.MODE_WINDOWED
 			get_window().set_size(dev.forced_window)
-		if scene_type == 'scene':
+		if scene_type == &'scene':
 			scenes.fresh(scene_name)
 		else:
 			menus.fresh(scene_name)
@@ -782,7 +782,7 @@ func hide_transitions() -> void:
 
 func _transition_out(transitions: Dictionary) -> void:
 	var transition_out = transitions['out']
-	if transition_out and transition_out != 'none':
+	if transition_out and transition_out != &'none':
 		enable_transitions()
 		if transition_out == 'fade':
 			transition_fade_out(settings.transition_out_time)
@@ -794,27 +794,27 @@ func _transition_out(transitions: Dictionary) -> void:
 
 func _transition_middle(info: Dictionary, transitions: Dictionary) -> void:
 	var transition_middle = transitions['middle']
-	var switch_origin = info['switch_origin']
-	var switch_target = info['switch_target']
+	var switch_origin = info[&'switch_origin']
+	var switch_target = info[&'switch_target']
 	var slide_out_direction = transitions['out_direction']
 	var slide_in_direction = transitions['in_direction']
-	if transition_middle and transition_middle != 'none':
+	if transition_middle and transition_middle != &'none':
 		enable_transitions()
 		if transition_middle == 'black' or transition_middle == 'fade':
 			transition_wait(settings.transition_middle_time)
 			await self.transition_finished
 		elif transition_middle == 'slide_both':
-			if switch_origin == 'menu' or switch_target == 'menu':
+			if switch_origin == &'menu' or switch_target == &'menu':
 				enable_menus()
 			transition_slide_both(current_scene, _next_scene, slide_out_direction)
 			await self.transition_finished
 		elif transition_middle == 'slide_new':
-			if switch_origin == 'menu' or switch_target == 'menu':
+			if switch_origin == &'menu' or switch_target == &'menu':
 				enable_menus()
 			transition_slide(_next_scene, 'in', slide_in_direction)
 			await self.transition_finished
 		elif transition_middle == 'slide_old':
-			if switch_origin == 'menu' or switch_target == 'menu':
+			if switch_origin == &'menu' or switch_target == &'menu':
 				enable_menus()
 			transition_slide(current_scene, 'out', slide_out_direction)
 			await self.transition_finished
@@ -822,7 +822,7 @@ func _transition_middle(info: Dictionary, transitions: Dictionary) -> void:
 
 func _transition_in(transitions: Dictionary) -> void:
 	var transition_in = transitions['in']
-	if transition_in and transition_in != 'none':
+	if transition_in and transition_in != &'none':
 		if transition_in == 'fade':
 			transition_fade_in(game.time(settings.transition_in_time))
 			await self.transition_finished
@@ -835,7 +835,7 @@ func _transition_in(transitions: Dictionary) -> void:
 func fade_out_and_quit() -> void:
 	resume()
 	# transition?
-	if settings.transition_quit != 'none':
+	if settings.transition_quit != &'none':
 		enable_transitions()
 		if settings.transition_quit == 'fade':
 			transition_fade_out(game.time(settings.transition_quit_time))
