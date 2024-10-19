@@ -46,7 +46,7 @@ func play_sound(sound_name: String, volume:=1.0, allow_multiple:=false, pitch:={
 		player = _find_empty_sound_player()
 	if not player:
 		return null
-	var stream := load(resource_link)
+	var stream: AudioStream = load(resource_link)
 	if not stream:
 		debug.print('ERROR: Bad Audio Stream load failed', resource_link)
 		return null
@@ -91,7 +91,7 @@ func loop_sound(sound_name: String, volume:=1.0, fade_in:=false, fade_in_time:=0
 		player = _find_empty_sound_looper()
 	if not player:
 		return null
-	var stream := load(resource_link)
+	var stream: AudioStream = load(resource_link)
 	if not stream:
 		debug.print('ERROR: Bad Audio Loop load failed', resource_link)
 		return null
@@ -99,8 +99,15 @@ func loop_sound(sound_name: String, volume:=1.0, fade_in:=false, fade_in_time:=0
 	player.volume_db = convert_percent_to_db(volume)
 	player.pitch_scale = 1.0
 	player.set_meta('resource_link', resource_link)
-	if not player.is_connected("finished", Callable(self,"_on_loop_sound")):
-		player.connect("finished", Callable(self,"_on_loop_sound").bind(player))
+	if stream is AudioStreamWAV and stream.loop_mode == AudioStreamWAV.LOOP_DISABLED:
+		if not player.is_connected("finished", Callable(self,"_on_loop_sound")):
+			debug.print("Sound stream wasn't imported with looping:", sound_name)
+			debug.print("- Using automatic looping (may cause pops)")
+			player.connect("finished", Callable(self,"_on_loop_sound").bind(player))
+	else:
+		# might have connected this before but dont need it again...
+		if player.is_connected("finished", Callable(self,"_on_loop_sound")):
+			player.disconnect("finished", Callable(self,"_on_loop_sound"))
 	player.play()
 	if fade_in:
 		var desired_db := player.volume_db
@@ -339,7 +346,7 @@ func rogue(player: Object, load_with_sound_name:='') -> void:
 		var resource_link := _sound_resource(load_with_sound_name)
 		if not player.has_meta('resource_link') or player.get_meta('resource_link') != resource_link:
 			player.set_meta('resource_link', resource_link)
-			var stream := load(resource_link)
+			var stream: AudioStream = load(resource_link)
 			if not stream:
 				debug.print('ERROR: Bad Audio Stream external load failed', resource_link)
 				return
@@ -396,7 +403,7 @@ func play_music(song_name:String, volume:=1.0, resume_if_previous:=true, and_sto
 	if and_stop_music:
 		stop_and_reset_music()
 	# load stream
-	var stream := load(resource_link)
+	var stream: AudioStream = load(resource_link)
 	if stream:
 		$MusicPlayer.volume_db = convert_percent_to_db(volume)
 		$MusicPlayer.set_stream(stream)
