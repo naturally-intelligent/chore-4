@@ -266,6 +266,7 @@ func _soft_switch(scene, scene_name: String, scene_data, info: Dictionary, trans
 	# FINISH
 	switching_scene = false
 	first_scene = false
+	current_scene.set_meta("chore_scene", true)
 	emit_signal("scene_switch_complete")
 	#debug.print('finished!')
 	#debug_scene_roots()
@@ -443,12 +444,12 @@ func _resume_current_scene() -> void:
 		current_scene.set_process(true)
 		current_scene.set_physics_process(true)
 		current_scene.set_process_input(true)
-		if current_scene.has_method('on_resume'):
+		if current_scene.has_meta("chore_scene") and current_scene.has_method('on_resume'):
 			current_scene.on_resume()
 		if settings.pause_tree_during_switch:
 			if current_scene_type == &'scene':
 				resume()
-
+			
 func get_scene_container(scene_type: String) -> Control:
 	if scene_type == &'scene':
 		return scenes_root
