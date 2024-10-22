@@ -187,3 +187,44 @@ func move_towards(target: int, current: int, amount: int) -> int:
 			return target
 		return current - amount
 	return current
+
+### POLYGONS
+
+func polygon_from_sprite(sprite: Sprite2D, mirror := false, epsilon := 2.0, area := Rect2()) -> Array:
+	var image: Image = sprite.texture.get_image()
+	var texture_size := sprite.texture.get_size()
+	var texture_frames := Vector2(sprite.hframes, sprite.vframes)
+	var sprite_size := texture_size / texture_frames
+	var bitmap := BitMap.new()
+	bitmap.create_from_image_alpha(image)
+	# using sprite sheet?
+	if not area:
+		if sprite.hframes > 1 or sprite.vframes > 1:
+			var sprite_size_2i := Vector2i(sprite_size)
+			area = Rect2(sprite.frame_coords * sprite_size_2i, sprite_size_2i)
+		else:
+			area = Rect2(Vector2(), texture_size)
+	var polygons := bitmap.opaque_to_polygons(area, epsilon)
+	var final_polygon: PackedVector2Array
+	# find the bounding box
+	var bounding_min := polygons[0][0]
+	var bounding_max := polygons[0][0]
+	for j: Vector2 in polygons[0]:
+		if j.x < bounding_min.x: bounding_min.x = j.x
+		if j.y < bounding_min.y: bounding_min.y = j.y
+		if j.x > bounding_max.x: bounding_max.x = j.x
+		if j.y > bounding_max.y: bounding_max.y = j.y
+	var bounding_mirror := (bounding_max.x - bounding_min.x) * 2
+	if mirror:
+		bounding_min.x = bounding_mirror - bounding_min.x
+		bounding_max.x = bounding_mirror - bounding_max.x
+	# final polygon
+	for j: Vector2 in polygons[0]:
+		var new_j := j
+		if sprite.centered:
+			new_j -= sprite_size / 2
+		if mirror:
+			new_j.x = bounding_mirror - new_j.x
+		final_polygon.append(new_j)
+	# return all data
+	return [final_polygon, bounding_min, bounding_max, sprite_size]
