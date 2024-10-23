@@ -214,17 +214,17 @@ func polygon_from_sprite(sprite: Sprite2D, mirror := false, epsilon := 2.0, area
 		if j.y < bounding_min.y: bounding_min.y = j.y
 		if j.x > bounding_max.x: bounding_max.x = j.x
 		if j.y > bounding_max.y: bounding_max.y = j.y
-	var bounding_mirror := (bounding_max.x - bounding_min.x) * 2
+	var bounding_mirror_x := (bounding_max.x - bounding_min.x) * 2
+	var offset := Vector2.ZERO
 	if mirror:
-		bounding_min.x = bounding_mirror - bounding_min.x
-		bounding_max.x = bounding_mirror - bounding_max.x
+		offset.x = sprite_size.x - bounding_mirror_x
 	# final polygon
-	for j: Vector2 in polygons[0]:
-		var new_j := j
-		if sprite.centered:
-			new_j -= sprite_size / 2
+	for point: Vector2 in polygons[0]:
 		if mirror:
-			new_j.x = bounding_mirror - new_j.x
-		final_polygon.append(new_j)
+			point.x = bounding_mirror_x - point.x
+		if sprite.centered:
+			point -= sprite_size / 2
+		point += offset
+		final_polygon.append(point)
 	# return all data
 	return [final_polygon, bounding_min, bounding_max, sprite_size]
