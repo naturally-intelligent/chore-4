@@ -3,6 +3,12 @@ extends Node
 
 ### RANDOM NUMBERS
 
+func random_chance(chance: int) -> bool:
+	return randi_range(0, chance) == 0
+
+func random_choice(chance: int) -> int:
+	return randi_range(1, chance)
+
 func random_int(start: int, end: int) -> int:
 	return randi_range(start, end)
 	#var div = end-start+1
