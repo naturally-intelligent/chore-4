@@ -1,5 +1,4 @@
 # UTILITY FUNCTIONS
-@tool
 extends Node
 
 var desktop := true
