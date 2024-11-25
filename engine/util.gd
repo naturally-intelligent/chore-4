@@ -271,6 +271,15 @@ func first_letter(id: String) -> String:
 func upper_first_letter(id: String) -> String:
 	return id.substr(0,1).to_upper()
 
+func pluralize(id: String) -> String:
+	var last := id.substr(id.length()-1, 1)
+	if last != 's':
+		return id + 's'
+	return id
+
+func pluralize_upper_first(id: String) -> String:
+	return string_upper_first(pluralize(id))
+	
 func a_an(word: String):
 	var first := word.substr(0,1).to_upper()
 	var vowels := ['a','e','i','o','u']
