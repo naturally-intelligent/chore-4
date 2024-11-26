@@ -39,6 +39,7 @@ var quake := 0.0  # Current shake strength.
 # shake due to shooting
 @export var shoot_shake_decay := 2.0
 @export var shoot_shake_power := 2
+@export var limit_shake_zoom := true
 var shoot_shake := 0.0
 var max_shake_roll := 0.1  # Maximum rotation in radians (use sparingly).
 var noise_vector := Vector2.ZERO
@@ -318,6 +319,17 @@ func _do_shake(_shake: float, _shake_power: float):
 	shake_vector.x = int(shake_vector.x)
 	shake_vector.y = int(shake_vector.y)
 	offset = shake_vector
+	if zoom != Vector2.ONE and limit_shake_zoom:
+		var rect: Rect2 = get_visible_screen_rect()
+		if offset.x > 0 and rect.end.x + offset.x > limit_right:
+			offset.x = 0 #limit_right - rect.end.x
+		elif offset.x < 0 and rect.position.x + offset.x < limit_left:
+			offset.x = 0
+		if offset.y > 0 and rect.end.y + offset.y > limit_bottom:
+			offset.y = 0
+		elif offset.y < 0 and rect.position.y + offset.y < limit_top:
+			offset.y = 0
+	#if offset.x > camera_edge_left_x()
 	# rotation
 	#rotation = shake_amount * noise.get_noise_2d(noise.seed, noise_vector.x)
 	#rotation = clamp(rotation, -max_shake_roll, max_shake_roll)
@@ -432,8 +444,8 @@ func camera_edge_top_y() -> int:
 
 func get_visible_screen_rect() -> Rect2:
 	var rect: Rect2
-	rect.position = Vector2(camera_edge_left_x(), camera_edge_top_y())
-	rect.size = Vector2(ProjectSettings.get_setting("display/window/size/viewport_width"), ProjectSettings.get_setting("display/window/size/viewport_height"))
+	rect.size = zoom * Vector2(ProjectSettings.get_setting("display/window/size/viewport_width"), ProjectSettings.get_setting("display/window/size/viewport_height")) * zoom
+	rect.position = get_screen_center_position() - rect.size / 2
 	return rect
 
 func is_point_on_screen(point: Vector2) -> bool:
