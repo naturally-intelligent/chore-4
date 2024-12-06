@@ -135,7 +135,7 @@ func target_ahead_camera(delta: float):
 	# anchored?
 	if target_anchored:
 		var anchor_distance_x: float = absf(target.global_position.x - target_anchor_position.x)
-		if anchor_distance_x <= TARGET_IGNORE_PIXELS:
+		if anchor_distance_x <= TARGET_IGNORE_PIXELS / zoom.x:
 			return
 		target_anchored = false
 	# move target point?
@@ -143,13 +143,13 @@ func target_ahead_camera(delta: float):
 		if current_direction.x > 0:
 			#target_point.x = target_ahead_pixels
 			target_point.x += target_ahead_factor
-			if target_point.x > target_ahead_pixels:
-				target_point.x = target_ahead_pixels
+			if target_point.x > target_ahead_pixels / zoom.x:
+				target_point.x = target_ahead_pixels / zoom.x
 		elif current_direction.x < 0:
 			#target_point.x = -target_behind_pixels
 			target_point.x -= target_behind_factor
-			if target_point.x < -target_behind_pixels:
-				target_point.x = -target_behind_pixels
+			if target_point.x < -target_behind_pixels / zoom.x:
+				target_point.x = -target_behind_pixels / zoom.x
 	# move towards goal
 	var camera_speed := TARGET_CATCHUP_LERP_SPEED * delta
 	# account for fast-moving target?
