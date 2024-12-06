@@ -37,6 +37,7 @@ var view_scale = Vector2(1,1)
 var last_input_mouse := false
 var last_input_gamepad := false
 var last_input_keyboard := false
+var ever_input_gamepad := false
 
 # scenes don't stack, they are a pool of persistent nodes
 #  only 1 is ever running
@@ -616,9 +617,7 @@ func _input(event: InputEvent) -> void:
 		last_input_mouse = false
 		last_input_gamepad = true
 		last_input_keyboard = false
-		last_input_mouse = false
-		last_input_gamepad = true
-		last_input_keyboard = false
+		ever_input_gamepad = true
 	# common keys
 	if settings.root_capture_ui_cancel and Input.is_action_just_pressed("ui_cancel"):
 		menus.back()
