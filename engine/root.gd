@@ -49,13 +49,13 @@ var scene_container_style := 'pool'
 var menu_container_style := 'stack'
 @onready var menus_root: Control = $Overlay/Menus
 # overlay pointers
-@onready var Overlay := $Overlay
-@onready var OverlayHUD := $Overlay/HUD
-@onready var Mouse := $Overlay/Mouse
-@onready var Cursor := $Overlay/Mouse/Cursor
-@onready var Transitions := $Overlay/Transitions
-@onready var Shaders := $Overlay/Shaders
-@onready var Debug := $Overlay/Debug
+@onready var Overlay: CanvasLayer = $Overlay
+@onready var OverlayHUD: Control = $Overlay/HUD
+@onready var Mouse: Control = $Overlay/Mouse
+@onready var Cursor: Control = $Overlay/Mouse/Cursor
+@onready var Transitions: Control = $Overlay/Transitions
+@onready var Shaders: Control = $Overlay/Shaders
+@onready var Debug: Control = $Overlay/Debug
 # optional big screen node
 var big_screen_node = null
 
@@ -328,7 +328,7 @@ func _pre_delete_scenes(info: Dictionary) -> void:
 	var switch_target = info[&'switch_target']
 	var origin_root := get_scene_container(switch_origin)
 	var target_root := get_scene_container(switch_target)
-	var removal_method = 'hide'
+	var removal_method := 'hide'
 	if 'remove_at' in info:
 		removal_method = 'delete'
 	if 'clear' in info:
@@ -347,7 +347,7 @@ func _pre_delete_scenes(info: Dictionary) -> void:
 				emit_signal("pre_scene_deleted", current_scene_name)
 	# removal?
 	elif removal_method == 'delete_all':
-		var removal = []
+		var removal := []
 		for child in target_root.get_children():
 			child.queue_free()
 			removal.append(child)
@@ -374,8 +374,8 @@ func _remove_current_scene(info: Dictionary) -> void:
 					child.visible = false
 	elif origin_style == 'stack':
 		# remove_at anything above next_scene
-		var found = false
-		var to_remove = []
+		var found := false
+		var to_remove := []
 		for child in origin_root.get_children():
 			if found:
 				to_remove.append(child)
@@ -474,7 +474,7 @@ func get_container_style(scene_type: String) -> String:
 # CLEAR / DELETE / HIDE / SHOW SCENES
 
 func clear_scenes() -> void:
-	var remove_at = []
+	var remove_at := []
 	for child in root.scenes_root.get_children():
 		if current_scene == child:
 			current_scene = null
@@ -486,7 +486,7 @@ func clear_scenes() -> void:
 		root.scenes_root.remove_child(child)
 
 func clear_menus() -> void:
-	var remove_at = []
+	var remove_at := []
 	for child in root.menus_root.get_children():
 		if current_scene == child:
 			current_scene = null
@@ -498,8 +498,8 @@ func clear_menus() -> void:
 		root.menus_root.remove_child(child)
 
 func clear_menus_above(menu) -> void:
-	var remove_at = []
-	var found = false
+	var remove_at := []
+	var found := false
 	for child in root.menus_root.get_children():
 		if found:
 			if current_scene == child:
@@ -559,12 +559,12 @@ func hide_scenes() -> void:
 # WINDOW / SCALING
 
 func scale_root() -> void:
-	var orig_w = game.pixel_width
-	var orig_h = game.pixel_height
-	var proj_w = ProjectSettings.get_setting("display/window/size/viewport_width")
-	var proj_h = ProjectSettings.get_setting("display/window/size/viewport_height")
-	var scale_w = int(proj_w / orig_w)
-	var scale_h = int(proj_h / orig_h)
+	var orig_w := game.pixel_width
+	var orig_h := game.pixel_height
+	var proj_w: int = ProjectSettings.get_setting("display/window/size/viewport_width")
+	var proj_h: int = ProjectSettings.get_setting("display/window/size/viewport_height")
+	var scale_w := int(proj_w / orig_w)
+	var scale_h := int(proj_h / orig_h)
 	view_scale = Vector2(scale_w, scale_h)
 	# you may want to scale other nodes after this, for example:
 	#  scenes_root.set_scale(view_scale)
@@ -579,7 +579,7 @@ func scale_cursor() -> void:
 # https://godotengine.org/qa/25504/pixel-perfect-scaling
 func pixel_perfect_resize() -> void:
 	var viewport: SubViewport = get_viewport()
-	var window_size = get_window().get_size()
+	var window_size := get_window().get_size()
 
 	# see how big the window is compared to the viewport size
 	# floor it so we only get round numbers (0, 1, 2, 3 ...)
@@ -691,7 +691,7 @@ func update_ui() -> void:
 	update_hud()
 
 func reset_overlay():
-	var hud_visible = OverlayHUD.visible
+	var hud_visible := OverlayHUD.visible
 	for node in Overlay.get_children():
 		node.visible = false
 	if settings.hud_keep_around:
@@ -700,7 +700,7 @@ func reset_overlay():
 # MOUSE / CURSOR
 
 func update_mouse():
-	var show_mouse = false
+	var show_mouse := false
 	if util.desktop and settings.allow_mouse_cursor:
 		show_mouse = true
 	if last_input_mouse:
@@ -716,8 +716,7 @@ func update_mouse():
 
 func update_mouse_position() -> void:
 	var mouse_pos := get_viewport().get_mouse_position()
-	mouse_pos.x /= view_scale.x
-	mouse_pos.y /= view_scale.y
+	mouse_pos /= view_scale
 	Cursor.position = mouse_pos
 
 func set_cursor(file) -> void:
@@ -861,7 +860,7 @@ func transition_wait(middle_time:=0.3) -> void:
 	var transition = Transitions.get_node("Fader")
 	transition.visible = true
 	# stay for a little while
-	var middle_timer = util.wait(game.time(middle_time), self)
+	var middle_timer := util.wait(game.time(middle_time), self)
 	await middle_timer.timeout
 	middle_timer.queue_free()
 	emit_signal("transition_finished")
@@ -904,14 +903,14 @@ func transition_fade_out_stagger(fade_out_time:=0.2) -> void:
 	# fade out to black
 	enable_transitions()
 	hide_cursor()
-	var fade_out_steps = 3
-	var fade_out_step_time = fade_out_time/float(fade_out_steps)
+	var fade_out_steps := 3
+	var fade_out_step_time := fade_out_time/float(fade_out_steps)
 	var transition = Transitions.get_node("Fader")
 	transition.visible = true
 	for i: int in range(fade_out_steps+1):
-		var a = i/float(fade_out_steps)
+		var a := i/float(fade_out_steps)
 		transition.modulate = Color(1, 1, 1, a)
-		var timer = util.wait(game.time(fade_out_step_time), self)
+		var timer := util.wait(game.time(fade_out_step_time), self)
 		await timer.timeout
 		timer.queue_free()
 	emit_signal('transition_finished')
@@ -921,24 +920,24 @@ func transition_fade_in_stagger(fade_in_time:=0.3) -> void:
 		emit_signal("transition_finished")
 		return
 	enable_transitions()
-	var fade_in_steps = 5
-	var fade_in_step_time = fade_in_time/float(fade_in_steps)
+	var fade_in_steps := 5
+	var fade_in_step_time := fade_in_time/float(fade_in_steps)
 	# fade out to black
 	var transition = Transitions.get_node("Fader")
 	transition.visible = true
 	# fade back in from black to new scene
 	for i: int in range(fade_in_steps+1):
-		var a = 1-i/float(fade_in_steps)
+		var a := 1-i/float(fade_in_steps)
 		transition.modulate = Color(1, 1, 1, a)
-		var timer = util.wait(game.time(fade_in_step_time), self)
+		var timer := util.wait(game.time(fade_in_step_time), self)
 		await timer.timeout
 		timer.queue_free()
 	emit_signal('transition_finished')
 
 func transition_slide(scene: Node, in_out: String, direction: String, time:=0.5) -> void:
 	scene.visible = true
-	var off_screen
-	var on_screen
+	var off_screen: Vector2
+	var on_screen: Vector2
 	if in_out == 'out':
 		direction = util.opposite_direction(direction)
 	# off_screen
@@ -952,8 +951,8 @@ func transition_slide(scene: Node, in_out: String, direction: String, time:=0.5)
 		off_screen = Vector2(0, -game.pixel_height)
 	# on_screen
 	on_screen = Vector2(0,0)
-	var destination
-	var param = 'position'
+	var destination: Vector2
+	var param := 'position'
 	if 'position' in scene:
 		param = 'position'
 	if in_out == 'in':
@@ -979,9 +978,9 @@ func transition_slide_both(old: Node, new: Node, direction: String, time:=0.5) -
 	#new.position = Vector2(game.pixel_width*dir, 0)
 	new.visible = true
 	old.visible = true
-	var on_screen = Vector2(0,0)
-	var off_screen_new
-	var off_screen_old
+	var on_screen := Vector2(0,0)
+	var off_screen_new: Vector2
+	var off_screen_old: Vector2
 	# off_screen
 	if direction == 'left':
 		off_screen_new = Vector2(-game.pixel_width, 0)
@@ -996,10 +995,10 @@ func transition_slide_both(old: Node, new: Node, direction: String, time:=0.5) -
 		off_screen_new = Vector2(0, -game.pixel_height)
 		off_screen_old = Vector2(0, game.pixel_height)
 	# parameter
-	var new_param = 'position'
+	var new_param := 'position'
 	if 'position' in new:
 		new_param = 'position'
-	var old_param = 'position'
+	var old_param := 'position'
 	if 'position' in old:
 		old_param = 'position'
 	# setup
@@ -1130,7 +1129,7 @@ func debug_reset() -> void:
 
 func debug_scene_roots() -> void:
 	debug.print('SCENE ROOT')
-	var count = 0
+	var count := 0
 	for child in scenes_root.get_children():
 		debug.print('-' + str(count) + ': ' + child.name)
 		count += 1
@@ -1173,7 +1172,7 @@ func update_hud() -> void:
 	if not hud_allowed or dev.no_hud_ever:
 		hide_hud()
 		return
-	var allow_hud = true
+	var allow_hud := true
 	if current_scene:
 		if 'show_hud' in current_scene:
 			if current_scene.show_hud:
@@ -1234,7 +1233,7 @@ func remove_hud() -> void:
 # SMALL VIEWPORT (Experimental)
 
 func setup_small_viewport(big_resolution:=Vector2(1920,1080), small_resolution:=Vector2(640,360)) -> void:
-	var viewport:= get_viewport()
+	var viewport := get_viewport()
 	# create viewport scene to hold smaller game view
 	var gvc_tscn = load("res://widgets/game-viewport.tscn")
 	var game_viewport_container = gvc_tscn.instantiate()
@@ -1245,7 +1244,7 @@ func setup_small_viewport(big_resolution:=Vector2(1920,1080), small_resolution:=
 	var game_viewport = game_viewport_container.viewport()
 	viewport = game_viewport
 	# move $Scenes and $Overlay to the new viewport
-	var _scenes = scenes_root
+	var _scenes := scenes_root
 	#var _overlay = Overlay
 	remove_child(_scenes)
 	#remove_child(_overlay)
@@ -1397,8 +1396,8 @@ func command_line_start() -> void:
 		var xstr: String = settings.args['position']
 		var split := xstr.split('x')
 		if split.size()==2:
-			var w = int(split[0])
-			var h = int(split[1])
+			var w := int(split[0])
+			var h := int(split[1])
 			if w>0 && h>0:
 				var v2 = Vector2(w,h)
 				DisplayServer.window_set_position(v2)
