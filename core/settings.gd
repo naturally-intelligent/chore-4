@@ -54,6 +54,8 @@ var root_overlay_canvas_layer = 111
 
 # UI
 var root_capture_ui_cancel = true
+var start_with_gamepad := false
+var hud_keep_around := false
 
 # DISPLAY
 var pixel_perfect := false
@@ -84,7 +86,7 @@ const tracklist = {
 	'main-menu': ['song-file-todo', 0.8],
 }
 const music_pools = {
-    'default': ['main-menu'],
+	'default': ['main-menu'],
 }
 # SOUND
 const sound_bus_name = 'Sounds'

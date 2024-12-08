@@ -89,6 +89,10 @@ func _ready() -> void:
 		set_cursor(settings.custom_mouse_cursor)
 	if settings.scale_mouse_cursor:
 		scale_cursor()
+	# gamepad
+	if settings.start_with_gamepad:
+		ever_input_gamepad = true
+		last_input_gamepad = true
 	# Overlay Layer Number
 	Overlay.layer = settings.root_overlay_canvas_layer
 	# Timers
@@ -687,8 +691,11 @@ func update_ui() -> void:
 	update_hud()
 
 func reset_overlay():
+	var hud_visible = OverlayHUD.visible
 	for node in Overlay.get_children():
 		node.visible = false
+	if settings.hud_keep_around:
+		OverlayHUD.visible = hud_visible
 
 # MOUSE / CURSOR
 
@@ -1209,6 +1216,9 @@ func get_hud() -> Node:
 		return OverlayHUD.get_children()[0]
 	else:
 		return null
+
+func get_hud_overlay_layer() -> Control:
+	return OverlayHUD
 
 func add_hud(hud: Node) -> bool:
 	for child in OverlayHUD.get_children():
