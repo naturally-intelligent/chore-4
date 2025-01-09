@@ -528,6 +528,7 @@ func check_is_root_scene(scene, scene_name, scene_type=&'scene') -> bool:
 			print('forcing window size')
 			get_window().mode = Window.MODE_WINDOWED
 			get_window().set_size(dev.forced_window)
+		audio.init_volumes()
 		if scene_type == &'scene':
 			scenes.fresh(scene_name)
 		else:

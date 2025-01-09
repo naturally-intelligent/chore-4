@@ -23,10 +23,13 @@ signal music_volume_changed()
 signal sound_volume_changed()
 
 func _ready() -> void:
+	init_volumes()
+	
+func init_volumes():
 	set_sound_volume(settings.sound_volume)
 	set_music_volume(settings.music_volume)
 	if dev.silence: mute_master()
-		
+
 ### SOUNDS
 
 func play_sound(sound_name: String, volume:=1.0, allow_multiple:=false, pitch:={}) -> AudioStreamPlayer:
