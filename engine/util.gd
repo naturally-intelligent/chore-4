@@ -83,6 +83,7 @@ func random_boolean() -> bool:
 	return ((randi()%2) == 0)
 
 func random_array(a: Array) -> Variant:
+	# better than pick_random, as it doesnt throw an error if empty
 	if a.size() > 0:
 		var i := math.random_int(0,a.size()-1)
 		return a[i]
@@ -128,7 +129,7 @@ func random_integer_key(dict: Dictionary) -> int:
 		return -1
 
 func random_vector() -> Vector2:
-	var angle := math.random_float(0,PI)
+	var angle := math.random_float(0,PI*2)
 	return Vector2(cos(angle), sin(angle))
 
 func random_vector_between(v1: Vector2, v2: Vector2) -> Vector2:
