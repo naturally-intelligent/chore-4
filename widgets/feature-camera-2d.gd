@@ -182,14 +182,17 @@ func on_camera_trigger(camera_trigger: CameraTrigger):
 	if camera_trigger.name != last_trigger_area:
 		enter_trigger_area(camera_trigger)
 
-func check_all_triggers():
+func check_all_triggers(force := true):
 	if camera_trigger_areas:
 		trigger_areas = get_node(camera_trigger_areas)
 		# connect triggers
-		for trigger in trigger_areas.get_children():
+		for trigger: CameraTrigger in trigger_areas.get_children():
 			var camera_trigger: CameraTrigger = trigger
 			if camera_trigger.has_overlapping_bodies():
-				on_camera_trigger(camera_trigger)
+				if force:
+					force_trigger_area(camera_trigger)
+				else:
+					on_camera_trigger(camera_trigger)
 
 func enter_trigger_area(trigger_area: CameraTrigger):
 	if trigger_area.new_y_limits or trigger_area.new_x_limits:
@@ -212,10 +215,6 @@ func enter_trigger_area(trigger_area: CameraTrigger):
 		trigger_tween.tween_property(self, "limit_bottom", trigger_area.limit_y_bottom, time)
 	# x limits
 	if trigger_area.new_x_limits:
-		#limit_left = trigger_area.limit_x_left
-		#limit_right = trigger_area.limit_x_right
-		#initial_camera_left_limit = limit_left
-		#initial_camera_right_limit = limit_right
 		initial_camera_left_limit = trigger_area.limit_x_left
 		initial_camera_right_limit = trigger_area.limit_x_right
 		limit_left = camera_edge_left_x()
@@ -241,6 +240,32 @@ func enter_trigger_area(trigger_area: CameraTrigger):
 	last_trigger_area = trigger_area.name
 	call_deferred("check_empty_triggers")
 
+func force_trigger_area(trigger_area: CameraTrigger):
+	if trigger_tween:
+		trigger_tween.kill()
+	# y limits
+	if trigger_area.new_y_limits:
+		# set these limits to what is current, so that animation to new limits is smoother
+		limit_top = trigger_area.limit_y_top
+		limit_bottom = trigger_area.limit_y_bottom
+	# x limits
+	if trigger_area.new_x_limits:
+		initial_camera_left_limit = trigger_area.limit_x_left
+		initial_camera_right_limit = trigger_area.limit_x_right
+		limit_left = trigger_area.limit_x_left
+		limit_right = trigger_area.limit_x_right
+	# target distance pixels
+	if trigger_area.new_target_ahead:
+		target_ahead_pixels = trigger_area.target_ahead_pixels
+		target_behind_pixels = trigger_area.target_behind_pixels
+	# lighting
+	if trigger_area.new_darkness:
+		trigger_area.on_new_lighting()
+	# lighting
+	if trigger_area.new_rounding:
+		pixel_rounding = trigger_area.pixel_rounding
+	last_trigger_area = trigger_area.name
+	
 func tween_change_camera_limits_x(new_limit_left: int, new_limit_right: int, time:=1.5):
 	if trigger_tween:
 		trigger_tween.kill()
@@ -272,6 +297,15 @@ func tween_change_camera_limits(new_limit_left: int, new_limit_right: int, new_l
 	trigger_tween.tween_property(self, "limit_right", new_limit_right, time)
 	trigger_tween.tween_property(self, "limit_top", new_limit_top, time)
 	trigger_tween.tween_property(self, "limit_bottom", new_limit_bottom, time)
+
+func is_in_trigger_area() -> bool:
+	if camera_trigger_areas:
+		trigger_areas = get_node(camera_trigger_areas)
+		# connect triggers
+		for trigger: CameraTrigger in trigger_areas.get_children():
+			if trigger.has_overlapping_bodies():
+				return true
+	return false
 
 # SHAKE / QUAKE
 func start_shaking():

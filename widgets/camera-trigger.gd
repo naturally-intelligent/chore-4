@@ -1,3 +1,7 @@
+# CAMERA TRIGGER
+# - to use, add a Node2D container to your scene and link it to the Camera
+# - add CameraTriggers to the Node2D container, then add CollisionShape to each one
+# - make sure to set the CollisionMask flag to appropriate body physics layer (usually Player)
 extends Area2D
 class_name CameraTrigger
 
