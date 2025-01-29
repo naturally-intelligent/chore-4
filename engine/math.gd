@@ -162,6 +162,17 @@ func nearest_global_node(parent: Node, position: Vector2) -> Node2D:
 			nearest_node = node
 	return nearest_node
 
+func nearest_dict_key_if(dict: Dictionary, target: float, default := 0) -> int:
+	var nearest := 100000.0
+	var nearest_key := default
+	for key: int in dict:
+		var value: float = dict[key]
+		var closeness: float = abs(target - value)
+		if closeness < nearest:
+			nearest = closeness
+			nearest_key = key
+	return nearest_key
+	
 ### CURVES
 
 func quadratic_bezier(p0: Vector2, p1: Vector2, p2: Vector2, t: float) -> Array:
