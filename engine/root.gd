@@ -783,7 +783,7 @@ func enable_transitions() -> void:
 	Transitions.visible = true
 
 func hide_transitions() -> void:
-	#Transitions.visible = false
+	Transitions.visible = false
 	for node in Transitions.get_children():
 		node.visible = false
 

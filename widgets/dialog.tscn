@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://e8b1fbmdi7kr"]
 
-[ext_resource type="Script" path="res://widgets/dialog.gd" id="1"]
+[ext_resource type="Script" uid="uid://erwrswqt1pct" path="res://widgets/dialog.gd" id="1"]
 
 [node name="Dialog" type="VBoxContainer"]
 offset_right = 262.0

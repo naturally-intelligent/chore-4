@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://dauum6e3766xg"]
 
-[ext_resource type="Script" path="res://widgets/dpad-touch.gd" id="1"]
+[ext_resource type="Script" uid="uid://cccfc017fa13g" path="res://widgets/dpad-touch.gd" id="1"]
 
 [sub_resource type="CircleShape2D" id="1"]
 radius = 64.0

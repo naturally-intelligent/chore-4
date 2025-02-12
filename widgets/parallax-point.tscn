@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://cwa7555xxqaui"]
 
-[ext_resource type="Script" path="res://widgets/parallax-point.gd" id="1"]
+[ext_resource type="Script" uid="uid://gvt3qlwuq7v5" path="res://widgets/parallax-point.gd" id="1"]
 
 [node name="ParallaxPoint" type="Node2D"]
 script = ExtResource("1")

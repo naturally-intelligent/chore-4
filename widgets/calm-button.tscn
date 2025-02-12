@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://x1gf8ck7uw2y"]
 
-[ext_resource type="Script" path="res://widgets/calm-button.gd" id="1"]
+[ext_resource type="Script" uid="uid://ptotc6kyp4ne" path="res://widgets/calm-button.gd" id="1"]
 
 [node name="CalmButton" type="TextureButton"]
 offset_right = 40.0

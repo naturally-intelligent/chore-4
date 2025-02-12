@@ -1,12 +1,12 @@
 [gd_scene load_steps=19 format=3 uid="uid://bd75f2uxinml3"]
 
-[ext_resource type="Script" path="res://engine/root.gd" id="1"]
+[ext_resource type="Script" uid="uid://cvucfaq343pa3" path="res://engine/root.gd" id="1"]
 [ext_resource type="PackedScene" uid="uid://2k52x4jbunyj" path="res://engine/overlay.tscn" id="2"]
-[ext_resource type="Shader" path="res://engine/shaders/blur-shader.gdshader" id="5"]
-[ext_resource type="Shader" path="res://engine/shaders/greyscale-shader.gdshader" id="6"]
-[ext_resource type="Shader" path="res://engine/shaders/brightness.gdshader" id="7"]
-[ext_resource type="Shader" path="res://engine/shaders/screen-whirl.gdshader" id="8"]
-[ext_resource type="Shader" path="res://engine/shaders/screen-mirage.gdshader" id="10"]
+[ext_resource type="Shader" uid="uid://cat08yvw5bij0" path="res://engine/shaders/blur-shader.gdshader" id="5"]
+[ext_resource type="Shader" uid="uid://b3j5jqaxdd40m" path="res://engine/shaders/greyscale-shader.gdshader" id="6"]
+[ext_resource type="Shader" uid="uid://6lwvrg6kg22w" path="res://engine/shaders/brightness.gdshader" id="7"]
+[ext_resource type="Shader" uid="uid://dyubqurb7w64q" path="res://engine/shaders/screen-whirl.gdshader" id="8"]
+[ext_resource type="Shader" uid="uid://dpvha2hub5h0r" path="res://engine/shaders/screen-mirage.gdshader" id="10"]
 
 [sub_resource type="ShaderMaterial" id="1"]
 shader = ExtResource("8")
@@ -19,7 +19,7 @@ shader_parameter/depth = 0.005
 
 [sub_resource type="ShaderMaterial" id="3"]
 shader = ExtResource("5")
-shader_parameter/blur_amount = null
+shader_parameter/blur_amount = 0.0
 
 [sub_resource type="ShaderMaterial" id="4"]
 shader = ExtResource("6")
@@ -61,7 +61,7 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_tob26"]
 _data = {
-"fade": SubResource("10")
+&"fade": SubResource("10")
 }
 
 [sub_resource type="Shader" id="6"]
@@ -267,7 +267,7 @@ color = Color(0, 0, 0, 1)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Overlay/Transitions/Circle"]
 libraries = {
-"": SubResource("AnimationLibrary_tob26")
+&"": SubResource("AnimationLibrary_tob26")
 }
 
 [node name="Box" type="TextureRect" parent="Overlay/Transitions"]

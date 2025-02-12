@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://d2oicxsgc0imn"]
 
 [ext_resource type="Texture2D" uid="uid://dtk53dndd0dqy" path="res://art/hud/touch/dpad-3d-ortho.png" id="1"]
-[ext_resource type="Script" path="res://widgets/dpad-touch.gd" id="2"]
+[ext_resource type="Script" uid="uid://cccfc017fa13g" path="res://widgets/dpad-touch.gd" id="2"]
 
 [sub_resource type="CircleShape2D" id="1"]
 radius = 64.0

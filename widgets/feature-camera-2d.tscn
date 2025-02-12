@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://bi84xuh2mo5xh"]
 
-[ext_resource type="Script" path="res://widgets/feature-camera-2d.gd" id="1"]
+[ext_resource type="Script" uid="uid://drkobvkv3hsbt" path="res://widgets/feature-camera-2d.gd" id="1"]
 
 [node name="FeatureCamera2D" type="Camera2D"]
 position_smoothing_speed = 1.0

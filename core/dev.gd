@@ -48,7 +48,7 @@ var hide_mouse_cursor = false
 var skip_first_song = false
 
 func launch_hacks():
-	#silence = true
+	silence = true
 	no_music = true
 	#forced_window = Vector2(640,360)
 	#debug_overlay = true

@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://2k52x4jbunyj"]
 
-[ext_resource type="Script" path="res://engine/overlay.gd" id="1"]
+[ext_resource type="Script" uid="uid://dbrgwiknvmxw6" path="res://engine/overlay.gd" id="1"]
 
 [node name="DebugOverlay" type="Control"]
 offset_left = 5.72081
