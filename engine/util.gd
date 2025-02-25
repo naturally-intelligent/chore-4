@@ -333,6 +333,12 @@ func int_dict(data: Dictionary) -> Dictionary:
 		int_data[int(loop)] = data[loop]
 	return int_data
 
+func is_value_in_dict(data: Dictionary, value: Variant) -> bool:
+	for key in data:
+		if data[key] == value:
+			return true
+	return false
+
 func dictionary_next_key(dict: Dictionary, current_key: Variant) -> Variant:
 	if dict.size() == 0:
 		return null
@@ -846,6 +852,13 @@ func string_to_bool(_s: String) -> bool:
 		return true
 	else:
 		return false
+
+func value_to_bool(v: Variant) -> bool:
+	if v is String:
+		return string_to_bool(v)
+	if v is bool:
+		return v
+	return bool(v)
 
 func vector_to_string(vector: Vector2) -> String:
 	return "x="+str(trim_decimals(vector.x, 1))+" y="+str(trim_decimals(vector.y, 1))
