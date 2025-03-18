@@ -47,7 +47,7 @@ var shake_vector := Vector2.ZERO
 
 # camera trigger areas - parent container of CameraTrigger objects
 @export var camera_trigger_areas: NodePath = NodePath("")
-var trigger_areas: Control = null
+var trigger_areas: Node = null
 var last_trigger_area := ''
 var trigger_tween: Tween
 
@@ -199,18 +199,20 @@ func enter_trigger_area(trigger_area: CameraTrigger):
 		if trigger_tween:
 			trigger_tween.kill()
 		trigger_tween = create_tween()
-		var trans_type := Tween.TRANS_CUBIC
-		var ease_type := Tween.EASE_IN
+		var trans_type := trigger_area.tween_trans
+		var ease_type := trigger_area.tween_ease
 		trigger_tween.set_trans(trans_type)
 		trigger_tween.set_ease(ease_type)
 		trigger_tween.set_parallel()
 	# y limits
 	if trigger_area.new_y_limits:
 		# tween
-		var time := 1.0
+		var time: float = trigger_area.time
 		# set these limits to what is current, so that animation to new limits is smoother
 		limit_top = camera_edge_top_y()
 		limit_bottom = camera_edge_bottom_y()
+		if trigger_area.add_top_distance_time:
+			time += abs(trigger_area.limit_y_top - limit_top) / 400
 		trigger_tween.tween_property(self, "limit_top", trigger_area.limit_y_top, time)
 		trigger_tween.tween_property(self, "limit_bottom", trigger_area.limit_y_bottom, time)
 	# x limits
@@ -380,7 +382,7 @@ func shooty_shake(_direction: Vector2, _threshold:=1.0):
 		start_shaking()
 
 # DRAMA
-func zoom_drama(wait:=0.25, zoom_factor:=0.5):
+func zoom_drama(wait:=0.25, zoom_factor:=1.0):
 	zoom_to(1.0+zoom_factor)
 	$DramaticTimer.wait_time = wait
 	$DramaticTimer.start()

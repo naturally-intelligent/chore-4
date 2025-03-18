@@ -334,6 +334,7 @@ func int_dict(data: Dictionary) -> Dictionary:
 	return int_data
 
 func is_value_in_dict(data: Dictionary, value: Variant) -> bool:
+	# equivalent: return data.find_key(value) != null
 	for key in data:
 		if data[key] == value:
 			return true
