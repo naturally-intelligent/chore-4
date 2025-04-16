@@ -290,6 +290,8 @@ func _add_next_scene(scene, scene_name: String, info: Dictionary) -> void:
 	# load from file?
 	if typeof(scene) == TYPE_STRING:
 		var tscn = load(scene)
+		if not tscn:
+			debug.print("FATAL: Missing Scene ", scene_name)
 		scene = tscn.instantiate() # if it fails here, file doesn't exist
 		scene.name = scene_name
 	# console info about bad scene
@@ -454,7 +456,7 @@ func _resume_current_scene() -> void:
 		if settings.pause_tree_during_switch:
 			if current_scene_type == &'scene':
 				resume()
-			
+
 func get_scene_container(scene_type: String) -> Control:
 	if scene_type == &'scene':
 		return scenes_root

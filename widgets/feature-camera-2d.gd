@@ -22,6 +22,7 @@ var target_point := Vector2.ZERO
 var last_camera_direction := Vector2.ZERO
 var target_anchor_position := Vector2.ZERO
 var target_anchored := false
+var enable_triggers := true
 
 # pixel rounding
 @export var pixel_rounding := true
@@ -180,7 +181,8 @@ func setup_camera_triggers():
 
 func on_camera_trigger(camera_trigger: CameraTrigger):
 	if camera_trigger.name != last_trigger_area:
-		enter_trigger_area(camera_trigger)
+		if enable_triggers:
+			enter_trigger_area(camera_trigger)
 
 func check_all_triggers(force := true):
 	if camera_trigger_areas:

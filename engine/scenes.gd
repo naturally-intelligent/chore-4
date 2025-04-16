@@ -66,9 +66,9 @@ func thaw(scene_name: String, transitions={}, info={}, scene_data=false) -> Vari
 	return scene
 
 func fresh(scene_name: String, transitions=false, info=false, scene_data=false) -> Variant:
-	if info is bool and info == false: 
+	if info is bool and info == false:
 		info = 'remove_at'
-	if info == null: 
+	if info == null:
 		info = 'remove_at'
 	return thaw(scene_name, transitions, info, scene_data)
 

@@ -23,8 +23,12 @@ func _ready():
 	else:
 		# development launch overrides
 		if dev.launch_menu_override:
+			if dev.use_save_slot:
+				game.start_game_working_slot(false)
 			menus.show(dev.launch_menu_override)
 		elif dev.launch_scene_override:
+			if dev.use_save_slot:
+				game.start_game_working_slot(false)
 			scenes.show(dev.launch_scene_override)
 		else:
 			if game.launch_scene:

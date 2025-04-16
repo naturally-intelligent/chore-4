@@ -251,7 +251,7 @@ func dir_exists(space: String, dir: String) -> bool:
 
 func delete_file(space: String, dir: String) -> bool:
 	var base := DirAccess.open(space) # ex: res:// or user://
-	if base and base.remove(dir):
+	if base and base.remove(dir) == OK:
 		return true
 	return false
 

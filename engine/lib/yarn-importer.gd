@@ -121,7 +121,7 @@ func load_yarn(path: String) -> Dictionary:
 	new_yarn['start'] = ''
 	new_yarn['file'] = path
 	var file = FileAccess.open(path, FileAccess.READ)
-	if file.is_open():
+	if file and file.is_open():
 		# yarn reading flags
 		var start := false
 		var header := true
@@ -308,4 +308,3 @@ func save_to_gdscript(filename: String):
 		return false
 	file.store_string(script)
 	file = null
-
