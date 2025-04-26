@@ -23,6 +23,7 @@ class_name CameraTrigger
 @export var new_x_limits := false
 @export var limit_x_left := 0
 @export var limit_x_right := 640
+@export var tween_x_limits := true
 
 # target ahead
 @export_group("Target Ahead")

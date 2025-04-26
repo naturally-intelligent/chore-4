@@ -64,7 +64,7 @@ var free_roam_data := {}
 # coop
 @export var coop_camera_limits := true
 
-const TARGET_CATCHUP_LERP_SPEED = 4.0
+const TARGET_CATCHUP_LERP_SPEED = 2.0
 const TARGET_IGNORE_PIXELS = 24
 const NOISE_FACTOR = 1
 
@@ -92,7 +92,7 @@ func _process(delta: float):
 		target = null
 	# target follow
 	if target:
-		if target_ahead and not trigger_tween:
+		if target_ahead:
 			target_ahead_camera(delta)
 		else:
 			float_camera_position = target.global_position
@@ -137,7 +137,9 @@ func target_ahead_camera(delta: float):
 	if target_anchored:
 		var anchor_distance_x: float = absf(target.global_position.x - target_anchor_position.x)
 		if anchor_distance_x <= TARGET_IGNORE_PIXELS / zoom.x:
-			return
+			var camera_distance_y: float = absf(target.global_position.y - float_camera_position.y)
+			if camera_distance_y < 5:
+				return
 		target_anchored = false
 	# move target point?
 	if $TargetIgnoreTimer.is_stopped():
@@ -179,12 +181,12 @@ func setup_camera_triggers():
 			camera_trigger.connect("triggered", Callable(self, "on_camera_trigger").bind(camera_trigger))
 		trigger_areas.visible = false
 
-func on_camera_trigger(camera_trigger: CameraTrigger):
-	if camera_trigger.name != last_trigger_area:
+func on_camera_trigger(camera_trigger: CameraTrigger, ensure := false):
+	if camera_trigger.name != last_trigger_area or ensure:
 		if enable_triggers:
 			enter_trigger_area(camera_trigger)
 
-func check_all_triggers(force := true):
+func check_all_triggers(force := true, ensure := false):
 	if camera_trigger_areas:
 		trigger_areas = get_node(camera_trigger_areas)
 		# connect triggers
@@ -194,7 +196,7 @@ func check_all_triggers(force := true):
 				if force:
 					force_trigger_area(camera_trigger)
 				else:
-					on_camera_trigger(camera_trigger)
+					on_camera_trigger(camera_trigger, ensure)
 
 func enter_trigger_area(trigger_area: CameraTrigger):
 	if trigger_area.new_y_limits or trigger_area.new_x_limits:
@@ -219,17 +221,23 @@ func enter_trigger_area(trigger_area: CameraTrigger):
 		trigger_tween.tween_property(self, "limit_bottom", trigger_area.limit_y_bottom, time)
 	# x limits
 	if trigger_area.new_x_limits:
-		initial_camera_left_limit = trigger_area.limit_x_left
-		initial_camera_right_limit = trigger_area.limit_x_right
-		limit_left = camera_edge_left_x()
-		limit_right = camera_edge_right_x()
-		var time: float = abs(initial_camera_left_limit - trigger_area.limit_x_left) + abs(initial_camera_right_limit - trigger_area.limit_x_right)
-		time *= 0.01
-		if time < 1.0: time = 1.0
-		trigger_tween.tween_property(self, "limit_left", trigger_area.limit_x_left, time)
-		trigger_tween.tween_property(self, "limit_right", trigger_area.limit_x_right, time)
-		if position_smoothing_speed > 1:
-			set_smoothing_speed_temporarily()
+		if trigger_area.tween_x_limits:
+			initial_camera_left_limit = trigger_area.limit_x_left
+			initial_camera_right_limit = trigger_area.limit_x_right
+			limit_left = camera_edge_left_x()
+			limit_right = camera_edge_right_x()
+			var time: float = abs(initial_camera_left_limit - trigger_area.limit_x_left) + abs(initial_camera_right_limit - trigger_area.limit_x_right)
+			time *= 0.01
+			if time < 1.0: time = 1.0
+			trigger_tween.tween_property(self, "limit_left", trigger_area.limit_x_left, time)
+			trigger_tween.tween_property(self, "limit_right", trigger_area.limit_x_right, time)
+			if position_smoothing_speed > 1:
+				set_smoothing_speed_temporarily()
+		else:
+			initial_camera_left_limit = trigger_area.limit_x_left
+			initial_camera_right_limit = trigger_area.limit_x_right
+			limit_left = trigger_area.limit_x_left
+			limit_right = trigger_area.limit_x_right
 	# target distance pixels
 	if trigger_area.new_target_ahead:
 		target_ahead_pixels = trigger_area.target_ahead_pixels
