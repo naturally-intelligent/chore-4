@@ -1,5 +1,5 @@
 # CHORE ENGINE v1.4
-Godot 4 Framework
+Godot 4.4 Framework
 ---
 
 What does this engine do?
@@ -14,11 +14,13 @@ The repository includes a demo project.
 SHARED DIRECTORIES
 ---
 
-Use by linking/copying into your project these directories:
+Copy or use by linking/copying into your project these directories:
 - engine
 - widgets
 
-Example: ln -s /path/to/chore/engine /path/to/yourgame/.
+Example (copy/link): 
+- cp -r /path/to/chore/engine /path/to/yourgame/.
+- ln -s /path/to/chore/engine /path/to/yourgame/.
 
 "widgets" contains optional convenient components you can use or not. Even though the Chore repo contains art, sound, etc, you should not link those, they are examples. This means the repository is both the engine *and* the demo project.
 
@@ -42,6 +44,8 @@ Name them anything you want, and let Chore know your directories in "settings.gd
 ---
 PROJECT SETTINGS
 ---
+
+You can quickly copy and paste from within your "project.godot" file by opening the Chore sample project and your new project and copying the autoload/input sections.
 
 You will need to set in your Project Settings:
 - main scene: launch.tscn (see next section)
