@@ -169,7 +169,8 @@ func target_ahead_camera(delta: float):
 func force_position(_position: Vector2):
 	_position = round(_position)
 	global_position = _position
-	target_point = _position
+	target_point = Vector2.ZERO
+	target_anchor_position = _position
 	float_camera_position = _position
 
 # TRIGGER
@@ -234,8 +235,8 @@ func enter_trigger_area(trigger_area: CameraTrigger):
 			if position_smoothing_speed > 1:
 				set_smoothing_speed_temporarily()
 		else:
-			initial_camera_left_limit = trigger_area.limit_x_left
-			initial_camera_right_limit = trigger_area.limit_x_right
+			#initial_camera_left_limit = trigger_area.limit_x_left
+			#initial_camera_right_limit = trigger_area.limit_x_right
 			limit_left = trigger_area.limit_x_left
 			limit_right = trigger_area.limit_x_right
 	# target distance pixels
