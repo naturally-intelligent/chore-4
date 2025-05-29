@@ -340,6 +340,11 @@ func is_value_in_dict(data: Dictionary, value: Variant) -> bool:
 			return true
 	return false
 
+func dictionary_first_key(dict: Dictionary) -> Variant:
+	if dict.size() == 0:
+		return null
+	return dict.keys()[0]
+
 func dictionary_next_key(dict: Dictionary, current_key: Variant) -> Variant:
 	if dict.size() == 0:
 		return null
