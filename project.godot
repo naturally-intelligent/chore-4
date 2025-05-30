@@ -14,10 +14,10 @@ config/name="Chore Engine 4"
 config/description="Chore Engine 4"
 run/main_scene="res://menus/launch.tscn"
 config/quit_on_go_back=false
-config/features=PackedStringArray("4.3")
+config/features=PackedStringArray("4.4")
 boot_splash/bg_color=Color(0, 0, 0, 1)
-boot_splash/image="res://icon.png"
 boot_splash/use_filter=false
+boot_splash/image="res://icon.png"
 config/icon="res://icon.png"
 
 [autoload]
