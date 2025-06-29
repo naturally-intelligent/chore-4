@@ -932,13 +932,13 @@ func map_input_keys(config: Dictionary, allowed:=[]) -> void:
 				new_event.set_keycode(scan_code)
 				InputMap.action_add_event(ui_action, new_event)
 
-func add_action_key(action: String, physical_keycode: int):
+func add_action_key(action: String, physical_keycode: Key):
 	if InputMap.has_action(action):
 		var event := InputEventKey.new()
 		event.physical_keycode = physical_keycode
 		InputMap.action_add_event(action, event)
 	
-func erase_action_key(action: String, physical_keycode: int):
+func erase_action_key(action: String, physical_keycode: Key):
 	var events := InputMap.action_get_events(action)
 	for event in events:
 		if event is InputEventKey and event.physical_keycode == physical_keycode:
