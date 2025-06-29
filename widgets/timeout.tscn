@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://cbuy2g0k3h1th"]
+
+[ext_resource type="Script" uid="uid://bmqsxc06prs5k" path="res://widgets/timeout.gd" id="1_sxbmn"]
+
+[node name="TimeoutTimer" type="Timer"]
+wait_time = 180.0
+one_shot = true
+script = ExtResource("1_sxbmn")
+
+[connection signal="timeout" from="." to="." method="_on_timeout"]

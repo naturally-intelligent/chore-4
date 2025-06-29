@@ -1409,6 +1409,11 @@ func command_line_start() -> void:
 		if '-menu' in settings.args:
 			game.launch_menu = settings.args['-menu']
 
+func add_timeout_scene(seconds := 180):
+	var timeout = load("res://widgets/timeout.tscn").instantiate()
+	timeout.timeout_time = seconds
+	add_child(timeout)
+
 # QUIT
 
 func quit() -> void:
