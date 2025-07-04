@@ -932,6 +932,42 @@ func map_input_keys(config: Dictionary, allowed:=[]) -> void:
 				new_event.set_keycode(scan_code)
 				InputMap.action_add_event(ui_action, new_event)
 
+func add_action_keys(config: Dictionary, allowed:=[]) -> void:
+	var to_map := []
+	var cleared := []
+	# Check for validity of input maps, and erase any existing conflicts
+	for action: String in config:
+		var key_code: String = config[action]
+		var allow := (allowed.is_empty()) or ('all' in allowed) or (action in allowed)
+		if allow:
+			var scan_code := keycode_to_scancode(key_code)
+			#debug.print('Input Map Request: ', ui_action, key_code, scan_code)
+			if scan_code:
+				add_action_key(action, scan_code)
+				
+func add_action_mouse_buttons(config: Dictionary, allowed:=[]) -> void:
+	var to_map := []
+	var cleared := []
+	# Check for validity of input maps, and erase any existing conflicts
+	for action: String in config:
+		var button_index: int = int(config[action])
+		var allow := (allowed.is_empty()) or ('all' in allowed) or (action in allowed)
+		if allow:
+			add_action_mouse_button(action, button_index)
+				
+func erase_action_keys(config: Dictionary, allowed:=[]) -> void:
+	var to_map := []
+	var cleared := []
+	# Check for validity of input maps, and erase any existing conflicts
+	for action: String in config:
+		var key_code: String = config[action]
+		var allow := (allowed.is_empty()) or ('all' in allowed) or (action in allowed)
+		if allow:
+			var scan_code := keycode_to_scancode(key_code)
+			#debug.print('Input Map Request: ', ui_action, key_code, scan_code)
+			if scan_code:
+				erase_action_key(action, scan_code)
+
 func add_action_key(action: String, physical_keycode: Key):
 	if InputMap.has_action(action):
 		var event := InputEventKey.new()
