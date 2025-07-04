@@ -155,8 +155,8 @@ The debug console currently doesn't support typing, but it can be printed to.
 ---
 GODOT GAMES USING CHORE ENGINE
 ---
-Dirty Land - www.dirtylandgame.com
-Forehead Chip - www.foreheadchip.com
-[ more to be announced ]
+- Dirty Land - www.dirtylandgame.com
+- Forehead Chip - www.foreheadchip.com
+- Shade Protocol - www.shadeprotocolgame.com
 
 
