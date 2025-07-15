@@ -646,42 +646,43 @@ func _input(event: InputEvent) -> void:
 				flip_autoscreenshot()
 		if Input.is_action_just_pressed("ui_quit"):
 			quit()
-		if Input.is_action_just_pressed("dev_pause"):
-			debug.console('pause - press Backspace to resume')
-			pause()
-			Engine.time_scale = 0.0
-		elif Input.is_action_just_pressed("dev_advance"):
-			debug.console('advance - \\ for next frame or Backspace to resume')
-			Engine.time_scale = 1.0
-			resume()
-			reset()
-			$Timers/Advance.start()
-		elif Input.is_action_just_pressed("dev_resume"):
-			hide_console()
-			resume()
-			reset()
-		elif Input.is_action_pressed("dev_slow"):
-			resume()
-			Engine.time_scale *= 0.75
-			if Engine.time_scale < 0.1:
-				Engine.time_scale = 0.1
-			debug.console('slow ',util.trim_decimals(Engine.time_scale, 1),'  - press Backspace for normal')
-		elif Input.is_action_pressed("dev_fast"):
-			resume()
-			Engine.time_scale *= 1.5
-			if Engine.time_scale > 10:
-				Engine.time_scale = 10
-			debug.console('fast ',util.trim_decimals(Engine.time_scale, 1),' - press Backspace for normal')
-		elif Input.is_action_just_pressed("dev_console"):
-			flip_console()
-			if is_console_visible():
-				show_console_readme()
-		elif Input.is_action_just_pressed("dev_info_prev"):
-			debug_info_prev()
-		elif Input.is_action_just_pressed("dev_info_next"):
-			debug_info_next()
-		elif Input.is_action_just_pressed("dev_info_point"):
-			debug_info_point()
+		if current_scene_type == &'scene':
+			if Input.is_action_just_pressed("dev_pause"):
+				debug.console('pause - press Backspace to resume')
+				pause()
+				Engine.time_scale = 0.0
+			elif Input.is_action_just_pressed("dev_advance"):
+				debug.console('advance - \\ for next frame or Backspace to resume')
+				Engine.time_scale = 1.0
+				resume()
+				reset()
+				$Timers/Advance.start()
+			elif Input.is_action_just_pressed("dev_resume"):
+				hide_console()
+				resume()
+				reset()
+			elif Input.is_action_pressed("dev_slow"):
+				resume()
+				Engine.time_scale *= 0.75
+				if Engine.time_scale < 0.1:
+					Engine.time_scale = 0.1
+				debug.console('slow ',util.trim_decimals(Engine.time_scale, 1),'  - press Backspace for normal')
+			elif Input.is_action_pressed("dev_fast"):
+				resume()
+				Engine.time_scale *= 1.5
+				if Engine.time_scale > 10:
+					Engine.time_scale = 10
+				debug.console('fast ',util.trim_decimals(Engine.time_scale, 1),' - press Backspace for normal')
+			elif Input.is_action_just_pressed("dev_console"):
+				flip_console()
+				if is_console_visible():
+					show_console_readme()
+			elif Input.is_action_just_pressed("dev_info_prev"):
+				debug_info_prev()
+			elif Input.is_action_just_pressed("dev_info_next"):
+				debug_info_next()
+			elif Input.is_action_just_pressed("dev_info_point"):
+				debug_info_point()
 
 # UPDATES
 
