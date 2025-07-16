@@ -71,7 +71,10 @@ func fullscreen_flip() -> void:
 	if window.mode == Window.MODE_FULLSCREEN or window.mode == Window.MODE_EXCLUSIVE_FULLSCREEN :
 		window.mode = Window.MODE_WINDOWED
 	else:
-		window.mode = Window.MODE_FULLSCREEN
+		if util.windows:
+			window.mode = Window.MODE_EXCLUSIVE_FULLSCREEN
+		else:
+			window.mode = Window.MODE_FULLSCREEN
 		
 func random(_s: Variant, _e: Variant):
 	if typeof(_s) == TYPE_INT:
@@ -970,6 +973,12 @@ func erase_action_keys(config: Dictionary, allowed:=[]) -> void:
 
 func add_action_key(action: String, physical_keycode: Key):
 	if InputMap.has_action(action):
+		# duplicate check
+		var events := InputMap.action_get_events(action)
+		for event in events:
+			if event is InputEventKey and event.physical_keycode == physical_keycode:
+				return
+		# add
 		var event := InputEventKey.new()
 		event.physical_keycode = physical_keycode
 		InputMap.action_add_event(action, event)
@@ -979,6 +988,13 @@ func erase_action_key(action: String, physical_keycode: Key):
 	for event in events:
 		if event is InputEventKey and event.physical_keycode == physical_keycode:
 			InputMap.action_erase_event(action, event)
+
+func erase_all_action_keys(action: String, exceptions := [KEY_UP, KEY_DOWN, KEY_RIGHT, KEY_LEFT]):
+	var events := InputMap.action_get_events(action)
+	for event in events:
+		if event is InputEventKey:
+			if event.physical_keycode not in exceptions:
+				InputMap.action_erase_event(action, event)
 
 func add_action_mouse_button(action: String, button_index: MouseButton):
 	if InputMap.has_action(action):
