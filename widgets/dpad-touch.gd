@@ -17,7 +17,7 @@ var left := false
 var right := false
 
 var last_degrees := -1
-var wiggle := 23
+var wiggle := 11
 
 # sprite sprite_frames
 const eight_directions = {
