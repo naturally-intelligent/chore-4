@@ -624,14 +624,15 @@ func create_import_files_for_export(texture_dir: String) -> Resource:
 	return null
 	
 # SCREENSHOT (F5)
-func screenshot(scene: Node, scale:=Vector2i.ZERO, logo:='', savedir:="screenshots"):
+func screenshot(scene: Node, scale:=Vector2i.ZERO, logo:='', savedir:="screenshots", clear_frame:=false):
 	debug.print('Screenshot...')
 	# setup
 	var viewport: Viewport = scene.get_viewport()
 	var tree: SceneTree = scene.get_tree()
 	
 	# clear next frame
-	RenderingServer.viewport_set_clear_mode(viewport, RenderingServer.VIEWPORT_CLEAR_ONLY_NEXT_FRAME)
+	if clear_frame:
+		RenderingServer.viewport_set_clear_mode(viewport.get_viewport_rid(), RenderingServer.VIEWPORT_CLEAR_ONLY_NEXT_FRAME)
 
 	# hide cursor?
 	var show_cursor: bool = root.is_cursor_visible()
@@ -641,12 +642,16 @@ func screenshot(scene: Node, scale:=Vector2i.ZERO, logo:='', savedir:="screensho
 	if settings.screenshot_transparent_bg:
 		viewport.transparent_bg = true
 
-	# Let two sprite_frames pass to make sure the screen was captured
+	# Let two frames pass to make sure the screen was captured
 	await tree.process_frame
 	await tree.process_frame
 
 	# Retrieve the captured image
 	var img: Image = viewport.get_texture().get_image()
+
+	# restore clear mode
+	if clear_frame:
+		RenderingServer.viewport_set_clear_mode(viewport.get_viewport_rid(), RenderingServer.VIEWPORT_CLEAR_ALWAYS)
 
 	if settings.screenshot_transparent_bg:
 		viewport.transparent_bg = false
