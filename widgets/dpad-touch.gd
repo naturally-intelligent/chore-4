@@ -2,14 +2,19 @@ extends TouchScreenButton
 
 @export var diagonal := true
 
-var outer_boundary := 128
-var inner_boundary := 8
-var touch_idx := -1
+@export var outer_boundary := 128
+@export var inner_boundary := 8
+@export var touch_idx := -1
 var direction := Vector2.RIGHT
 var active := false
 var instant_direction := false
-var instant_threshold := 1
+@export var instant_threshold := 1
 var last_position := Vector2.ZERO
+
+@export var action_up = "ui_up"
+@export var action_left = "ui_left"
+@export var action_right = "ui_right"
+@export var action_down = "ui_down"
 
 var up := false
 var down := false
@@ -17,7 +22,7 @@ var left := false
 var right := false
 
 var last_degrees := -1
-var wiggle := 11
+@export var wiggle := 11
 
 # sprite sprite_frames
 const eight_directions = {
@@ -169,29 +174,29 @@ func update_dpad(vector: Vector2):
 	last_degrees = degrees
 
 func press_events():
-	if up: Input.action_press("ui_up")
-	if left: Input.action_press("ui_left")
-	if right: Input.action_press("ui_right")
-	if down: Input.action_press("ui_down")
+	if up: Input.action_press(action_up)
+	if left: Input.action_press(action_left)
+	if right: Input.action_press(action_right)
+	if down: Input.action_press(action_down)
 
 func release_left():
 	if left:
-		Input.action_release("ui_left")
+		Input.action_release(action_left)
 		left = false
 
 func release_right():
 	if right:
-		Input.action_release("ui_right")
+		Input.action_release(action_right)
 		right = false
 
 func release_up():
 	if up:
-		Input.action_release("ui_up")
+		Input.action_release(action_up)
 		up = false
 
 func release_down():
 	if down:
-		Input.action_release("ui_down")
+		Input.action_release(action_down)
 		down = false
 
 func release_events():
