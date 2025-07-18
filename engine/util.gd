@@ -949,12 +949,28 @@ func add_action_keys(config: Dictionary, allowed:=[], replace := false) -> void:
 		var allow := (allowed.is_empty()) or ('all' in allowed) or (action in allowed)
 		if allow:
 			var scan_code := keycode_to_scancode(key_code)
-			#debug.print('Input Map Request: ', ui_action, key_code, scan_code)
+			#debug.print('Input Map Request: ', action, key_code, scan_code)
 			if scan_code:
 				if replace:
-					add_action_key(action, scan_code)
-				else:
 					replace_action_key(action, scan_code)
+				else:
+					add_action_key(action, scan_code)
+
+func add_keys_action(config: Dictionary, allowed:=[], replace := false) -> void:
+	var to_map := []
+	var cleared := []
+	# Check for validity of input maps, and erase any existing conflicts
+	for key_code: String in config:
+		var action: String = str(config[key_code])
+		var allow := (allowed.is_empty()) or ('all' in allowed) or (action in allowed)
+		if allow:
+			var scan_code := keycode_to_scancode(key_code)
+			#debug.print('Input Map Request: ', action, key_code, scan_code)
+			if scan_code:
+				if replace:
+					replace_action_key(action, scan_code)
+				else:
+					add_action_key(action, scan_code)
 
 func add_action_mouse_buttons(config: Dictionary, allowed:=[]) -> void:
 	var to_map := []
