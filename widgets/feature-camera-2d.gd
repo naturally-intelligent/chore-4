@@ -181,8 +181,11 @@ func setup_camera_triggers():
 		trigger_areas = get_node(camera_trigger_areas)
 		# connect triggers
 		for camera_trigger: CameraTrigger in trigger_areas.get_children():
-			camera_trigger.connect("triggered", Callable(self, "on_camera_trigger").bind(camera_trigger))
+			setup_camera_trigger(camera_trigger)
 		trigger_areas.visible = false
+
+func setup_camera_trigger(camera_trigger: CameraTrigger):
+	camera_trigger.connect("triggered", Callable(self, "on_camera_trigger").bind(camera_trigger))
 
 func on_camera_trigger(camera_trigger: CameraTrigger, ensure := false):
 	if camera_trigger.name != last_trigger_area or ensure:
@@ -225,22 +228,30 @@ func enter_trigger_area(trigger_area: CameraTrigger):
 	# x limits
 	if trigger_area.new_x_limits:
 		if trigger_area.tween_x_limits:
-			initial_camera_left_limit = trigger_area.limit_x_left
-			initial_camera_right_limit = trigger_area.limit_x_right
-			limit_left = camera_edge_left_x()
-			limit_right = camera_edge_right_x()
-			var time: float = abs(initial_camera_left_limit - trigger_area.limit_x_left) + abs(initial_camera_right_limit - trigger_area.limit_x_right)
+			var time: float = 1.0
+			if trigger_area.new_left_limit:
+				initial_camera_left_limit = trigger_area.limit_x_left
+				limit_left = camera_edge_left_x()
+				time += abs(initial_camera_left_limit - trigger_area.limit_x_left)
+			if trigger_area.new_right_limit:
+				initial_camera_right_limit = trigger_area.limit_x_right
+				limit_right = camera_edge_right_x()
+				time += abs(initial_camera_right_limit - trigger_area.limit_x_right)
 			time *= 0.01
 			if time < 1.0: time = 1.0
-			trigger_tween.tween_property(self, "limit_left", trigger_area.limit_x_left, time)
-			trigger_tween.tween_property(self, "limit_right", trigger_area.limit_x_right, time)
+			if trigger_area.new_left_limit:
+				trigger_tween.tween_property(self, "limit_left", trigger_area.limit_x_left, time)
+			if trigger_area.new_right_limit:
+				trigger_tween.tween_property(self, "limit_right", trigger_area.limit_x_right, time)
 			if position_smoothing_speed > 1:
 				set_smoothing_speed_temporarily()
 		else:
 			#initial_camera_left_limit = trigger_area.limit_x_left
 			#initial_camera_right_limit = trigger_area.limit_x_right
-			limit_left = trigger_area.limit_x_left
-			limit_right = trigger_area.limit_x_right
+			if trigger_area.new_left_limit:
+				limit_left = trigger_area.limit_x_left
+			if trigger_area.new_right_limit:
+				limit_right = trigger_area.limit_x_right
 	# target distance pixels
 	if trigger_area.new_target_ahead:
 		target_ahead_pixels = trigger_area.target_ahead_pixels
@@ -265,10 +276,12 @@ func force_trigger_area(trigger_area: CameraTrigger):
 		limit_bottom = trigger_area.limit_y_bottom
 	# x limits
 	if trigger_area.new_x_limits:
-		initial_camera_left_limit = trigger_area.limit_x_left
-		initial_camera_right_limit = trigger_area.limit_x_right
-		limit_left = trigger_area.limit_x_left
-		limit_right = trigger_area.limit_x_right
+		if trigger_area.new_left_limit:
+			initial_camera_left_limit = trigger_area.limit_x_left
+			limit_left = trigger_area.limit_x_left
+		if trigger_area.new_right_limit:
+			initial_camera_right_limit = trigger_area.limit_x_right
+			limit_right = trigger_area.limit_x_right
 	# target distance pixels
 	if trigger_area.new_target_ahead:
 		target_ahead_pixels = trigger_area.target_ahead_pixels

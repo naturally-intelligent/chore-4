@@ -21,6 +21,8 @@ class_name CameraTrigger
 # x limits
 @export_group("X Limits")
 @export var new_x_limits := false
+@export var new_left_limit := true
+@export var new_right_limit := true
 @export var limit_x_left := 0
 @export var limit_x_right := 640
 @export var tween_x_limits := true
