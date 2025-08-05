@@ -64,6 +64,8 @@ var free_roam_data := {}
 # coop
 @export var coop_camera_limits := true
 
+signal camera_tween_finished()
+
 const TARGET_CATCHUP_LERP_SPEED = 2.0
 const TARGET_IGNORE_PIXELS = 24
 const NOISE_FACTOR = 1
@@ -310,6 +312,8 @@ func tween_change_camera_limits(new_limit_left: int, new_limit_right: int, new_l
 	trigger_tween.tween_property(self, "limit_right", new_limit_right, time)
 	trigger_tween.tween_property(self, "limit_top", new_limit_top, time)
 	trigger_tween.tween_property(self, "limit_bottom", new_limit_bottom, time)
+	await trigger_tween.finished
+	emit_signal("camera_tween_finished")
 
 func is_in_trigger_area() -> bool:
 	if camera_trigger_areas:
