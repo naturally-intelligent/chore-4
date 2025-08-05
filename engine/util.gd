@@ -1089,3 +1089,14 @@ func gamepad_detection() -> String:
 				found = test
 		if found in alias: found = alias[found]
 	return found
+
+# load a value from a TSCN file without preload/load
+# https://forum.godotengine.org/t/how-can-i-get-the-export-variables-from-a-scene-without-loading-it-completely-into-memory/26529/3
+func get_tscn_value(filename: String, var_name: String) -> String:
+	var file := FileAccess.open(filename, FileAccess.READ)
+	if file:
+		while not file.eof_reached():
+			var line := file.get_line()
+			if line.find(var_name + " = ") > -1:
+				return line.split("= ")[1]
+	return ''
