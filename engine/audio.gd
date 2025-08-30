@@ -539,6 +539,13 @@ func seek_music(time: float) -> void:
 	if $MusicPlayer.is_playing():
 		$MusicPlayer.seek(time)
 
+func is_group_playing(group_name) -> bool:
+	for node in get_tree().get_nodes_in_group(group_name):
+		if node is AudioStreamPlayer2D or node is AudioStreamPlayer:
+			if node.playing:
+				return true
+	return false
+
 ### MUSIC - INTERNAL
 
 func _get_volume_for_song(song_name: String) -> float:
