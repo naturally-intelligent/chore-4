@@ -35,7 +35,7 @@ func init_volumes():
 func play_sound(sound_name: String, volume:=1.0, allow_multiple:=false, pitch:={}) -> AudioStreamPlayer:
 	if dev.silence: return
 	# find sound resource link (res://dir/file.ext)
-	var resource_link := _sound_resource(sound_name)
+	var resource_link := sound_resource(sound_name)
 	if resource_link == '':
 		return null
 	# find a sound player
@@ -67,21 +67,21 @@ func play_sound(sound_name: String, volume:=1.0, allow_multiple:=false, pitch:={
 	return player
 
 func is_sound_playing(sound_name) -> bool:
-	var resource_link := _sound_resource(sound_name)
+	var resource_link := sound_resource(sound_name)
 	return _is_sound_resource_playing(resource_link)
 
 func is_sound_looping(sound_name) -> bool:
-	var resource_link := _sound_resource(sound_name)
+	var resource_link := sound_resource(sound_name)
 	return _is_sound_resource_looping(resource_link)
 
 func stop_sound(sound_name) -> void:
-	var resource_link := _sound_resource(sound_name)
+	var resource_link := sound_resource(sound_name)
 	_stop_sound_resource(resource_link)
 
 func loop_sound(sound_name: String, volume:=1.0, fade_in:=false, fade_in_time:=0.5) -> AudioStreamPlayer:
 	if dev.silence: return
 	# find sound resource link (res://dir/file.ext)
-	var resource_link := _sound_resource(sound_name)
+	var resource_link := sound_resource(sound_name)
 	if resource_link == '':
 		return null
 	# find a sound player
@@ -136,7 +136,7 @@ func fade_in_loop_sound(sound_name: String, volume:=1.0, fade_in_time:=1.5) -> v
 	loop_sound(sound_name, volume, true, fade_in_time)
 
 func fade_out_sound(sound_name: String, fade_out_time:=1.0) -> bool:
-	var resource_link := _sound_resource(sound_name)
+	var resource_link := sound_resource(sound_name)
 	if resource_link == '':
 		return false
 	var containers := [$SoundPlayers, $SoundLoopers]
@@ -152,19 +152,19 @@ func fade_out_sound(sound_name: String, fade_out_time:=1.0) -> bool:
 
 ### SOUNDS - INTERNAL CALLS
 
-func _sound_resource(sound_name: String) -> String:
+func sound_resource(sound_name: String) -> String:
 	if sound_name in file_locations:
 		return file_locations[sound_name]
 	if util.file_exists(sound_name):
 		return sound_name
-	var file_name := _find_sound_file(sound_name)
+	var file_name := find_sound_file(sound_name)
 	if file_name:
 		file_locations[sound_name] = file_name
 		return file_name
 	if sound_name in settings.sound_alias:
 		var alias_name = settings.sound_alias[sound_name]
 		if alias_name:
-			var file_name2 := _find_sound_file(alias_name)
+			var file_name2 := find_sound_file(alias_name)
 			if file_name2:
 				file_locations[sound_name] = file_name2
 			return file_name2
@@ -173,7 +173,7 @@ func _sound_resource(sound_name: String) -> String:
 		missing_files.append(sound_name)
 	return ''
 
-func _find_sound_file(sound_name: String) -> String:
+func find_sound_file(sound_name: String) -> String:
 	for dir: String in settings.sound_dirs:
 		var file_name := 'res://' + dir + '/' + sound_name + settings.sound_ext
 		if util.file_exists(file_name) or util.file_exists(file_name+".import"):
@@ -346,7 +346,7 @@ func rogue(player: Object, load_with_sound_name:='') -> void:
 	if dev.silence: return
 	# load with sound from settings?
 	if load_with_sound_name != '':
-		var resource_link := _sound_resource(load_with_sound_name)
+		var resource_link := sound_resource(load_with_sound_name)
 		if not player.has_meta('resource_link') or player.get_meta('resource_link') != resource_link:
 			player.set_meta('resource_link', resource_link)
 			var stream: AudioStream = load(resource_link)
