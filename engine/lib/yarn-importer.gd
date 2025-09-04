@@ -19,15 +19,15 @@ var yarn := {}
 # OVERRIDE METHODS
 #
 # called to request new dialog
-func say(text: String):
+func say(text: String, fibre: Dictionary):
 	pass
 
 # called to request new choice button
-func choice(text: String, marker: String):
+func choice(text: String, marker: String, fibre: Dictionary):
 	pass
 
 # called to request internal logic handling
-func logic(instruction: String, command: String):
+func logic(instruction: String, command: String, fibre: Dictionary):
 	pass
 
 # called for each line of text
@@ -77,7 +77,7 @@ func new_yarn_thread() -> Dictionary:
 	return thread
 
 # Internally create a new fibre (during loading)
-func new_yarn_fibre(line: String) -> Dictionary:
+func new_yarn_fibre(line: String, title: String) -> Dictionary:
 	var first_two := line.substr(0,2)
 	# choice fibre
 	if first_two == '[[':
@@ -112,6 +112,7 @@ func new_yarn_fibre(line: String) -> Dictionary:
 	var new_fibre := {}
 	new_fibre['kind'] = 'text'
 	new_fibre['text'] = line.strip_edges(true, true)
+	new_fibre['title'] = title
 	return new_fibre
 
 # Create Yarn data structure from file (must be *.yarn.txt Yarn format)
@@ -126,6 +127,7 @@ func load_yarn(path: String) -> Dictionary:
 		var start := false
 		var header := true
 		var thread := new_yarn_thread()
+		var thread_title := ''
 		# loop
 		while !file.eof_reached():
 			# read a line
@@ -140,7 +142,6 @@ func load_yarn(path: String) -> Dictionary:
 						thread['header'][split[0]] = split[1]
 						if split[0] == 'title':
 							var title_split := split[1].split(':')
-							var thread_title := ''
 							var thread_kind := 'branch'
 							if len(title_split) == 1:
 								thread_title = split[1]
@@ -158,7 +159,7 @@ func load_yarn(path: String) -> Dictionary:
 				thread = new_yarn_thread()
 			# fibre read mode
 			else:
-				var fibre := new_yarn_fibre(line)
+				var fibre := new_yarn_fibre(line, thread_title)
 				if fibre:
 					thread['fibres'].append(fibre)
 	else:
@@ -179,14 +180,14 @@ func yarn_unravel(to:String, from:=false) -> Dictionary:
 					match fibre['kind']:
 						'text':
 							var text := yarn_text_variables(fibre['text'])
-							say(text)
+							say(text, fibre)
 						'choice':
 							var text := yarn_text_variables(fibre['text'])
-							choice(text, fibre['marker'])
+							choice(text, fibre['marker'], fibre)
 						'logic':
 							var instruction: String = fibre['instruction']
 							var command: String = fibre['command']
-							logic(instruction, command)
+							logic(instruction, command, fibre)
 			'code':
 				yarn_code(to)
 	else:
