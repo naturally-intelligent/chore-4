@@ -315,6 +315,9 @@ func first_upper(string: String) -> String:
 func first_upper_only(string: String) -> String:
 	return string.substr(0,1).capitalize() + string.substr(1).to_lower()
 
+func starts_with(string: String, start: String) -> bool:
+	return string.substr(0, start.length()-1) == start
+	
 func calculate_total(data: Dictionary) -> void:
 	data['total'] = 0
 	for col: String in data:
