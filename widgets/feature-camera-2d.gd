@@ -328,6 +328,12 @@ func tween_change_camera_limits(new_limit_left: int, new_limit_right: int, new_l
 	await trigger_tween.finished
 	emit_signal("camera_tween_finished")
 
+func change_camera_limits_from_colorrect(view_rect: ColorRect, time:=1.5):
+	limit_left = view_rect.global_position.x
+	limit_right = view_rect.global_position.x + view_rect.size.x
+	limit_top = view_rect.global_position.y
+	limit_bottom = view_rect.global_position.y + view_rect.size.y
+
 func is_in_trigger_area() -> bool:
 	if camera_trigger_areas:
 		trigger_areas = get_node(camera_trigger_areas)
