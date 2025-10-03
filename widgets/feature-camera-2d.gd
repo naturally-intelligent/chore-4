@@ -329,10 +329,12 @@ func tween_change_camera_limits(new_limit_left: int, new_limit_right: int, new_l
 	emit_signal("camera_tween_finished")
 
 func change_camera_limits_from_colorrect(view_rect: ColorRect, time:=1.5):
-	limit_left = view_rect.global_position.x
-	limit_right = view_rect.global_position.x + view_rect.size.x
-	limit_top = view_rect.global_position.y
-	limit_bottom = view_rect.global_position.y + view_rect.size.y
+	#tween_change_camera_limits(int(view_rect.global_position.x), int(view_rect.global_position.x + view_rect.size.x),
+	#	int(view_rect.global_position.y), int(view_rect.global_position.y + view_rect.size.y))
+	limit_left = int(view_rect.global_position.x)
+	limit_right = int(view_rect.global_position.x + view_rect.size.x)
+	limit_top = int(view_rect.global_position.y)
+	limit_bottom = int(view_rect.global_position.y + view_rect.size.y)
 
 func is_in_trigger_area() -> bool:
 	if camera_trigger_areas:
@@ -479,11 +481,11 @@ func init_limits():
 	initial_camera_left_limit = limit_left
 	initial_camera_right_limit = limit_right
 
-func change_camera_limits(left_x: int, right_x: int, top_y=false, bottom_y=false):
+func change_camera_limits(left_x: int, right_x: int, top_y: int, bottom_y: int):
 	limit_left = left_x
 	limit_right = right_x
-	if top_y: limit_top = top_y
-	if bottom_y: limit_bottom = bottom_y
+	limit_top = top_y
+	limit_bottom = bottom_y
 
 func reset_camera_limits():
 	if position_smoothing_speed > 1:
