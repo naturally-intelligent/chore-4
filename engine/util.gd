@@ -392,7 +392,7 @@ func random_phone_number() -> String:
 # keys = values
 # keys = array # if split_commas and comma detected
 # values converted to ints/floats if convert_numbers, otherwise strings
-func load_config(_filename: String, split_commas:=true, convert_numbers:=true) -> Dictionary:
+func load_config(_filename: String, split_commas:=true, convert_numbers:=true, split_equals:=true) -> Dictionary:
 	var path := _filename
 	var file := FileAccess.open(path, FileAccess.READ)
 	var records := {}
@@ -409,7 +409,7 @@ func load_config(_filename: String, split_commas:=true, convert_numbers:=true) -
 			if line.find('#')==0:
 				pass
 			# config section/record check
-			elif line.find('[') + line.find(']') > 1:
+			elif line.begins_with('[') and line.find(']') > 1:
 				# store previous record
 				if new_record and not added_record:
 					records[title] = record
@@ -422,8 +422,8 @@ func load_config(_filename: String, split_commas:=true, convert_numbers:=true) -
 				added_record = false
 				line_count = 0
 			# add key=value line pairs to record
-			elif line.find('=') >= 0:
-				var data := line.split('=')
+			elif split_equals and line.find('=') >= 0:
+				var data := line.split('=', true, 1)
 				if len(data) == 2:
 					var key := data[0].strip_edges(true, true)
 					var value = data[1].strip_edges(true, true)
