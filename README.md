@@ -1,5 +1,5 @@
 # CHORE ENGINE v1.4
-Godot 4.4 Framework
+Godot 4.4+ Framework
 ---
 
 What does this engine do?
