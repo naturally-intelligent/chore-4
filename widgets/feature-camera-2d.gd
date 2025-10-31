@@ -514,6 +514,9 @@ func camera_edge_bottom_y() -> int:
 func camera_edge_top_y() -> int:
 	return get_screen_center_position().y - ProjectSettings.get_setting("display/window/size/viewport_height") * zoom.y / 2
 
+func camera_corner_top_left() -> Vector2:
+	return Vector2(camera_edge_left_x(), camera_edge_top_y())
+
 func get_visible_screen_rect() -> Rect2:
 	var rect: Rect2
 	rect.size = zoom * Vector2(ProjectSettings.get_setting("display/window/size/viewport_width"), ProjectSettings.get_setting("display/window/size/viewport_height")) * zoom
