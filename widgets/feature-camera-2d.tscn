@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://drkobvkv3hsbt" path="res://widgets/feature-camera-2d.gd" id="1"]
 
 [node name="FeatureCamera2D" type="Camera2D"]
+process_callback = 0
 position_smoothing_speed = 1.0
 drag_left_margin = 0.0
 drag_right_margin = 0.1

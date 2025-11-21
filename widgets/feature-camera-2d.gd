@@ -87,7 +87,7 @@ func _ready():
 		target = get_node(target_node)
 
 # PROCESS
-func _process(delta: float):
+func _physics_process(delta: float):
 	# target valid?
 	if not target_ref or not target_ref.get_ref():
 		target_ref = null
