@@ -13,6 +13,7 @@ var file_locations := {}
 var current_song := ''
 var missing_files := []
 var paused_sounds := {}
+var looping_music := false
 
 var fade_in_music_tween: Tween
 var fade_out_music_tween: Tween
@@ -414,6 +415,8 @@ func play_music(song_name:String, volume:=1.0, resume_if_previous:=true, and_sto
 		$MusicPlayer.play()
 		#$MusicPlayer.seek(stream.get_length()-3)
 		$MusicPlayer.set_meta("resource_link", resource_link)
+		# might have connected this before but dont need it again...
+		looping_music = loop
 		current_song = song_name
 		return true
 	else:
@@ -460,6 +463,7 @@ func resume_music(fade_in:=false) -> void:
 
 func stop_music() -> void:
 	#debug.print('stop_music')
+	looping_music = false
 	stop_music_animations()
 	$MusicPlayer.stop()
 	$MusicPlayer.stream_paused = false
@@ -623,3 +627,7 @@ func calm_button_hover_sounds(button: Node, focus_sound:='menu-hover', unfocus_s
 	button.connect("on_hover_state",Callable(self,"play_sound_if_ready").bind(focus_sound))
 	if unfocus_sound:
 		button.connect("on_normal_state",Callable(self,"play_sound").bind(unfocus_sound))
+
+func _on_music_player_finished() -> void:
+	if looping_music:
+		$MusicPlayer.play()

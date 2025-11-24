@@ -57,3 +57,5 @@ bus = &"Sounds"
 
 [node name="DelayedTimer1" type="Timer" parent="Timers"]
 one_shot = true
+
+[connection signal="finished" from="MusicPlayer" to="." method="_on_music_player_finished"]
