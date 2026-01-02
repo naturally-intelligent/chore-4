@@ -33,7 +33,7 @@ func init_volumes():
 
 ### SOUNDS
 
-func play_sound(sound_name: String, volume:=1.0, allow_multiple:=false, pitch:={}) -> AudioStreamPlayer:
+func play_sound(sound_name: String, volume:=1.0, allow_multiple:=false, pitch:=[], bus:='') -> AudioStreamPlayer:
 	if dev.silence: return
 	# find sound resource link (res://dir/file.ext)
 	var resource_link := sound_resource(sound_name)
@@ -55,6 +55,8 @@ func play_sound(sound_name: String, volume:=1.0, allow_multiple:=false, pitch:={
 		debug.print('ERROR: Bad Audio Stream load failed', resource_link)
 		return null
 	player.set_stream(stream)
+	if bus:
+		player.bus = bus
 	if pitch:
 		var pitch_start = pitch[0]
 		var pitch_end = pitch[1]
@@ -260,15 +262,18 @@ func play_distant_sound(sound_name: String, base_volume:float, origin:Vector2, l
 func play_once(sound_name: String, volume:=1.0) -> AudioStreamPlayer:
 	return play_sound(sound_name, volume, true)
 
-func play_random_sound(sound_name: String, total: int, volume:=1.0, pitch:={}) -> AudioStreamPlayer:
+func play_random_sound(sound_name: String, total: int, volume:=1.0, pitch:=[]) -> AudioStreamPlayer:
 	if dev.silence: return
 	var c := math.random_int(1,total)
 	return play_sound(sound_name + str(c), volume, false, pitch)
 
 func play_sound_pitched(sound_name: String, pitch_start:=0.8, pitch_end:=1.2, pitch_step:=0.02) -> void:
-	var player := play_sound(sound_name)
+	var player := play_sound(sound_name, 1.0, false, )
 	if player:
 		player.pitch_scale = math.random_float_step(pitch_start, pitch_end, pitch_step)
+
+func play_sound_pitched_volume(sound_name: String, volume:=1.0,  pitch_start:=0.8, pitch_end:=1.2, pitch_step:=0.02, bus:='') -> void:
+	var player := play_sound(sound_name, volume, false, [pitch_start, pitch_end, pitch_step], bus)
 
 func play_random_sound_pitched(sound_name: String, total: int, pitch_start:=0.8, pitch_end:=1.2, pitch_step:=0.02) -> void:
 	if dev.silence: return
