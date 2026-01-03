@@ -783,6 +783,36 @@ func strip_bbcode(text: String) -> String:
 	regex.compile('|[[\\/\\!]*?[^\\[\\]]*?]|')
 	return regex.sub(text, '', true)
 
+func bbcode_character_tags(text: String) -> Array:
+	var output := []
+	var stack := []
+	var tag := ''
+	var parsing_tag := false
+	var parsing_closing_tag := false
+	for c in text:
+		if c == '[':
+			parsing_tag = true
+			tag = '' + c
+			continue
+		if parsing_tag:
+			tag += c
+			if c == '/':
+				parsing_closing_tag = true
+				tag = '' + c
+				continue
+			if c == ']':
+				if parsing_closing_tag:
+					stack.pop_back()
+					parsing_closing_tag = false
+				else:
+					stack.append(tag)
+				parsing_tag = false
+				tag = ''
+			continue
+		output.append(stack.duplicate())
+	return output
+			
+
 func open_browser(www_url: String) -> Error:
 	return OS.shell_open(www_url)
 
