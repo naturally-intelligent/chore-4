@@ -268,12 +268,10 @@ func play_random_sound(sound_name: String, total: int, volume:=1.0, pitch:=[]) -
 	return play_sound(sound_name + str(c), volume, false, pitch)
 
 func play_sound_pitched(sound_name: String, pitch_start:=0.8, pitch_end:=1.2, pitch_step:=0.02) -> void:
-	var player := play_sound(sound_name, 1.0, false, )
-	if player:
-		player.pitch_scale = math.random_float_step(pitch_start, pitch_end, pitch_step)
+	play_sound(sound_name, 1.0, false, [pitch_start, pitch_end, pitch_step])
 
 func play_sound_pitched_volume(sound_name: String, volume:=1.0,  pitch_start:=0.8, pitch_end:=1.2, pitch_step:=0.02, bus:='') -> void:
-	var player := play_sound(sound_name, volume, false, [pitch_start, pitch_end, pitch_step], bus)
+	play_sound(sound_name, volume, false, [pitch_start, pitch_end, pitch_step], bus)
 
 func play_random_sound_pitched(sound_name: String, total: int, pitch_start:=0.8, pitch_end:=1.2, pitch_step:=0.02) -> void:
 	if dev.silence: return
