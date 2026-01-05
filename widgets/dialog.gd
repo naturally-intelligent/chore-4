@@ -141,7 +141,7 @@ func bump_dialog(plus_y=0):
 			size_y += plus_y
 			set_position(Vector2(dialog_position.x, dialog_position.y - (size_y-dialog_size.y)))
 
-func build_dialog(text, type='dialog'):
+func build_dialog(text: String, type:='dialog'):
 	if no_duplicates:
 		for child in get_children():
 			var t1 = util.clean_string(child.get_text())
@@ -243,7 +243,7 @@ func build_dialog(text, type='dialog'):
 
 	#return bubble
 
-func create_dialog(text, type='dialog'):
+func create_dialog(text: String, type:='dialog', original_text := ''):
 	var bubble_data = build_dialog(text, type)
 	var bubble = bubble_data[0]
 	if bubble:
@@ -251,11 +251,14 @@ func create_dialog(text, type='dialog'):
 		var _bubble_height = bubble_data[2]
 		var _bubble_grow_time = bubble_data[3]
 		var _formatted_text = bubble_data[4]
+		if "original_text" in bubble:
+			bubble.original_text = original_text
 		add_child(bubble)
 		bubble.grow_animation(_bubble_width, _bubble_height, _bubble_grow_time, _formatted_text)
 		if auto_remove:	auto_remove_timers[bubble.get_name()] = auto_remove_speed
 		#queue_sort() #https://godotdevelopers.org/forum/discussion/18760/create-scroll-checked-vboxcontainer
-
+	return bubble
+	
 func create_action(text):
 	var bubble_data = build_dialog(text, 'action')
 	var bubble = bubble_data[0]
