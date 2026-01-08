@@ -66,16 +66,19 @@ class SecondElementLeast:
 #  these are all static, meaning they arent part of the 'util' object
 #  but still called like -> util.fullscreen_flip()
 
-func fullscreen_flip() -> void:
+func fullscreen_flip():
 	var window: Window = get_window()
-	if window.mode == Window.MODE_FULLSCREEN or window.mode == Window.MODE_EXCLUSIVE_FULLSCREEN :
+	if window.mode == Window.MODE_FULLSCREEN or window.mode == Window.MODE_EXCLUSIVE_FULLSCREEN:
 		window.mode = Window.MODE_WINDOWED
 	else:
 		if util.windows:
 			window.mode = Window.MODE_EXCLUSIVE_FULLSCREEN
 		else:
 			window.mode = Window.MODE_FULLSCREEN
-		
+
+func is_fullscreen() -> bool:
+	return (get_window().mode == Window.MODE_EXCLUSIVE_FULLSCREEN) or (get_window().mode == Window.MODE_FULLSCREEN)
+
 func random(_s: Variant, _e: Variant):
 	if typeof(_s) == TYPE_INT:
 		return math.random_int(_s, _e)
