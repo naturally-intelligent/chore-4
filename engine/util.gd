@@ -1115,19 +1115,16 @@ func find_theme(control: Node) -> Theme:
 func is_not(variable: Variant) -> bool:
 	return variable == null
 
-func gamepad_detection() -> String:
-	var available := Input.get_connected_joypads()
+func gamepad_detection(device_id := 0) -> String:
 	var found := "generic"
-	if available.size() >= 1:
-		var device: int = available.front()
-		var controller_name := Input.get_joy_name(device)
-		var controller_match := controller_name.to_lower()
-		var tests := ["steam", "nintendo", "logitech", "xbox", "x-box", "switch", "retro"]
-		var alias := {"x-box": "xbox", "switch": "nintendo", "retro": "nintendo"}
-		for test in tests:
-			if test in controller_match:
-				found = test
-		if found in alias: found = alias[found]
+	var controller_name := Input.get_joy_name(device_id)
+	var controller_match := controller_name.to_lower()
+	var tests := ["steam", "nintendo", "logitech", "xbox", "x-box", "switch", "retro"]
+	var alias := {"x-box": "xbox", "switch": "nintendo", "retro": "nintendo"}
+	for test in tests:
+		if test in controller_match:
+			found = test
+	if found in alias: found = alias[found]
 	return found
 
 # load a value from a TSCN file without preload/load
