@@ -1119,12 +1119,22 @@ func gamepad_detection(device_id := 0) -> String:
 	var found := "generic"
 	var controller_name := Input.get_joy_name(device_id)
 	var controller_match := controller_name.to_lower()
-	var tests := ["steam", "nintendo", "logitech", "xbox", "x-box", "switch", "retro"]
-	var alias := {"x-box": "xbox", "switch": "nintendo", "retro": "nintendo"}
+	var tests := ["steam", "nintendo", "logitech", "xbox", "playstation"]
+	var alias := {
+		"x-box": "xbox", 
+		"switch": "nintendo", 
+		"retro": "nintendo", 
+		"ps": "playstation", 
+		"dual": "playstation",
+		}
 	for test in tests:
 		if test in controller_match:
 			found = test
-	if found in alias: found = alias[found]
+			return found
+	for test in alias:
+		if test in controller_match:
+			found = alias[test]
+			return found
 	return found
 
 # load a value from a TSCN file without preload/load
