@@ -1136,7 +1136,16 @@ func gamepad_detection(device_id := 0) -> String:
 			found = alias[test]
 			return found
 	return found
-
+	
+func gamepad_string(kind: String) -> String:
+	match kind:
+		"steam": return "Steam"
+		"nintendo": return "Nintendo"
+		"logitech": return "Logitech"
+		"xbox": return "X-Box"
+		"playstation": return "Playstation"
+	return "Generic X-Box"
+	
 # load a value from a TSCN file without preload/load
 # https://forum.godotengine.org/t/how-can-i-get-the-export-variables-from-a-scene-without-loading-it-completely-into-memory/26529/3
 func get_tscn_value(filename: String, var_name: String) -> String:
