@@ -926,8 +926,8 @@ func keycode_to_scancode(key_code: String) -> Key:
 	return scan_code
 
 func print_connected_gamepads() -> void:
-	for id in Input.get_connected_joypads():
-		debug.print("Joypad:", id, Input.get_joy_name(id), Input.get_joy_guid(id))
+	for id: int in Input.get_connected_joypads():
+		debug.print("Joypad:", str(id), Input.get_joy_name(id), Input.get_joy_guid(id))
 
 func connected_gamepad_count() -> int:
 	var count := 0

@@ -2,6 +2,7 @@
 extends Node
 
 # SOUND BUS
+@onready var _master_bus_index := AudioServer.get_bus_index(settings.master_bus_name) or 0
 @onready var _sound_bus_index := AudioServer.get_bus_index(settings.sound_bus_name)
 @onready var _music_bus_index := AudioServer.get_bus_index(settings.music_bus_name)
 
@@ -20,13 +21,15 @@ var fade_out_music_tween: Tween
 
 const silent_db = -60
 
-signal music_volume_changed()
+signal master_volume_changed()
 signal sound_volume_changed()
+signal music_volume_changed()
 
 func _ready() -> void:
 	init_volumes()
 	
 func init_volumes():
+	set_master_volume(settings.master_volume)
 	set_sound_volume(settings.sound_volume)
 	set_music_volume(settings.music_volume)
 	if dev.silence: mute_master()
@@ -366,7 +369,7 @@ func play_random_node(player: Object, sound_name: String, total: int):
 	rogue(player, sound_name + str(c))
 
 func mute_master():
-	AudioServer.set_bus_volume_db(0, -80) # 0 = Master
+	AudioServer.set_bus_volume_db(_master_bus_index, -80) # 0 = Master
 
 ###
 ### MUSIC
@@ -590,6 +593,12 @@ func _music_resource(song_name: String) -> String:
 func convert_percent_to_db(amount: float) -> float:
 	return 12.5 * log(amount)
 
+func set_master_volume(amount: float) -> void:
+	if dev.silence: amount = 0.0
+	var db := convert_percent_to_db(amount)
+	AudioServer.set_bus_volume_db(_master_bus_index, db)
+	emit_signal("master_volume_changed", db)
+
 func set_sound_volume(amount: float) -> void:
 	if dev.silence: amount = 0.0
 	var db := convert_percent_to_db(amount)
@@ -601,6 +610,13 @@ func set_music_volume(amount: float) -> void:
 	var db := convert_percent_to_db(amount)
 	AudioServer.set_bus_volume_db(_music_bus_index, db)
 	emit_signal("music_volume_changed", db)
+
+func set_bus_volume(bus_name: String, amount: float) -> void:
+	if dev.silence: amount = 0.0
+	var db := convert_percent_to_db(amount)
+	var bus_index := AudioServer.get_bus_index(bus_name)
+	if bus_index >= 0:
+		AudioServer.set_bus_volume_db(bus_index, db)
 
 # BUTTON SOUND MAPPERS
 
