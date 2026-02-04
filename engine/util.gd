@@ -1053,7 +1053,7 @@ func erase_action_key(action: String, physical_keycode: Key):
 		if event is InputEventKey and event.physical_keycode == physical_keycode:
 			InputMap.action_erase_event(action, event)
 
-func replace_action_key(action: String, physical_keycode: Key, exceptions := []):
+func replace_action_key(action: String, physical_keycode: Key, exceptions := [KEY_UP, KEY_DOWN, KEY_RIGHT, KEY_LEFT]):
 	erase_all_action_keys(action, exceptions)
 	add_action_key(action, physical_keycode)
 
@@ -1144,7 +1144,8 @@ func gamepad_string(kind: String) -> String:
 		"logitech": return "Logitech"
 		"xbox": return "X-Box"
 		"playstation": return "Playstation"
-	return "Generic X-Box"
+		"pretendo": return "Pretendo"
+	return "Generic"
 	
 # load a value from a TSCN file without preload/load
 # https://forum.godotengine.org/t/how-can-i-get-the-export-variables-from-a-scene-without-loading-it-completely-into-memory/26529/3
