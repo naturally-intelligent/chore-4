@@ -5,7 +5,7 @@ var subtitle = ''
 var version = '1.4'
 var state = ''
 var release = false
-var year = '2022-2024'
+var year = '2022-2026'
 
 var demo = true
 var website = "https://www.naturallyintelligent.com"

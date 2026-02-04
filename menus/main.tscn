@@ -1,9 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://ccmopfo07pfyg"]
+[gd_scene format=3 uid="uid://ccmopfo07pfyg"]
 
 [ext_resource type="Theme" uid="uid://bml6iiodj2eom" path="res://art/chore_theme.tres" id="1_5i7gd"]
-[ext_resource type="Script" path="res://menus/main.gd" id="8"]
+[ext_resource type="Script" uid="uid://dqivqqmwbcsjh" path="res://menus/main.gd" id="8"]
 
-[node name="MainMenu" type="Control"]
+[node name="MainMenu" type="Control" unique_id=1228067074]
 process_mode = 1
 layout_mode = 3
 anchors_preset = 15
@@ -14,13 +14,13 @@ grow_vertical = 2
 theme = ExtResource("1_5i7gd")
 script = ExtResource("8")
 
-[node name="BG" type="ColorRect" parent="."]
+[node name="BG" type="ColorRect" parent="." unique_id=1370859729]
 layout_mode = 0
 offset_right = 640.0
 offset_bottom = 360.0
 color = Color(1, 1, 1, 0)
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1748669422]
 layout_mode = 0
 offset_left = 674.0
 offset_top = 56.0
@@ -28,7 +28,7 @@ offset_right = 1381.0
 offset_bottom = 864.0
 color = Color(0.133333, 0.180392, 0.611765, 1)
 
-[node name="Title" type="Label" parent="."]
+[node name="Title" type="Label" parent="." unique_id=741254645]
 layout_mode = 0
 offset_left = 590.0
 offset_top = 125.0
@@ -38,7 +38,7 @@ theme_override_font_sizes/font_size = 48
 text = "CHORE ENGINE"
 horizontal_alignment = 1
 
-[node name="Buttons" type="VBoxContainer" parent="."]
+[node name="Buttons" type="VBoxContainer" parent="." unique_id=1526836158]
 layout_mode = 0
 offset_left = 908.0
 offset_top = 287.0
@@ -47,38 +47,38 @@ offset_bottom = 675.0
 theme_override_constants/separation = 14
 alignment = 1
 
-[node name="Play" type="Button" parent="Buttons"]
+[node name="Play" type="Button" parent="Buttons" unique_id=213607972]
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "Play"
 
-[node name="Restart" type="Button" parent="Buttons"]
+[node name="Restart" type="Button" parent="Buttons" unique_id=652045178]
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "Restart"
 
-[node name="Settings" type="Button" parent="Buttons"]
+[node name="Settings" type="Button" parent="Buttons" unique_id=123034916]
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "Settings"
 
-[node name="Credits" type="Button" parent="Buttons"]
+[node name="Credits" type="Button" parent="Buttons" unique_id=1334589689]
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "Credits"
 
-[node name="Notes" type="Button" parent="Buttons"]
+[node name="Notes" type="Button" parent="Buttons" unique_id=1305048652]
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "Notes"
 
-[node name="Quit" type="Button" parent="Buttons"]
+[node name="Quit" type="Button" parent="Buttons" unique_id=1159832019]
 layout_mode = 2
 focus_neighbor_bottom = NodePath("../New")
 theme_override_font_sizes/font_size = 32
 text = "Quit"
 
-[node name="Demo" type="Label" parent="."]
+[node name="Demo" type="Label" parent="." unique_id=1865145041]
 visible = false
 modulate = Color(0.8, 0.8, 0.8, 1)
 layout_mode = 0
@@ -90,7 +90,7 @@ theme_override_font_sizes/font_size = 20
 text = "(DEMO APP)"
 horizontal_alignment = 1
 
-[node name="Copyright" type="Label" parent="."]
+[node name="Copyright" type="Label" parent="." unique_id=3732174]
 modulate = Color(0.611765, 0.611765, 0.611765, 1)
 layout_mode = 0
 offset_left = 874.0
@@ -103,7 +103,7 @@ Naturally Intelligent
 Free to Use - MIT License"
 horizontal_alignment = 1
 
-[node name="Subtitle" type="Label" parent="."]
+[node name="Subtitle" type="Label" parent="." unique_id=641034261]
 layout_mode = 0
 offset_left = 675.0
 offset_top = 195.0
@@ -113,7 +113,7 @@ theme_override_font_sizes/font_size = 20
 text = "Godot 4 Framework"
 horizontal_alignment = 1
 
-[node name="Version" type="Label" parent="."]
+[node name="Version" type="Label" parent="." unique_id=1208903835]
 layout_mode = 0
 offset_left = 675.0
 offset_top = 223.0

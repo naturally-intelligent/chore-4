@@ -78,14 +78,13 @@ var settings_config = {}
 var settings_config_file := "user://settings.cfg"
 
 # MUSIC
+const master_bus_name = 'Master'
 const music_bus_name = 'Music'
 const music_ext = '.ogg'
 const music_dirs = ['music']
 const music_res = true
 const music_alias = {}
-const tracklist = {
-	'main-menu': ['song-file-todo', 0.8],
-}
+const tracklist = {}
 const music_pools = {
 	'default': ['main-menu'],
 }

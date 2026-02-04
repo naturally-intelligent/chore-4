@@ -1,16 +1,25 @@
-[gd_scene load_steps=6 format=3 uid="uid://b5ccvws7pb1fx"]
+[gd_scene format=3 uid="uid://b5ccvws7pb1fx"]
 
-[ext_resource type="Script" path="res://scenes/play.gd" id="1"]
+[ext_resource type="Script" uid="uid://dpkqvn1wlmxv1" path="res://scenes/play.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://c0cka18yihvk2" path="res://art/hud/black-512x512.png" id="2"]
-[ext_resource type="Shader" path="res://engine/shaders/screen-mirage.gdshader" id="3"]
-[ext_resource type="Texture2D" uid="uid://cx6i2eky1ux" path="res://icon.png" id="4"]
+[ext_resource type="Shader" uid="uid://dpvha2hub5h0r" path="res://engine/shaders/screen-mirage.gdshader" id="3"]
+[ext_resource type="Shader" uid="uid://dgyfshvc0kh7j" path="res://engine/shaders/hit.gdshader" id="3_65v2a"]
+[ext_resource type="Texture2D" uid="uid://8xf87s5q48fd" path="res://icon.png" id="4"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_j27tm"]
+shader = ExtResource("3_65v2a")
+shader_parameter/enabled = true
+shader_parameter/color = Color(0, 0, 0, 1)
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_hsi3f"]
+diffuse_texture = ExtResource("4")
 
 [sub_resource type="ShaderMaterial" id="2"]
 shader = ExtResource("3")
 shader_parameter/frequency = 60.0
 shader_parameter/depth = 0.005
 
-[node name="Play" type="Control"]
+[node name="Play" type="Control" unique_id=559660211]
 process_mode = 1
 layout_mode = 3
 anchors_preset = 15
@@ -20,7 +29,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1")
 
-[node name="Background" type="TextureRect" parent="."]
+[node name="Background" type="TextureRect" parent="." unique_id=1297745325]
 visible = false
 modulate = Color(1, 1, 1, 0.854902)
 layout_mode = 0
@@ -28,11 +37,13 @@ offset_right = 512.0
 offset_bottom = 512.0
 texture = ExtResource("2")
 
-[node name="Chore" type="Sprite2D" parent="."]
+[node name="Chore" type="Sprite2D" parent="." unique_id=582360440]
+material = SubResource("ShaderMaterial_j27tm")
+use_parent_material = true
 position = Vector2(1516, 324)
-texture = ExtResource("4")
+texture = SubResource("CanvasTexture_hsi3f")
 
-[node name="Title" type="Label" parent="."]
+[node name="Title" type="Label" parent="." unique_id=798892982]
 layout_mode = 0
 offset_left = 807.0
 offset_top = 88.0
@@ -41,7 +52,7 @@ offset_bottom = 148.0
 theme_override_font_sizes/font_size = 48
 text = "CHORE SCENE"
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1249359749]
 layout_mode = 0
 offset_left = 162.0
 offset_top = 284.0
@@ -49,18 +60,18 @@ offset_right = 648.0
 offset_bottom = 985.0
 color = Color(0.129412, 0.129412, 0.129412, 1)
 
-[node name="LabelContainer" type="VBoxContainer" parent="."]
+[node name="LabelContainer" type="VBoxContainer" parent="." unique_id=164790642]
 layout_mode = 0
 offset_left = 213.0
 offset_top = 320.0
 offset_right = 604.0
 offset_bottom = 937.0
 
-[node name="Label" type="Label" parent="LabelContainer"]
+[node name="Label" type="Label" parent="LabelContainer" unique_id=260604812]
 layout_mode = 2
 text = "CHORE BOARD A"
 
-[node name="MirageShader" type="ColorRect" parent="."]
+[node name="MirageShader" type="ColorRect" parent="." unique_id=48408899]
 material = SubResource("2")
 custom_minimum_size = Vector2(1920, 1080)
 layout_mode = 0
@@ -68,7 +79,7 @@ offset_right = 1920.0
 offset_bottom = 1080.0
 mouse_filter = 2
 
-[node name="AddLabel" type="Button" parent="."]
+[node name="AddLabel" type="Button" parent="." unique_id=1456267118]
 layout_mode = 0
 offset_left = 730.0
 offset_top = 383.0
@@ -76,7 +87,7 @@ offset_right = 1122.0
 offset_bottom = 481.0
 text = "<- Add Chore To Do"
 
-[node name="MainMenu" type="Button" parent="."]
+[node name="MainMenu" type="Button" parent="." unique_id=1225400049]
 layout_mode = 0
 offset_left = 1054.0
 offset_top = 831.0
@@ -85,7 +96,7 @@ offset_bottom = 941.0
 focus_neighbor_bottom = NodePath("../New")
 text = "MAIN MENU"
 
-[node name="BoringButton" type="Button" parent="."]
+[node name="BoringButton" type="Button" parent="." unique_id=461903810]
 layout_mode = 0
 offset_left = 1239.0
 offset_top = 606.0
