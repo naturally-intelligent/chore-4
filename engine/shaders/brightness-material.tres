@@ -1,0 +1,9 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://231plvd76ng8"]
+
+[ext_resource type="Shader" uid="uid://6lwvrg6kg22w" path="res://engine/shaders/brightness.gdshader" id="1_ylm3a"]
+
+[resource]
+shader = ExtResource("1_ylm3a")
+shader_parameter/brightness = 1.5
+shader_parameter/contrast = 1.0
+shader_parameter/saturation = 1.0

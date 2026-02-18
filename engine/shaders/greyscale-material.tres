@@ -1,0 +1,6 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://c6svxjbxff0a1"]
+
+[ext_resource type="Shader" uid="uid://b3j5jqaxdd40m" path="res://engine/shaders/greyscale-shader.gdshader" id="1_i63rm"]
+
+[resource]
+shader = ExtResource("1_i63rm")

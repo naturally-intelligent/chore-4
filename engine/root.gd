@@ -1199,8 +1199,6 @@ func show_hud() -> void:
 
 func hide_hud() -> void:
 	OverlayHUD.visible = false
-	if current_scene and current_scene.has_method("on_focus"):
-		current_scene.on_focus()
 
 func is_hud_visible() -> bool:
 	return OverlayHUD.visible

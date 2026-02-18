@@ -1,0 +1,8 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://20hgmch3rcwl"]
+
+[ext_resource type="Shader" uid="uid://dpvha2hub5h0r" path="res://engine/shaders/screen-mirage.gdshader" id="1_xdf4n"]
+
+[resource]
+shader = ExtResource("1_xdf4n")
+shader_parameter/frequency = 60.0
+shader_parameter/depth = 0.005

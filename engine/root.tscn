@@ -1,34 +1,12 @@
-[gd_scene load_steps=19 format=3 uid="uid://bd75f2uxinml3"]
+[gd_scene format=3 uid="uid://bd75f2uxinml3"]
 
 [ext_resource type="Script" uid="uid://cvucfaq343pa3" path="res://engine/root.gd" id="1"]
 [ext_resource type="PackedScene" uid="uid://2k52x4jbunyj" path="res://engine/overlay.tscn" id="2"]
-[ext_resource type="Shader" uid="uid://cat08yvw5bij0" path="res://engine/shaders/blur-shader.gdshader" id="5"]
-[ext_resource type="Shader" uid="uid://b3j5jqaxdd40m" path="res://engine/shaders/greyscale-shader.gdshader" id="6"]
-[ext_resource type="Shader" uid="uid://6lwvrg6kg22w" path="res://engine/shaders/brightness.gdshader" id="7"]
-[ext_resource type="Shader" uid="uid://dyubqurb7w64q" path="res://engine/shaders/screen-whirl.gdshader" id="8"]
-[ext_resource type="Shader" uid="uid://dpvha2hub5h0r" path="res://engine/shaders/screen-mirage.gdshader" id="10"]
-
-[sub_resource type="ShaderMaterial" id="1"]
-shader = ExtResource("8")
-shader_parameter/rotation = -0.5
-
-[sub_resource type="ShaderMaterial" id="2"]
-shader = ExtResource("10")
-shader_parameter/frequency = 60.0
-shader_parameter/depth = 0.005
-
-[sub_resource type="ShaderMaterial" id="3"]
-shader = ExtResource("5")
-shader_parameter/blur_amount = 0.0
-
-[sub_resource type="ShaderMaterial" id="4"]
-shader = ExtResource("6")
-
-[sub_resource type="ShaderMaterial" id="5"]
-shader = ExtResource("7")
-shader_parameter/brightness = 1.5
-shader_parameter/contrast = 1.0
-shader_parameter/saturation = 1.0
+[ext_resource type="Material" uid="uid://bn6ir2y4f1dc8" path="res://engine/shaders/screen-whirl-material.tres" id="2_qcigb"]
+[ext_resource type="Material" uid="uid://20hgmch3rcwl" path="res://engine/shaders/screen-mirage-material.tres" id="3_jynad"]
+[ext_resource type="Material" uid="uid://bbdq0o0uika6x" path="res://engine/shaders/blur-material.tres" id="4_qcigb"]
+[ext_resource type="Material" uid="uid://c6svxjbxff0a1" path="res://engine/shaders/greyscale-material.tres" id="5_qcigb"]
+[ext_resource type="Material" uid="uid://231plvd76ng8" path="res://engine/shaders/brightness-material.tres" id="6_qcigb"]
 
 [sub_resource type="Shader" id="8"]
 code = "shader_type canvas_item;
@@ -100,20 +78,20 @@ void fragment() {
 shader = SubResource("6")
 shader_parameter/slide = 1.0
 
-[node name="Root" type="Node"]
+[node name="Root" type="Node" unique_id=772919289]
 process_mode = 3
 script = ExtResource("1")
 
-[node name="Scenes" type="Control" parent="."]
+[node name="Scenes" type="Control" parent="." unique_id=1790653552]
 process_mode = 1
 layout_mode = 3
 anchors_preset = 0
 mouse_filter = 2
 
-[node name="Overlay" type="CanvasLayer" parent="."]
+[node name="Overlay" type="CanvasLayer" parent="." unique_id=1316105326]
 layer = 111
 
-[node name="HUD" type="Control" parent="Overlay"]
+[node name="HUD" type="Control" parent="Overlay" unique_id=1606063389]
 visible = false
 layout_mode = 3
 anchors_preset = 0
@@ -121,57 +99,57 @@ offset_right = 40.0
 offset_bottom = 40.0
 mouse_filter = 2
 
-[node name="Shaders" type="Control" parent="Overlay"]
+[node name="Shaders" type="Control" parent="Overlay" unique_id=1760975886]
 process_mode = 1
 visible = false
 layout_mode = 3
 anchors_preset = 0
 mouse_filter = 2
 
-[node name="WhirlShader" type="ColorRect" parent="Overlay/Shaders"]
+[node name="WhirlShader" type="ColorRect" parent="Overlay/Shaders" unique_id=995654425]
 visible = false
-material = SubResource("1")
+material = ExtResource("2_qcigb")
 layout_mode = 0
 offset_right = 640.0
 offset_bottom = 360.0
 mouse_filter = 2
 
-[node name="MirageShader" type="ColorRect" parent="Overlay/Shaders"]
+[node name="MirageShader" type="ColorRect" parent="Overlay/Shaders" unique_id=202884157]
 visible = false
-material = SubResource("2")
+material = ExtResource("3_jynad")
 layout_mode = 0
 offset_right = 640.0
 offset_bottom = 360.0
 mouse_filter = 2
 
-[node name="BlurShader" type="ColorRect" parent="Overlay/Shaders"]
+[node name="BlurShader" type="ColorRect" parent="Overlay/Shaders" unique_id=1484650058]
 visible = false
-material = SubResource("3")
+material = ExtResource("4_qcigb")
 layout_mode = 0
 offset_right = 640.0
 offset_bottom = 360.0
 
-[node name="GreyShader" type="ColorRect" parent="Overlay/Shaders"]
+[node name="GreyShader" type="ColorRect" parent="Overlay/Shaders" unique_id=1478281814]
 visible = false
-material = SubResource("4")
+material = ExtResource("5_qcigb")
 layout_mode = 0
 offset_right = 640.0
 offset_bottom = 360.0
 
-[node name="BrightnessShader" type="ColorRect" parent="Overlay/Shaders"]
+[node name="BrightnessShader" type="ColorRect" parent="Overlay/Shaders" unique_id=10438612]
 visible = false
-material = SubResource("5")
+material = ExtResource("6_qcigb")
 layout_mode = 0
 offset_right = 640.0
 offset_bottom = 360.0
 
-[node name="ColorFlash" type="ColorRect" parent="Overlay/Shaders"]
+[node name="ColorFlash" type="ColorRect" parent="Overlay/Shaders" unique_id=1107616683]
 visible = false
 layout_mode = 0
 offset_right = 640.0
 offset_bottom = 360.0
 
-[node name="Letterbox" type="Control" parent="Overlay/Shaders"]
+[node name="Letterbox" type="Control" parent="Overlay/Shaders" unique_id=304106290]
 process_mode = 1
 visible = false
 anchors_preset = 0
@@ -182,7 +160,7 @@ offset_bottom = 55.0
 scale = Vector2(2, 2)
 mouse_filter = 2
 
-[node name="Top" type="ColorRect" parent="Overlay/Shaders/Letterbox"]
+[node name="Top" type="ColorRect" parent="Overlay/Shaders/Letterbox" unique_id=293921378]
 layout_mode = 0
 offset_left = -53.0
 offset_top = -180.0
@@ -190,7 +168,7 @@ offset_right = 267.0
 mouse_filter = 2
 color = Color(0, 0, 0, 1)
 
-[node name="Bottom" type="ColorRect" parent="Overlay/Shaders/Letterbox"]
+[node name="Bottom" type="ColorRect" parent="Overlay/Shaders/Letterbox" unique_id=709130416]
 layout_mode = 0
 offset_left = -54.0
 offset_top = 107.0
@@ -199,7 +177,7 @@ offset_bottom = 287.0
 mouse_filter = 2
 color = Color(0, 0, 0, 1)
 
-[node name="Right" type="ColorRect" parent="Overlay/Shaders/Letterbox"]
+[node name="Right" type="ColorRect" parent="Overlay/Shaders/Letterbox" unique_id=1583748423]
 layout_mode = 0
 offset_left = 214.0
 offset_top = -14.0
@@ -208,7 +186,7 @@ offset_bottom = 166.0
 mouse_filter = 2
 color = Color(0, 0, 0, 1)
 
-[node name="Left" type="ColorRect" parent="Overlay/Shaders/Letterbox"]
+[node name="Left" type="ColorRect" parent="Overlay/Shaders/Letterbox" unique_id=1049768766]
 layout_mode = 0
 offset_left = -320.0
 offset_top = -14.0
@@ -216,24 +194,24 @@ offset_bottom = 166.0
 mouse_filter = 2
 color = Color(0, 0, 0, 1)
 
-[node name="Menus" type="Control" parent="Overlay"]
+[node name="Menus" type="Control" parent="Overlay" unique_id=359437412]
 process_mode = 2
 layout_mode = 3
 anchors_preset = 0
 
-[node name="Mouse" type="Control" parent="Overlay"]
+[node name="Mouse" type="Control" parent="Overlay" unique_id=704002015]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 mouse_filter = 2
 
-[node name="Cursor" type="TextureRect" parent="Overlay/Mouse"]
+[node name="Cursor" type="TextureRect" parent="Overlay/Mouse" unique_id=460304598]
 texture_filter = 1
 layout_mode = 0
 mouse_filter = 2
 
-[node name="Transitions" type="Control" parent="Overlay"]
+[node name="Transitions" type="Control" parent="Overlay" unique_id=683392438]
 process_mode = 1
 visible = false
 layout_mode = 3
@@ -244,7 +222,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="Fader" type="ColorRect" parent="Overlay/Transitions"]
+[node name="Fader" type="ColorRect" parent="Overlay/Transitions" unique_id=580496633]
 modulate = Color(0, 0, 0, 1)
 layout_mode = 0
 anchor_right = 1.0
@@ -252,7 +230,7 @@ anchor_bottom = 1.0
 mouse_filter = 2
 color = Color(0, 0, 0, 1)
 
-[node name="Circle" type="ColorRect" parent="Overlay/Transitions"]
+[node name="Circle" type="ColorRect" parent="Overlay/Transitions" unique_id=1148646919]
 visible = false
 material = SubResource("9")
 layout_mode = 0
@@ -265,12 +243,10 @@ offset_bottom = 51.0
 mouse_filter = 2
 color = Color(0, 0, 0, 1)
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="Overlay/Transitions/Circle"]
-libraries = {
-&"": SubResource("AnimationLibrary_tob26")
-}
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Overlay/Transitions/Circle" unique_id=1591680147]
+libraries/ = SubResource("AnimationLibrary_tob26")
 
-[node name="Box" type="TextureRect" parent="Overlay/Transitions"]
+[node name="Box" type="TextureRect" parent="Overlay/Transitions" unique_id=749786936]
 material = SubResource("7")
 layout_mode = 0
 offset_left = 0.303333
@@ -279,7 +255,7 @@ offset_right = 320.303
 offset_bottom = 180.0
 mouse_filter = 2
 
-[node name="Top" type="ColorRect" parent="Overlay/Transitions/Box"]
+[node name="Top" type="ColorRect" parent="Overlay/Transitions/Box" unique_id=91842574]
 use_parent_material = true
 layout_mode = 0
 offset_left = -0.303333
@@ -289,7 +265,7 @@ offset_bottom = 15.4098
 mouse_filter = 2
 color = Color(0, 0, 0, 1)
 
-[node name="Bottom" type="ColorRect" parent="Overlay/Transitions/Box"]
+[node name="Bottom" type="ColorRect" parent="Overlay/Transitions/Box" unique_id=430772057]
 use_parent_material = true
 layout_mode = 0
 offset_left = -1.30333
@@ -299,7 +275,7 @@ offset_bottom = 302.41
 mouse_filter = 2
 color = Color(0, 0, 0, 1)
 
-[node name="Right" type="ColorRect" parent="Overlay/Transitions/Box"]
+[node name="Right" type="ColorRect" parent="Overlay/Transitions/Box" unique_id=1111639677]
 use_parent_material = true
 layout_mode = 0
 offset_left = 266.697
@@ -309,7 +285,7 @@ offset_bottom = 181.41
 mouse_filter = 2
 color = Color(0, 0, 0, 1)
 
-[node name="Left" type="ColorRect" parent="Overlay/Transitions/Box"]
+[node name="Left" type="ColorRect" parent="Overlay/Transitions/Box" unique_id=1013132890]
 use_parent_material = true
 layout_mode = 0
 offset_left = -267.303
@@ -319,7 +295,7 @@ offset_bottom = 181.41
 mouse_filter = 2
 color = Color(0, 0, 0, 1)
 
-[node name="Debug" parent="Overlay" instance=ExtResource("2")]
+[node name="Debug" parent="Overlay" unique_id=1749935254 instance=ExtResource("2")]
 visible = false
 layout_mode = 3
 anchors_preset = 0
@@ -328,15 +304,15 @@ offset_top = 0.0
 offset_right = 39.999
 offset_bottom = 40.0
 
-[node name="Timers" type="Node" parent="."]
+[node name="Timers" type="Node" parent="." unique_id=707967481]
 
-[node name="Screenshot" type="Timer" parent="Timers"]
+[node name="Screenshot" type="Timer" parent="Timers" unique_id=378002707]
 wait_time = 0.05
 
-[node name="Advance" type="Timer" parent="Timers"]
+[node name="Advance" type="Timer" parent="Timers" unique_id=260362492]
 wait_time = 0.075
 one_shot = true
 
-[node name="ShaderFader" type="Timer" parent="Timers"]
+[node name="ShaderFader" type="Timer" parent="Timers" unique_id=1521040079]
 wait_time = 0.1
 one_shot = true
