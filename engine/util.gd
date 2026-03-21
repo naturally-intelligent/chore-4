@@ -278,6 +278,17 @@ func first_letter(id: String) -> String:
 func upper_first_letter(id: String) -> String:
 	return id.substr(0,1).to_upper()
 
+func first_letters(text: String, _max := -1) -> String:
+	var words := text.split(" ")
+	var letters := ''
+	var count := 0
+	for word: String in words:
+		if word.length() >= 1:
+			count += 1
+			if count <= _max or _max == -1:
+				letters += word[0]
+	return letters
+
 func pluralize(id: String) -> String:
 	var last := id.substr(id.length()-1, 1)
 	if last != 's':
