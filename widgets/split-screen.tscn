@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://lchpaiats2fm"]
+
+[ext_resource type="PackedScene" uid="uid://bo0anbe4vsgni" path="res://widgets/split-viewport.tscn" id="1_7fcib"]
+[ext_resource type="Script" uid="uid://bmidui42hjnjk" path="res://widgets/split-screen.gd" id="1_hjwjy"]
+
+[node name="SplitScreen" type="HBoxContainer"]
+offset_top = -180.0
+offset_right = 640.0
+offset_bottom = 180.0
+theme_override_constants/separation = 0
+alignment = 1
+script = ExtResource("1_hjwjy")
+
+[node name="LeftViewport" parent="." instance=ExtResource("1_7fcib")]
+layout_mode = 2
+
+[node name="RightViewport" parent="." instance=ExtResource("1_7fcib")]
+layout_mode = 2

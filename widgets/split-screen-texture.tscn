@@ -1,0 +1,39 @@
+[gd_scene load_steps=4 format=3 uid="uid://ci5vhxc016qhs"]
+
+[ext_resource type="Script" uid="uid://dk1f6qmcxiu4e" path="res://widgets/split-screen-shader.gd" id="1_86jh5"]
+[ext_resource type="Shader" uid="uid://q8ruigpuv6vr" path="res://shaders/split-screen.gdshader" id="2_l80ue"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1lyi2"]
+shader = ExtResource("2_l80ue")
+shader_parameter/viewport_size = Vector2(0, 0)
+shader_parameter/split_active = false
+shader_parameter/player1_position = Vector2(0, 0)
+shader_parameter/player2_position = Vector2(0, 0)
+shader_parameter/split_line_thickness = 8.0
+shader_parameter/split_line_color = Color(0.442911, 0.442911, 0.442911, 1)
+
+[node name="SplitScreenTexture" type="Node2D"]
+script = ExtResource("1_86jh5")
+
+[node name="ViewTexture" type="TextureRect" parent="."]
+material = SubResource("ShaderMaterial_1lyi2")
+custom_minimum_size = Vector2(640, 360)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 640.0
+offset_bottom = 360.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Viewport1" type="SubViewport" parent="."]
+canvas_item_default_texture_filter = 0
+size = Vector2i(640, 360)
+render_target_update_mode = 3
+
+[node name="Viewport2" type="SubViewport" parent="."]
+canvas_item_default_texture_filter = 0
+size = Vector2i(640, 360)
+render_target_update_mode = 3
+
+[node name="Camera2D" type="Camera2D" parent="Viewport2"]
