@@ -60,6 +60,8 @@ func play_sound(sound_name: String, volume:=1.0, allow_multiple:=false, pitch:=[
 	player.set_stream(stream)
 	if bus:
 		player.bus = bus
+	else:
+		player.bus = settings.sound_bus_name
 	if pitch:
 		var pitch_start = pitch[0]
 		var pitch_end = pitch[1]
