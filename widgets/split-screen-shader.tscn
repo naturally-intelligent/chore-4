@@ -1,0 +1,25 @@
+[gd_scene load_steps=4 format=3 uid="uid://brjy7ubx15whc"]
+
+[ext_resource type="Script" uid="uid://dk1f6qmcxiu4e" path="res://widgets/split-screen-shader.gd" id="1_1lyi2"]
+[ext_resource type="Shader" uid="uid://q8ruigpuv6vr" path="res://shaders/split-screen.gdshader" id="1_8b8og"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1lyi2"]
+shader = ExtResource("1_8b8og")
+shader_parameter/viewport_size = Vector2(0, 0)
+shader_parameter/split_active = false
+shader_parameter/player1_position = Vector2(0, 0)
+shader_parameter/player2_position = Vector2(0, 0)
+shader_parameter/split_line_thickness = 8.0
+shader_parameter/split_line_color = Color(0.442911, 0.442911, 0.442911, 1)
+
+[node name="SplitScreenShader" type="Node2D"]
+script = ExtResource("1_1lyi2")
+
+[node name="ViewTexture" type="TextureRect" parent="."]
+material = SubResource("ShaderMaterial_1lyi2")
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Viewport1" type="SubViewport" parent="."]
+
+[node name="Viewport2" type="SubViewport" parent="."]
