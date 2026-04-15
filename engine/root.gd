@@ -635,6 +635,9 @@ func _input(event: InputEvent) -> void:
 			game.screenshot()
 		else:
 			util.screenshot(self, settings.screenshot_size)
+	if Input.is_action_just_pressed("ui_quit"):
+		if settings.cabinet_controls or dev.dev_mode_enabled:
+			quit()
 	if dev.dev_mode_enabled:
 		if Input.is_action_just_pressed("ui_hud"):
 			hud_allowed = not hud_allowed
@@ -644,8 +647,6 @@ func _input(event: InputEvent) -> void:
 				quit()
 			if Input.is_action_just_pressed("ui_autoscreenshot"):
 				flip_autoscreenshot()
-		if Input.is_action_just_pressed("ui_quit"):
-			quit()
 		if current_scene_type == &'scene':
 			if Input.is_action_just_pressed("dev_pause"):
 				debug.console('pause - press Backspace to resume')
