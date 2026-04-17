@@ -24,5 +24,9 @@ func _on_timeout() -> void:
 			root.quit()
 		'menu':
 			debug.print("Input Timeout! Main Menu")
-			menus.show(game.main_menu)
+			# this can be tricky and possibly cause crash
+			if not root.switching_scene:
+				if not root.current_scene_name == game.main_menu:
+					audio.pause_sounds()
+					menus.show(game.main_menu)
 	
